@@ -9,6 +9,7 @@
 // 02.10.2010 created by Matthias Hertel
 // 21.04.2011 support of active LOW and active HIGH button signal input.
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
+// 12.01.2014 some typos fixed.
 // -----
 
 #include "OneButton.h"
@@ -21,7 +22,7 @@ OneButton::OneButton(int pin, int activeLow)
   _pin = pin;
 
   _clickTicks = 600;        // number of millisec that have to pass by before a click is detected.
-  _pressTicks = 1000;       // number of millisec that have to pass by before a lonn button press is detected.
+  _pressTicks = 1000;       // number of millisec that have to pass by before a long button press is detected.
  
   _state = 0; // starting with state 0: waiting for button to be pressed
 
@@ -29,7 +30,7 @@ OneButton::OneButton(int pin, int activeLow)
     // button connects ground to the pin when pressed.
     _buttonReleased = HIGH; // notPressed
     _buttonPressed = LOW;
-    digitalWrite(pin, HIGH);   // turn on pulldown resistor
+    digitalWrite(pin, HIGH);   // turn on pullUp resistor
 
   } else {
     // button connects VCC to the pin when pressed.
