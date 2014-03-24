@@ -10,6 +10,7 @@
 // 21.04.2011 support of active LOW and active HIGH button signal input.
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
 // 12.01.2014 some typos fixed.
+// 01.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
 // -----
 
 #include "OneButton.h"
@@ -25,6 +26,7 @@ OneButton::OneButton(int pin, int activeLow)
   _pressTicks = 1000;       // number of millisec that have to pass by before a long button press is detected.
  
   _state = 0; // starting with state 0: waiting for button to be pressed
+  _isLongPressed = false;  // Keep track of long press state
 
   if (activeLow) {
     // button connects ground to the pin when pressed.
@@ -41,13 +43,13 @@ OneButton::OneButton(int pin, int activeLow)
 } // OneButton
 
 
-// explicitely set the number of millisec that have to pass by before a click is detected.
+// explicitly set the number of millisec that have to pass by before a click is detected.
 void OneButton::setClickTicks(int ticks) { 
   _clickTicks = ticks;
 } // setClickTicks
 
 
-// explicitely set the number of millisec that have to pass by before a lonn button press is detected.
+// explicitly set the number of millisec that have to pass by before a long button press is detected.
 void OneButton::setPressTicks(int ticks) {
   _pressTicks = ticks;
 } // setPressTicks
@@ -68,11 +70,34 @@ void OneButton::attachDoubleClick(callbackFunction newFunction)
 
 
 // save function for press event
+// DEPRECATED, is replaced by attachLongPressStart, attachLongPressStop, attachDuringLongPress, 
 void OneButton::attachPress(callbackFunction newFunction)
 {
   _pressFunc = newFunction;
 } // attachPress
 
+// save function for longPressStart event
+void OneButton::attachLongPressStart(callbackFunction newFunction)
+{
+  _longPressStartFunc = newFunction;
+} // attachLongPressStart
+
+// save function for longPressStop event
+void OneButton::attachLongPressStop(callbackFunction newFunction)
+{
+  _longPressStopFunc = newFunction;
+} // attachLongPressStop
+
+// save function for during longPress event
+void OneButton::attachDuringLongPress(callbackFunction newFunction)
+{
+  _duringLongPressFunc = newFunction;
+} // attachDuringLongPress
+
+// function to get the current long pressed state
+bool OneButton::isLongPressed(){
+  return _isLongPressed;
+}
 
 void OneButton::tick(void)
 {
@@ -92,7 +117,10 @@ void OneButton::tick(void)
       _state = 2; // step to state 2
 
     } else if ((buttonLevel == _buttonPressed) && (now > _startTime + _pressTicks)) {
+      _isLongPressed = true;  // Keep track of long press state
       if (_pressFunc) _pressFunc();
+	  if (_longPressStartFunc) _longPressStartFunc();
+	  if (_duringLongPressFunc) _duringLongPressFunc();
       _state = 6; // step to state 6
       
     } else {
@@ -118,7 +146,13 @@ void OneButton::tick(void)
 
   } else if (_state == 6) { // waiting for menu pin being release after long press.
     if (buttonLevel == _buttonReleased) {
+	  _isLongPressed = false;  // Keep track of long press state
+	  if(_longPressStopFunc) _longPressStopFunc();
       _state = 0; // restart.
+    } else {
+	  // button is being long pressed
+	  _isLongPressed = true; // Keep track of long press state
+	  if (_duringLongPressFunc) _duringLongPressFunc();
     } // if  
 
   } // if  

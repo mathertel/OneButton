@@ -8,6 +8,7 @@
 // 02.10.2010 created by Matthias Hertel
 // 21.04.2011 transformed into a library
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
+// 23.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
 // -----
 
 #ifndef OneButton_h
@@ -36,15 +37,19 @@ public:
   // set # millisec after press is assumed.
   void setPressTicks(int ticks);
 
-  // attach functions that will be called when button was pressed in th especified way.
+  // attach functions that will be called when button was pressed in the specified way.
   void attachClick(callbackFunction newFunction);
   void attachDoubleClick(callbackFunction newFunction);
-  void attachPress(callbackFunction newFunction);
+  void attachPress(callbackFunction newFunction); // DEPRECATED, replaced by longPressStart, longPressStop and duringLongPress
+  void attachLongPressStart(callbackFunction newFunction);
+  void attachLongPressStop(callbackFunction newFunction);
+  void attachDuringLongPress(callbackFunction newFunction);
 
   // ----- State machine functions -----
 
   // call this function every some milliseconds for handling button events.
   void tick(void);
+  bool isLongPressed();
 
 private:
   int _pin;        // hardware pin number. 
@@ -54,13 +59,17 @@ private:
   int _buttonReleased;
   int _buttonPressed;
 
+  bool _isLongPressed;
 
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc;
   callbackFunction _doubleClickFunc;
   callbackFunction _pressFunc;
+  callbackFunction _longPressStartFunc;
+  callbackFunction _longPressStopFunc;
+  callbackFunction _duringLongPressFunc;
 
-  // These variables that hold information across the upcomming tick calls.
+  // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the tick function is called.
   int _state;
   unsigned long _startTime; // will be set in state 1
