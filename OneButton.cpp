@@ -11,6 +11,7 @@
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
 // 12.01.2014 some typos fixed.
 // 01.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
+// 06.04.2014 Added debouncing of input readings, to prevent false double clicks
 // -----
 
 #include "OneButton.h"
@@ -40,6 +41,12 @@ OneButton::OneButton(int pin, int activeLow)
     _buttonPressed = HIGH;
   } // if
 
+  // Debounce init
+  _db_buttonState      = _buttonReleased;  // the current reading from the input pin, assume its in rest during setup
+  _db_lastButtonState  = _db_buttonState;  // the previous reading from the input pin, no previous reading so use current
+  _db_lastDebounceTime = 0;                // the last time the output pin was toggled, init to zero
+  _db_debounceDelay    = 50;               // the debounce time; increase if the output flickers. Settable with setDebounceDelay() function
+  
 } // OneButton
 
 
@@ -102,7 +109,7 @@ bool OneButton::isLongPressed(){
 void OneButton::tick(void)
 {
   // Detect the input information 
-  int buttonLevel = digitalRead(_pin); // current button signal.
+  int buttonLevel = debounce(digitalRead(_pin)); // current button signal (debounced)
   unsigned long now = millis(); // current (relative) time in msecs.
 
   // Implementation of the state machine
@@ -158,6 +165,40 @@ void OneButton::tick(void)
   } // if  
 } // OneButton.tick()
 
+
+boolean OneButton::debounce(boolean reading){
+  // Source: http://arduino.cc/en/Tutorial/Debounce
+  
+  // check to see if you just pressed the button
+  // (i.e. the input went from LOW to HIGH),  and you've waited
+  // long enough since the last press to ignore any noise:  
+
+  // If the switch changed, due to noise or pressing:
+  if (reading != _db_lastButtonState) {
+    // reset the debouncing timer
+    _db_lastDebounceTime = millis();
+  }
+ 
+  if ((millis() - _db_lastDebounceTime) > _db_debounceDelay) {
+    // whatever the reading is at, it's been there for longer
+    // than the debounce delay, so take it as the actual current state:
+
+    // if the button state has changed:
+    if (reading != _db_buttonState) {
+      _db_buttonState = reading;
+    }
+  }
+
+  // save the reading.  Next time through the loop,
+  // it'll be the lastButtonState:
+  _db_lastButtonState = reading;
+
+  return _db_buttonState;
+}
+
+void OneButton::setDebounceDelay(int delay){
+	_db_debounceDelay = delay;
+}
 
 // end.
 
