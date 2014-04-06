@@ -9,6 +9,7 @@
 // 21.04.2011 transformed into a library
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
 // 23.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
+// 06.04.2014 Added debouncing of input readings, to prevent false double clicks
 // -----
 
 #ifndef OneButton_h
@@ -51,6 +52,9 @@ public:
   void tick(void);
   bool isLongPressed();
 
+  // ----- public debounce functions ------
+  void setDebounceDelay(int delay);
+  
 private:
   int _pin;        // hardware pin number. 
   int _clickTicks; // number of ticks that have to pass by before a click is detected
@@ -73,6 +77,14 @@ private:
   // They are initialized once on program start and are updated every time the tick function is called.
   int _state;
   unsigned long _startTime; // will be set in state 1
+
+  // Debounce variables and functions
+  // Help prevent bouncing button states from being read as double clicks
+  int _db_buttonState;                // the current reading from the input pin
+  int _db_lastButtonState;            // the previous reading from the input pin
+  unsigned long _db_lastDebounceTime; // the last time the output pin was toggled
+  unsigned long _db_debounceDelay;    // the debounce time; increase if the output flickers
+  boolean debounce(boolean reading);  // method to debounce the digital reading, call every loop
 };
 
 #endif
