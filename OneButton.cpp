@@ -40,6 +40,12 @@ OneButton::OneButton(int pin, int activeLow)
     _buttonPressed = HIGH;
   } // if
 
+
+  _doubleClickFunc = NULL;
+  _pressFunc = NULL;
+  _longPressStartFunc = NULL;
+  _longPressStopFunc = NULL;
+  _duringLongPressFunc = NULL;
 } // OneButton
 
 
