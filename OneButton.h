@@ -9,6 +9,7 @@
 // 21.04.2011 transformed into a library
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
 // 23.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
+// 21.09.2015 A simple way for debounce detection added.
 // -----
 
 #ifndef OneButton_h
@@ -54,8 +55,9 @@ public:
 private:
   int _pin;        // hardware pin number. 
   int _clickTicks; // number of ticks that have to pass by before a click is detected
-  int _pressTicks; // number of ticks that have to pass by before a lonn button press is detected
-
+  int _pressTicks; // number of ticks that have to pass by before a long button press is detected
+  const int _debounceTicks = 50; // number of ticks for debounce times.
+  
   int _buttonReleased;
   int _buttonPressed;
 

@@ -5,12 +5,7 @@
 // This work is licensed under a BSD style license. See http://www.mathertel.de/License.aspx
 // More information on: http://www.mathertel.de/Arduino
 // -----
-// Connect the button to pin A1 (MenuPin)
-// 02.10.2010 created by Matthias Hertel
-// 21.04.2011 support of active LOW and active HIGH button signal input.
-// 01.12.2011 include file changed to work with the Arduino 1.0 environment
-// 12.01.2014 some typos fixed.
-// 01.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
+// Changelog: see OneButton.h
 // -----
 
 #include "OneButton.h"
@@ -119,7 +114,13 @@ void OneButton::tick(void)
     } // if
 
   } else if (_state == 1) { // waiting for menu pin being released.
-    if (buttonLevel == _buttonReleased) {
+
+    if ((buttonLevel == _buttonReleased) && (now < _startTime + _debounceTicks)) {
+      // button was released to quickly so I assume some debouncing.
+	  // go back to state 0 without calling a function.
+      _state = 0;
+
+    } else if (buttonLevel == _buttonReleased) {
       _state = 2; // step to state 2
 
     } else if ((buttonLevel == _buttonPressed) && (now > _startTime + _pressTicks)) {
