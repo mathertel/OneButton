@@ -115,7 +115,7 @@ void OneButton::tick(void)
 
   } else if (_state == 1) { // waiting for menu pin being released.
 
-    if ((buttonLevel == _buttonReleased) && (now < _startTime + _debounceTicks)) {
+    if ((buttonLevel == _buttonReleased) && ((unsigned long)(now - _startTime) < _debounceTicks)) {
       // button was released to quickly so I assume some debouncing.
 	  // go back to state 0 without calling a function.
       _state = 0;
@@ -123,7 +123,7 @@ void OneButton::tick(void)
     } else if (buttonLevel == _buttonReleased) {
       _state = 2; // step to state 2
 
-    } else if ((buttonLevel == _buttonPressed) && (now > _startTime + _pressTicks)) {
+    } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _startTime) > _pressTicks)) {
       _isLongPressed = true;  // Keep track of long press state
       if (_pressFunc) _pressFunc();
 	  if (_longPressStartFunc) _longPressStartFunc();
@@ -135,7 +135,7 @@ void OneButton::tick(void)
     } // if
 
   } else if (_state == 2) { // waiting for menu pin being pressed the second time or timeout.
-    if (now > _startTime + _clickTicks) {
+    if ((unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
       if (_clickFunc) _clickFunc();
       _state = 0; // restart.
