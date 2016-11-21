@@ -20,6 +20,7 @@
 // ----- Callback function types -----
 
 extern "C" {
+  typedef int (*PressedFunction)(uint8_t);
   typedef void (*callbackFunction)(void);
 }
 
@@ -29,7 +30,8 @@ class OneButton
 public:
   // ----- Constructor -----
   OneButton(int pin, int active);
-  
+  OneButton(int pin, int active, PressedFunction isPressed);
+
   // ----- Set runtime parameters -----
 
   // set # millisec after single click is assumed.
@@ -53,11 +55,12 @@ public:
   bool isLongPressed();
 
 private:
-  int _pin;        // hardware pin number. 
+  uint8_t _pin;        // hardware pin number.
   int _clickTicks; // number of ticks that have to pass by before a click is detected
   int _pressTicks; // number of ticks that have to pass by before a long button press is detected
   const int _debounceTicks = 50; // number of ticks for debounce times.
-  
+  const PressedFunction checkButton;
+
   int _buttonReleased;
   int _buttonPressed;
 

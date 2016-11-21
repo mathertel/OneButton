@@ -12,7 +12,11 @@
 
 // ----- Initialization and Default Values -----
 
-OneButton::OneButton(int pin, int activeLow)
+OneButton::OneButton(int pin, int activeLow) :
+  OneButton(pin, activeLow, digitalRead) {}
+
+OneButton::OneButton(int pin, int activeLow, PressedFunction isPressed ) :
+  checkButton(isPressed)
 {
   pinMode(pin, INPUT);      // sets the MenuPin as input
   _pin = pin;
@@ -103,7 +107,7 @@ bool OneButton::isLongPressed(){
 void OneButton::tick(void)
 {
   // Detect the input information 
-  int buttonLevel = digitalRead(_pin); // current button signal.
+  int buttonLevel = checkButton(_pin); // current button signal.
   unsigned long now = millis(); // current (relative) time in msecs.
 
   // Implementation of the state machine
