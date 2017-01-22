@@ -27,7 +27,7 @@ OneButton::OneButton(int pin, int activeLow)
     // button connects ground to the pin when pressed.
     _buttonReleased = HIGH; // notPressed
     _buttonPressed = LOW;
-    digitalWrite(pin, HIGH);   // turn on pullUp resistor
+    pinMode( pin, INPUT_PULLUP );   // turn on pullUp resistor
 
   } else {
     // button connects VCC to the pin when pressed.
