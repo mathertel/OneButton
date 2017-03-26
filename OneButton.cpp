@@ -14,7 +14,6 @@
 
 OneButton::OneButton(int pin, int activeLow)
 {
-  pinMode(pin, INPUT);      // sets the MenuPin as input
   _pin = pin;
 
   _clickTicks = 600;        // number of millisec that have to pass by before a click is detected.
@@ -24,17 +23,23 @@ OneButton::OneButton(int pin, int activeLow)
   _isLongPressed = false;  // Keep track of long press state
 
   if (activeLow) {
-    // button connects ground to the pin when pressed.
+    // the button connects the input pin to GND when pressed.
     _buttonReleased = HIGH; // notPressed
     _buttonPressed = LOW;
-    pinMode( pin, INPUT_PULLUP );   // turn on pullUp resistor
+
+    // use the given pin as input and activate internal PULLUP resistor.
+    pinMode( pin, INPUT_PULLUP );
 
   } else {
-    // button connects VCC to the pin when pressed.
+    // the button connects the input pin to VCC when pressed.
     _buttonReleased = LOW;
     _buttonPressed = HIGH;
+
+    // use the given pin as input
+    pinMode(pin, INPUT);
   } // if
 
+  // no functions attached yet: clear all function pointers.
   _clickFunc = NULL;
   _doubleClickFunc = NULL;
   _pressFunc = NULL;
