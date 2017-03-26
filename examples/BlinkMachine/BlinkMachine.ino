@@ -19,27 +19,52 @@
  A click on the button turns the led on.
  A doubleclick on the button changes the blink rate from ON to SLOW to FAST and back.
  In the loop function the button.tick function has to be called as often as you like.
+
+ State-Diagram
+
+    start
+      |                   +-------\
+      V                   V       |
+  --------              ------    |
+ |  OFF   |<--click-+->|  ON  |   |
+  --------          |   ------    |
+                    |     |       |
+                    |   d-click   |
+                    |     |       |
+                    |     V       |
+                    |   ------    |
+                    +- | SLOW |   |
+                    |   ------    |
+                    |     |       |
+                    |   d-click   |
+                    |     |       |
+                    |     V    d-click
+                    |   ------    |
+                    +--| FAST |---/
+                        ------ 
  */
 
 // 06.10.2012 created by Matthias Hertel
+// 26.03.2017 state diagram added, minor changes
 
 #include "OneButton.h"
 
 // The actions I ca do...
 typedef enum {
-  ACTION_NONE, // do nothing.
+  ACTION_OFF,  // set LED "OFF".
   ACTION_ON,   // set LED "ON"
   ACTION_SLOW, // blink LED "SLOW"
-  ACTION_FAST // blink LED "FAST"
+  ACTION_FAST  // blink LED "FAST"
 } 
 MyActions;
 
 // Setup a new OneButton on pin A1.  
 OneButton button(A1, true);
 
-MyActions nextAction = ACTION_NONE; // no action when starting
+MyActions nextAction = ACTION_OFF; // no action when starting
 
-// setup code here, to run once:
+
+// setup code here, to run once.
 void setup() {
   // enable the standard led on pin 13.
   pinMode(13, OUTPUT);      // sets the digital pin as output
@@ -61,7 +86,7 @@ void loop() {
 
   // You can implement other code in here or just wait a while 
 
-  if (nextAction == ACTION_NONE) {
+  if (nextAction == ACTION_OFF) {
     // do nothing.
     digitalWrite(13, LOW);
 
@@ -84,18 +109,16 @@ void loop() {
     } else {
       digitalWrite(13, HIGH);
     } // if
-
   } // if
-
 } // loop
 
 
 // this function will be called when the button was pressed 1 time and them some time has passed.
 void myClickFunction() {
-  if (nextAction == ACTION_NONE)
+  if (nextAction == ACTION_OFF)
     nextAction = ACTION_ON;
   else
-    nextAction = ACTION_NONE;
+    nextAction = ACTION_OFF;
 } // myClickFunction
 
 
