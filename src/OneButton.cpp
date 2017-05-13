@@ -16,6 +16,7 @@ OneButton::OneButton(int pin, int activeLow)
 {
   _pin = pin;
 
+  _debounceTicks = 50;      // number of millisec that have to pass by before a click is assumed as safe.
   _clickTicks = 600;        // number of millisec that have to pass by before a click is detected.
   _pressTicks = 1000;       // number of millisec that have to pass by before a long button press is detected.
  
@@ -48,6 +49,11 @@ OneButton::OneButton(int pin, int activeLow)
   _duringLongPressFunc = NULL;
 } // OneButton
 
+
+// explicitly set the number of millisec that have to pass by before a click is assumed as safe.
+void OneButton::setDebounceTicks(int ticks) { 
+  _debounceTicks = ticks;
+} // setDebounceTicks
 
 // explicitly set the number of millisec that have to pass by before a click is detected.
 void OneButton::setClickTicks(int ticks) { 
@@ -127,6 +133,7 @@ void OneButton::tick(void)
 
     } else if (buttonLevel == _buttonReleased) {
       _state = 2; // step to state 2
+      _stopTime = now; // remember stopping time
 
     } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _startTime) > _pressTicks)) {
       _isLongPressed = true;  // Keep track of long press state
@@ -145,7 +152,7 @@ void OneButton::tick(void)
       if (_clickFunc) _clickFunc();
       _state = 0; // restart.
 
-    } else if (buttonLevel == _buttonPressed) {
+    } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
       _state = 3; // step to state 3
     } // if
 
