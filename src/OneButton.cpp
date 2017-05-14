@@ -140,7 +140,7 @@ void OneButton::tick(void)
     } // if
 
   } else if (_state == 2) { // waiting for menu pin being pressed the second time or timeout.
-    if ((unsigned long)(now - _startTime) > _clickTicks) {
+    if (_doubleClickFunc == NULL || (unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
       if (_clickFunc) _clickFunc();
       _state = 0; // restart.
