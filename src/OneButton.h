@@ -10,6 +10,7 @@
 // 01.12.2011 include file changed to work with the Arduino 1.0 environment
 // 23.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
 // 21.09.2015 A simple way for debounce detection added.
+// 14.05.2017 Debouncing improvements.
 // -----
 
 #ifndef OneButton_h
