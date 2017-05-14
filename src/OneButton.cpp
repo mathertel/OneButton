@@ -147,10 +147,13 @@ void OneButton::tick(void)
 
     } else if (buttonLevel == _buttonPressed) {
       _state = 3; // step to state 3
+      _startTime = now; // remember starting time
     } // if
 
   } else if (_state == 3) { // waiting for menu pin being released finally.
-    if (buttonLevel == _buttonReleased) {
+    // Stay here for at least _debounceTicks because else we might end up in state 1 if the
+    // button bounces for too long.
+    if (buttonLevel == _buttonReleased && ((unsigned long)(now - _startTime) > _debounceTicks)) {
       // this was a 2 click sequence.
       if (_doubleClickFunc) _doubleClickFunc();
       _state = 0; // restart.
