@@ -47,6 +47,7 @@ OneButton::OneButton(int pin, int activeLow)
   _longPressStartFunc = NULL;
   _longPressStopFunc = NULL;
   _duringLongPressFunc = NULL;
+  _numberClickFunc = NULL:
 } // OneButton
 
 
