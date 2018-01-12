@@ -49,6 +49,7 @@ public:
   void attachLongPressStart(callbackFunction newFunction);
   void attachLongPressStop(callbackFunction newFunction);
   void attachDuringLongPress(callbackFunction newFunction);
+  void attachNumberOfClicks(callbackFunction newFunction, int newNumberOfClicks);
 
   // ----- State machine functions -----
 
@@ -61,6 +62,8 @@ private:
   int _debounceTicks; // number of ticks for debounce times.
   int _clickTicks; // number of ticks that have to pass by before a click is detected
   int _pressTicks; // number of ticks that have to pass by before a long button press is detected
+  int _pressTimes; // number of how much a button has been pressed
+  int _numberOfClicks; // number that is compared to pressTimes (if pressTimes >= numberOfClicks) callFunction();
   
   int _buttonReleased;
   int _buttonPressed;
@@ -74,6 +77,7 @@ private:
   callbackFunction _longPressStartFunc;
   callbackFunction _longPressStopFunc;
   callbackFunction _duringLongPressFunc;
+  callbackFunction _numberClickFunc;
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the tick function is called.

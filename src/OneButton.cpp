@@ -106,6 +106,15 @@ void OneButton::attachDuringLongPress(callbackFunction newFunction)
   _duringLongPressFunc = newFunction;
 } // attachDuringLongPress
 
+// save function for number click event
+void OneButton::attachNumberOfClicks(callbackFunction newFunction, int newNumberOfClicks)
+{
+	if (newNumberOfClicks > 2){ // check if newNumberOfClicks bigger than doubleClick
+		_numberClickFunc = newFunction;
+		_numberOfClicks = newNumberOfClicks;
+	}
+} // attachNumberOfClicks
+
 // function to get the current long pressed state
 bool OneButton::isLongPressed(){
   return _isLongPressed;
@@ -116,7 +125,7 @@ void OneButton::tick(void)
   // Detect the input information 
   int buttonLevel = digitalRead(_pin); // current button signal.
   unsigned long now = millis(); // current (relative) time in msecs.
-
+  
   // Implementation of the state machine
   if (_state == 0) { // waiting for menu pin being pressed.
     if (buttonLevel == _buttonPressed) {
@@ -125,7 +134,6 @@ void OneButton::tick(void)
     } // if
 
   } else if (_state == 1) { // waiting for menu pin being released.
-
     if ((buttonLevel == _buttonReleased) && ((unsigned long)(now - _startTime) < _debounceTicks)) {
       // button was released to quickly so I assume some debouncing.
 	  // go back to state 0 without calling a function.
@@ -141,13 +149,13 @@ void OneButton::tick(void)
 	  if (_longPressStartFunc) _longPressStartFunc();
 	  if (_duringLongPressFunc) _duringLongPressFunc();
       _state = 6; // step to state 6
-      
+	  
     } else {
       // wait. Stay in this state.
     } // if
 
   } else if (_state == 2) { // waiting for menu pin being pressed the second time or timeout.
-    if (_doubleClickFunc == NULL || (unsigned long)(now - _startTime) > _clickTicks) {
+    if (_doubleClickFunc == NULL && _numberClickFunc == NULL || (unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
       if (_clickFunc) _clickFunc();
       _state = 0; // restart.
@@ -160,12 +168,51 @@ void OneButton::tick(void)
   } else if (_state == 3) { // waiting for menu pin being released finally.
     // Stay here for at least _debounceTicks because else we might end up in state 1 if the
     // button bounces for too long.
-    if (buttonLevel == _buttonReleased && ((unsigned long)(now - _startTime) > _debounceTicks)) {
-      // this was a 2 click sequence.
+	  
+	  if ((buttonLevel == _buttonReleased) && ((unsigned long)(now - _startTime) < _debounceTicks)) {
+      // button was released to quickly so I assume some debouncing.
+	  // go back to state 2 without skipping to step 4.
+      _state = 2;
+
+    } else if (buttonLevel == _buttonReleased) {
+      _state = 4; // step to state 4
+      _stopTime = now; // remember stopping time
+    }  else {
+      // wait. Stay in this state.
+    } // if
+	
+  } else if (_state == 4){ // waiting for menu pin to timeout finally or if it is pressed again
+	  if (_numberClickFunc == NULL || (unsigned long)(now - _startTime) > _clickTicks) {
+      // this was only a doubleClick and we are not going to check for further clicks
       if (_doubleClickFunc) _doubleClickFunc();
       _state = 0; // restart.
-    } // if
 
+    } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
+	  _pressTimes = 2; //set press times to 2, since a button has been pressed 2 times.
+      _state = 5; // step to state 5
+      _startTime = now; // remember starting time
+    } // if
+	  
+  } else if (_state == 5){ // waiting for button to release (state 5 and state 7 - call each other to loop through needed number of clicks)
+	  if (buttonLevel == _buttonReleased && ((unsigned long)(now - _startTime) > _debounceTicks)) {
+		_pressTimes++; // increase pressed times counter
+		_state = 7; // step to state 7
+		_stopTime = now; // remember stopping time
+		if (_pressTimes >= _numberOfClicks && _numberClickFunc){ // check if pressTimes equals to user given number of presses
+			_numberClickFunc(); // call users function
+			_state = 0; // restart
+		}
+    } // if
+	
+  } else if (_state == 7){ // waiting for menu pin to timeout finally or if it is pressed again
+	  if (_numberClickFunc == NULL || (unsigned long)(now - _startTime) > _clickTicks) {
+      _state = 0; // restart.
+	  
+    } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
+      _state = 5; // step to state 5
+      _startTime = now; // remember starting time
+    } // if
+  
   } else if (_state == 6) { // waiting for menu pin being release after long press.
     if (buttonLevel == _buttonReleased) {
 	  _isLongPressed = false;  // Keep track of long press state
