@@ -30,7 +30,7 @@ class OneButton
 public:
   // ----- Constructor -----
   OneButton(int pin, int active);
-  
+
   // ----- Set runtime parameters -----
 
   // set # millisec after safe click is assumed.
@@ -55,13 +55,15 @@ public:
   // call this function every some milliseconds for handling button events.
   void tick(void);
   bool isLongPressed();
+  int getPressedTicks();
+  void reset(void);
 
 private:
-  int _pin;        // hardware pin number. 
+  int _pin;        // hardware pin number.
   int _debounceTicks; // number of ticks for debounce times.
   int _clickTicks; // number of ticks that have to pass by before a click is detected
   int _pressTicks; // number of ticks that have to pass by before a long button press is detected
-  
+
   int _buttonReleased;
   int _buttonPressed;
 
@@ -83,5 +85,3 @@ private:
 };
 
 #endif
-
-
