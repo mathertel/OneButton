@@ -12,7 +12,7 @@
 
 // ----- Initialization and Default Values -----
 
-OneButton::OneButton(int pin, int activeLow)
+OneButton::OneButton(int pin, int activeLow, bool pullupActive)
 {
   _pin = pin;
 
@@ -29,7 +29,10 @@ OneButton::OneButton(int pin, int activeLow)
     _buttonPressed = LOW;
 
     // use the given pin as input and activate internal PULLUP resistor.
-    pinMode( pin, INPUT_PULLUP );
+	if(pullupActive)
+	    pinMode( pin, INPUT_PULLUP );
+	else
+	    pinMode( pin, INPUT );
 
   } else {
     // the button connects the input pin to VCC when pressed.

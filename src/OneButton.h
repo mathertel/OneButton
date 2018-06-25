@@ -11,6 +11,7 @@
 // 23.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
 // 21.09.2015 A simple way for debounce detection added.
 // 14.05.2017 Debouncing improvements.
+// 25.06.2018 Optional third parameter for deactivating pullup.
 // -----
 
 #ifndef OneButton_h
@@ -29,7 +30,7 @@ class OneButton
 {
 public:
   // ----- Constructor -----
-  OneButton(int pin, int active);
+  OneButton(int pin, int active, bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
