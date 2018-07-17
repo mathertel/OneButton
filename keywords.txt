@@ -15,7 +15,7 @@ callbackFunction	KEYWORD1
 
 setClickTicks	KEYWORD2
 setPressTicks	KEYWORD2
-setDebounceTicks KEYWORD2
+setDebounceTicks	KEYWORD2
 attachClick	KEYWORD2
 attachDoubleClick	KEYWORD2
 attachLongPressStart	KEYWORD2
