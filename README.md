@@ -30,12 +30,12 @@ void tickButtons() {
   cB.tick( nunchuk_buttonC() == 1 );     // button C is pressed
   jE.tick( nunchuk_joystickX() > 120 );  // joystick X in full right position
   jW.tick( nunchuk_joystickX() < -120 ); // joystick X in full left position
-  if ( !q.isEmpty() ) {					 // if any of the button actions happened					
-    tTransmit.enableIfNot();			 // then fire up transmitting the command TaskSceduler task
+  if ( !q.isEmpty() ) {					         // if any of the button actions happened					
+    tTransmit.enableIfNot();			       // then fire up transmitting the command TaskSceduler task
   }
 }
 ```
 And this is how to use OneButton with a buttong connected to a D2 pin:
 ```
-buttom.tick( digitalRead(2) == HIGH ); 
+aButton.tick( digitalRead(2) == HIGH ); 
 ```
