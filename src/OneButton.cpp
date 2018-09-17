@@ -12,33 +12,21 @@
 
 // ----- Initialization and Default Values -----
 
-OneButton::OneButton(int pin, int activeLow)
+OneButton::OneButton()
 {
-  _pin = pin;
 
   _debounceTicks = 50;      // number of millisec that have to pass by before a click is assumed as safe.
-  _clickTicks = 600;        // number of millisec that have to pass by before a click is detected.
+  _clickTicks = 300;        // number of millisec that have to pass by before a click is detected.
   _pressTicks = 1000;       // number of millisec that have to pass by before a long button press is detected.
 
   _state = 0; // starting with state 0: waiting for button to be pressed
   _isLongPressed = false;  // Keep track of long press state
 
-  if (activeLow) {
-    // the button connects the input pin to GND when pressed.
-    _buttonReleased = HIGH; // notPressed
-    _buttonPressed = LOW;
 
-    // use the given pin as input and activate internal PULLUP resistor.
-    pinMode( pin, INPUT_PULLUP );
-
-  } else {
     // the button connects the input pin to VCC when pressed.
-    _buttonReleased = LOW;
-    _buttonPressed = HIGH;
+  _buttonReleased = false;
+  _buttonPressed = true;
 
-    // use the given pin as input
-    pinMode(pin, INPUT);
-  } // if
 
   // no functions attached yet: clear all function pointers.
   _clickFunc = NULL;
@@ -122,10 +110,10 @@ void OneButton::reset(void){
   _isLongPressed = false;
 }
 
-void OneButton::tick(void)
+void OneButton::tick(bool buttonLevel)
 {
   // Detect the input information
-  int buttonLevel = digitalRead(_pin); // current button signal.
+  // int buttonLevel = digitalRead(_pin); // current button signal.
   unsigned long now = millis(); // current (relative) time in msecs.
 
   // Implementation of the state machine
