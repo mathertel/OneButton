@@ -11,6 +11,7 @@
 // 23.03.2014 Enhanced long press functionalities by adding longPressStart and longPressStop callbacks
 // 21.09.2015 A simple way for debounce detection added.
 // 14.05.2017 Debouncing improvements.
+// 17.09.2018 (Anatoli Arkhipenko) modified to become a general-purpose button processor 
 // -----
 
 #ifndef OneButton_h
@@ -29,7 +30,7 @@ class OneButton
 {
 public:
   // ----- Constructor -----
-  OneButton(int pin, int active);
+  OneButton(int pin = 0, int active = true);
 
   // ----- Set runtime parameters -----
 
@@ -53,6 +54,7 @@ public:
   // ----- State machine functions -----
 
   // call this function every some milliseconds for handling button events.
+  void tick(bool buttonLevel);
   void tick(void);
   bool isLongPressed();
   int getPressedTicks();
