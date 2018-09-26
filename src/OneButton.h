@@ -17,6 +17,7 @@
 // 26.09.2018 Anatoli Arkhipenko: Included solution to use library with other
 // sources of input.
 // 26.09.2018 Initialization moved into class declaration.
+// 26.09.2018 Jay M Ericsson: compiler warnings removed.
 // -----
 
 #ifndef OneButton_h
@@ -82,11 +83,11 @@ public:
 
 private:
   int _pin; // hardware pin number.
-  int _debounceTicks = 50; // number of ticks for debounce times.
-  int _clickTicks = 600; // number of ticks that have to pass by
-                         // before a click is detected.
-  int _pressTicks = 1000; // number of ticks that have to pass by before a long
-                          // button press is detected
+  unsigned int _debounceTicks = 50; // number of ticks for debounce times.
+  unsigned int _clickTicks = 600; // number of ticks that have to pass by
+                                  // before a click is detected.
+  unsigned int _pressTicks = 1000; // number of ticks that have to pass by
+                                   // before a long button press is detected
 
   int _buttonPressed;
 
