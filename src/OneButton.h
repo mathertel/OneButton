@@ -80,6 +80,9 @@ public:
   bool isLongPressed();
   int getPressedTicks();
   void reset(void);
+  bool wasIPressed(); //is true during callbackFunction execution,
+                      //allows to identify which button was pressed if all use
+                      //the same callbackFunction
 
 private:
   int _pin; // hardware pin number.
@@ -107,6 +110,8 @@ private:
   int _state = 0;
   unsigned long _startTime; // will be set in state 1
   unsigned long _stopTime; // will be set in state 2
+
+  bool _wasIPressed=false;
 };
 
 #endif

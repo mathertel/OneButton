@@ -131,6 +131,31 @@ void OneButton::reset(void){
   _isLongPressed = false;
 }
 
+/**
+ * @brief Return true during execution of attached function. If you have an
+ * array of buttons it allows you to detect which of them triggered the
+ * function.
+ * @code
+ * buttons[1].oneButtonInsance.attachClick(default_click_handler);
+ *
+ * buttons[1].click_handler = func_to_react_on_button1_click;
+ *
+ * void default_click_handler(void) {
+ *  for(int i=0; i<BOARD_BUTTONS; i++) {
+ *   if(buttons[i].oneButtonInsance.wasIPressed()) {
+ *      //HERE do common code for all pressess keys with buttons[i] pointing
+ *      //to the triggering button
+ *     buttons[i].click_handler(); //afterwards execute the given function
+ *     break;
+ *   }
+ *  }
+ * }
+ * @endcode
+ */
+bool OneButton::wasIPressed(void)
+{
+  return _wasIPressed;
+}
 
 /**
  * @brief Check input of the configured pin and then advance the finite state
@@ -142,7 +167,6 @@ void OneButton::tick(void)
     tick(digitalRead(_pin) == _buttonPressed);
   }
 }
-
 
 /**
  * @brief Advance the finite state machine (FSM) using the given level.
@@ -174,12 +198,14 @@ void OneButton::tick(bool activeLevel)
     } else if ((activeLevel) &&
                ((unsigned long)(now - _startTime) > _pressTicks)) {
       _isLongPressed = true; // Keep track of long press state
+      _wasIPressed=true;
       if (_pressFunc)
         _pressFunc();
       if (_longPressStartFunc)
         _longPressStartFunc();
       if (_duringLongPressFunc)
         _duringLongPressFunc();
+      _wasIPressed=false;
       _state = 6; // step to state 6
       _stopTime = now; // remember stopping time
     } else {
@@ -191,8 +217,11 @@ void OneButton::tick(bool activeLevel)
     if (_doubleClickFunc == NULL ||
         (unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
-      if (_clickFunc)
+      if (_clickFunc){
+        _wasIPressed=true;
         _clickFunc();
+        _wasIPressed=false;
+      }
       _state = 0; // restart.
 
     } else if ((activeLevel) &&
@@ -207,8 +236,11 @@ void OneButton::tick(bool activeLevel)
     if ((!activeLevel) &&
         ((unsigned long)(now - _startTime) > _debounceTicks)) {
       // this was a 2 click sequence.
-      if (_doubleClickFunc)
+      if (_doubleClickFunc){
+        _wasIPressed=true;
         _doubleClickFunc();
+        _wasIPressed=false;
+      }
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } // if
@@ -217,15 +249,21 @@ void OneButton::tick(bool activeLevel)
     // waiting for menu pin being release after long press.
     if (!activeLevel) {
       _isLongPressed = false; // Keep track of long press state
-      if (_longPressStopFunc)
+      if (_longPressStopFunc){
+        _wasIPressed=true;
         _longPressStopFunc();
+        _wasIPressed=false;
+      }
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } else {
       // button is being long pressed
       _isLongPressed = true; // Keep track of long press state
-      if (_duringLongPressFunc)
+      if (_duringLongPressFunc){
+        _wasIPressed=true;
         _duringLongPressFunc();
+        _wasIPressed=false;
+      }
     } // if
 
   } // if
