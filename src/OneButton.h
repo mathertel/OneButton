@@ -24,12 +24,11 @@
 #define OneButton_h
 
 #include "Arduino.h"
+#include <functional>
 
 // ----- Callback function types -----
 
-extern "C" {
-typedef void (*callbackFunction)(void);
-}
+typedef std::function<void(void)> callbackFunction;
 
 
 class OneButton
@@ -53,14 +52,14 @@ public:
 
   // attach functions that will be called when button was pressed in the
   // specified way.
-  void attachClick(callbackFunction newFunction);
-  void attachDoubleClick(callbackFunction newFunction);
+  void attachClick(const callbackFunction& newFunction);
+  void attachDoubleClick(const callbackFunction& newFunction);
   void attachPress(
-      callbackFunction newFunction); // DEPRECATED, replaced by longPressStart,
+      const callbackFunction& newFunction); // DEPRECATED, replaced by longPressStart,
                                      // longPressStop and duringLongPress
-  void attachLongPressStart(callbackFunction newFunction);
-  void attachLongPressStop(callbackFunction newFunction);
-  void attachDuringLongPress(callbackFunction newFunction);
+  void attachLongPressStart(const callbackFunction& newFunction);
+  void attachLongPressStop(const callbackFunction& newFunction);
+  void attachDuringLongPress(const callbackFunction& newFunction);
 
   // ----- State machine functions -----
 
