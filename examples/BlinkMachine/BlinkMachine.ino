@@ -58,8 +58,8 @@ typedef enum {
 } 
 MyActions;
 
-// Setup a new OneButton on pin A1.  
-OneButton button(A1, true);
+// Setup a new OneButton on pin A1 wich connects the input pin to 5V when pressed and use the internal PULLUP.
+OneButton button(A1, 0, true);
 
 MyActions nextAction = ACTION_OFF; // no action when starting
 
