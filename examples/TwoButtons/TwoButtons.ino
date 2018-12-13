@@ -37,10 +37,10 @@ Button 2 longPress stop
 
 #include "OneButton.h"
 
-// Setup a new OneButton on pin A1.  
-OneButton button1(A1, true);
-// Setup a new OneButton on pin A2.  
-OneButton button2(A2, true);
+// Setup a new OneButton on pin A1 wich connects the input pin to 5V when pressed and use the internal PULLUP.  
+OneButton button1(A1, 0, true);
+// Setup a new OneButton on pin A2 wich connects the input pin to 5V when pressed and use the internal PULLUP.  
+OneButton button2(A2, 0, true);
 
 
 // setup code here, to run once:
