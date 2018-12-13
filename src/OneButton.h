@@ -38,7 +38,7 @@ public:
   // ----- Constructor -----
   OneButton();
 
-  OneButton(int pin, int active, bool pullupActive = true);
+  OneButton(int pin, int activeLow, bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
