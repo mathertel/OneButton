@@ -82,10 +82,26 @@ void OneButton::attachClick(callbackFunction newFunction)
 } // attachClick
 
 
+// save function for parameterized click event
+void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* parameter)
+{
+  _paramClickFunc = newFunction;
+  _clickFuncParam = parameter;
+} // attachClick
+
+
 // save function for doubleClick event
 void OneButton::attachDoubleClick(callbackFunction newFunction)
 {
   _doubleClickFunc = newFunction;
+} // attachDoubleClick
+
+
+// save function for parameterized doubleClick event
+void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter)
+{
+  _paramDoubleClickFunc = newFunction;
+  _doubleClickFuncParam = parameter;
 } // attachDoubleClick
 
 
@@ -103,16 +119,37 @@ void OneButton::attachLongPressStart(callbackFunction newFunction)
   _longPressStartFunc = newFunction;
 } // attachLongPressStart
 
+// save function for parameterized longPressStart event
+void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter)
+{
+  _paramLongPressStartFunc = newFunction;
+  _longPressStartFuncParam = parameter;
+} // attachLongPressStart
+
 // save function for longPressStop event
 void OneButton::attachLongPressStop(callbackFunction newFunction)
 {
   _longPressStopFunc = newFunction;
 } // attachLongPressStop
 
+// save function for parameterized longPressStop event
+void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter)
+{
+  _paramLongPressStopFunc = newFunction;
+  _longPressStopFuncParam = parameter;
+} // attachLongPressStop
+
 // save function for during longPress event
 void OneButton::attachDuringLongPress(callbackFunction newFunction)
 {
   _duringLongPressFunc = newFunction;
+} // attachDuringLongPress
+
+// save function for parameterized during longPress event
+void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter)
+{
+  _paramDuringLongPressFunc = newFunction;
+  _duringLongPressFuncParam = parameter;
 } // attachDuringLongPress
 
 // function to get the current long pressed state
@@ -178,8 +215,12 @@ void OneButton::tick(bool activeLevel)
         _pressFunc();
       if (_longPressStartFunc)
         _longPressStartFunc();
+      if (_paramLongPressStartFunc)
+        _paramLongPressStartFunc(_longPressStartFuncParam);
       if (_duringLongPressFunc)
         _duringLongPressFunc();
+      if (_paramDuringLongPressFunc)
+        _paramDuringLongPressFunc(_duringLongPressFuncParam);
       _state = 6; // step to state 6
       _stopTime = now; // remember stopping time
     } else {
@@ -188,11 +229,13 @@ void OneButton::tick(bool activeLevel)
 
   } else if (_state == 2) {
     // waiting for menu pin being pressed the second time or timeout.
-    if (_doubleClickFunc == NULL ||
+    if ((_doubleClickFunc == NULL && _paramDoubleClickFunc == NULL) ||
         (unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
       if (_clickFunc)
         _clickFunc();
+      if (_paramClickFunc)
+        _paramClickFunc(_clickFuncParam);
       _state = 0; // restart.
 
     } else if ((activeLevel) &&
@@ -209,6 +252,8 @@ void OneButton::tick(bool activeLevel)
       // this was a 2 click sequence.
       if (_doubleClickFunc)
         _doubleClickFunc();
+      if (_paramDoubleClickFunc)
+        _paramDoubleClickFunc(_doubleClickFuncParam);
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } // if
@@ -219,6 +264,8 @@ void OneButton::tick(bool activeLevel)
       _isLongPressed = false; // Keep track of long press state
       if (_longPressStopFunc)
         _longPressStopFunc();
+      if (_paramLongPressStopFunc)
+        _paramLongPressStopFunc(_longPressStopFuncParam);
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } else {
@@ -226,6 +273,8 @@ void OneButton::tick(bool activeLevel)
       _isLongPressed = true; // Keep track of long press state
       if (_duringLongPressFunc)
         _duringLongPressFunc();
+      if (_paramDuringLongPressFunc)
+        _paramDuringLongPressFunc(_duringLongPressFuncParam);
     } // if
 
   } // if
