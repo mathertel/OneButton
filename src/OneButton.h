@@ -29,6 +29,7 @@
 
 extern "C" {
 typedef void (*callbackFunction)(void);
+typedef void (*parameterizedCallbackFunction)(void*);
 }
 
 
@@ -54,13 +55,18 @@ public:
   // attach functions that will be called when button was pressed in the
   // specified way.
   void attachClick(callbackFunction newFunction);
+  void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
   void attachDoubleClick(callbackFunction newFunction);
+  void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
   void attachPress(
       callbackFunction newFunction); // DEPRECATED, replaced by longPressStart,
                                      // longPressStop and duringLongPress
   void attachLongPressStart(callbackFunction newFunction);
+  void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
   void attachLongPressStop(callbackFunction newFunction);
+  void attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter);
   void attachDuringLongPress(callbackFunction newFunction);
+  void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
 
   // ----- State machine functions -----
 
@@ -95,11 +101,26 @@ private:
 
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
+  parameterizedCallbackFunction _paramClickFunc = NULL;
+  void* _clickFuncParam = NULL;
+
   callbackFunction _doubleClickFunc = NULL;
+  parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
+  void* _doubleClickFuncParam = NULL;
+
   callbackFunction _pressFunc = NULL;
+
   callbackFunction _longPressStartFunc = NULL;
+  parameterizedCallbackFunction _paramLongPressStartFunc = NULL;
+  void* _longPressStartFuncParam = NULL;
+
   callbackFunction _longPressStopFunc = NULL;
+  parameterizedCallbackFunction _paramLongPressStopFunc = NULL;
+  void* _longPressStopFuncParam;
+
   callbackFunction _duringLongPressFunc = NULL;
+  parameterizedCallbackFunction _paramDuringLongPressFunc = NULL;
+  void* _duringLongPressFuncParam = NULL;
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the
