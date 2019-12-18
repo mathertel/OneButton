@@ -205,8 +205,18 @@ void OneButton::tick(bool activeLevel)
       _state = 0;
 
     } else if (!activeLevel) {
-      _state = 2; // step to state 2
-      _stopTime = now; // remember stopping time
+      if (_doubleClickFunc == NULL && _paramDoubleClickFunc == NULL) {
+        // this was only a single short click
+        if (_clickFunc)
+          _clickFunc();
+        if (_paramClickFunc)
+          _paramClickFunc(_clickFuncParam);
+        _state = 0; // restart.
+
+      } else {
+        _state = 2; // step to state 2
+        _stopTime = now; // remember stopping time
+      } // if
 
     } else if ((activeLevel) &&
                ((unsigned long)(now - _startTime) > _pressTicks)) {
@@ -229,8 +239,7 @@ void OneButton::tick(bool activeLevel)
 
   } else if (_state == 2) {
     // waiting for menu pin being pressed the second time or timeout.
-    if ((_doubleClickFunc == NULL && _paramDoubleClickFunc == NULL) ||
-        (unsigned long)(now - _startTime) > _clickTicks) {
+    if ((unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
       if (_clickFunc)
         _clickFunc();
