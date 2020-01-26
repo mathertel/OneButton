@@ -28,6 +28,15 @@ OneButton::OneButton()
   // further initialization has moved to OneButton.h
 }
 
+/**
+ * @brief convenience constructor for button connected to GND
+ *        on specified pin without further hardware.
+ */
+OneButton::OneButton(int pin)
+{
+	OneButton(pin, true, true);
+}
+
 OneButton::OneButton(int pin, int activeLow, bool pullupActive)
 {
   // OneButton();

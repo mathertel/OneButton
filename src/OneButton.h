@@ -40,6 +40,14 @@ public:
   OneButton();
 
   /** 
+   * Set up button on specified pin connect to GND.
+   * The internal pull-up-resistor is activated, no need for futher hardware than the button.
+   *
+   * @param pin pin number the button is attached to
+   */
+  OneButton(int pin);
+
+  /** 
    * Set up button on specified pin with all parameters definable.
    *
    * Note: the combination pullUpActive=true (the default) and activeLow=false does not work.
