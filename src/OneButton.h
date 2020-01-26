@@ -39,6 +39,16 @@ public:
   // ----- Constructor -----
   OneButton();
 
+  /** 
+   * Set up button on specified pin with all parameters definable.
+   *
+   * Note: the combination pullUpActive=true (the default) and activeLow=false does not work.
+   * Of you want to use activeLow=false, you might need an external pull-down resistor for that.
+   *
+   * @param pin pin number the button is attached to
+   * @param activeLow true if button connects to GND, false if connected to HIGH
+   * @param pullupActive true if internal pull-up resistor shall be activated. Default to true.
+   */
   OneButton(int pin, int active, bool pullupActive = true);
 
   // ----- Set runtime parameters -----
