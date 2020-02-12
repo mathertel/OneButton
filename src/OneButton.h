@@ -39,7 +39,7 @@ public:
   // ----- Constructor -----
   OneButton();
 
-  OneButton(int pin, int active, bool pullupActive = true);
+  OneButton(int pin, bool activeLow = true, bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
@@ -95,7 +95,7 @@ private:
   unsigned int _pressTicks = 1000; // number of ticks that have to pass by
                                    // before a long button press is detected
 
-  int _buttonPressed;
+  int _buttonPressed = false;
 
   bool _isLongPressed = false;
 

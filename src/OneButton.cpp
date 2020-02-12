@@ -28,11 +28,11 @@ OneButton::OneButton()
   // further initialization has moved to OneButton.h
 }
 
-OneButton::OneButton(int pin, int activeLow, bool pullupActive)
+OneButton::OneButton(int pin, bool activeLow, bool pullupActive)
 {
   // OneButton();
   _pin = pin;
-
+  /*
   if (activeLow) {
     // the button connects the input pin to GND when pressed.
     _buttonPressed = LOW;
@@ -41,7 +41,10 @@ OneButton::OneButton(int pin, int activeLow, bool pullupActive)
     // the button connects the input pin to VCC when pressed.
     _buttonPressed = HIGH;
   } // if
-
+*/
+  // optimied the above code
+  _buttonPressed = ! activeLow;
+/*
   if (pullupActive) {
     // use the given pin as input and activate internal PULLUP resistor.
     pinMode(pin, INPUT_PULLUP);
@@ -49,6 +52,10 @@ OneButton::OneButton(int pin, int activeLow, bool pullupActive)
     // use the given pin as input
     pinMode(pin, INPUT);
   } // if
+  */
+ // optimied the above code
+  pinMode( pin, (pullupActive ? INPUT_PULLUP : INPUT) );
+
 } // OneButton
 
 
@@ -189,14 +196,17 @@ void OneButton::tick(bool activeLevel)
   unsigned long now = millis(); // current (relative) time in msecs.
 
   // Implementation of the state machine
-
-  if (_state == 0) { // waiting for menu pin being pressed.
+  // replacing multiple if()-s by switch() to optimize the code
+  switch( _state ) {
+  case 0:// waiting for menu pin being pressed.
+  //if (_state == 0) { // waiting for menu pin being pressed.
     if (activeLevel) {
       _state = 1; // step to state 1
       _startTime = now; // remember starting time
     } // if
-
-  } else if (_state == 1) { // waiting for menu pin being released.
+    break;
+  case 1:  
+  //} else if (_state == 1) { // waiting for menu pin being released.
 
     if ((!activeLevel) &&
         ((unsigned long)(now - _startTime) < _debounceTicks)) {
@@ -226,8 +236,9 @@ void OneButton::tick(bool activeLevel)
     } else {
       // wait. Stay in this state.
     } // if
-
-  } else if (_state == 2) {
+    break;
+  case 2:  
+  //} else if (_state == 2) {
     // waiting for menu pin being pressed the second time or timeout.
     if ((_doubleClickFunc == NULL && _paramDoubleClickFunc == NULL) ||
         (unsigned long)(now - _startTime) > _clickTicks) {
@@ -243,8 +254,9 @@ void OneButton::tick(bool activeLevel)
       _state = 3; // step to state 3
       _startTime = now; // remember starting time
     } // if
-
-  } else if (_state == 3) { // waiting for menu pin being released finally.
+    break;
+  case 3:  
+  //} else if (_state == 3) { // waiting for menu pin being released finally.
     // Stay here for at least _debounceTicks because else we might end up in
     // state 1 if the button bounces for too long.
     if ((!activeLevel) &&
@@ -257,8 +269,9 @@ void OneButton::tick(bool activeLevel)
       _state = 0; // restart.
       _stopTime = now; // remember stopping time
     } // if
-
-  } else if (_state == 6) {
+    break;
+  case 6:  
+  //} else if (_state == 6) {
     // waiting for menu pin being release after long press.
     if (!activeLevel) {
       _isLongPressed = false; // Keep track of long press state
@@ -276,8 +289,8 @@ void OneButton::tick(bool activeLevel)
       if (_paramDuringLongPressFunc)
         _paramDuringLongPressFunc(_duringLongPressFuncParam);
     } // if
-
-  } // if
+    break;
+  } // switch
 } // OneButton.tick()
 
 

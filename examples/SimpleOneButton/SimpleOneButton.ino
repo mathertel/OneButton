@@ -15,20 +15,27 @@
  
 // 03.03.2011 created by Matthias Hertel
 // 01.12.2011 extension changed to work with the Arduino 1.0 environment
+// 12.02.2020 extended to test more functions
 
 #include "OneButton.h"
 
 // Setup a new OneButton on pin A1.  
 OneButton button(A1, true);
-
+bool m = LOW;
 
 // setup code here, to run once:
 void setup() {
   // enable the standard led on pin 13.
   pinMode(13, OUTPUT);      // sets the digital pin as output
+  Serial.begin(9600);
   
-  // link the doubleclick function to be called on a doubleclick event.   
+  // link the doubleclick function to be called on a doubleclick event. 
+  button.attachClick(click);
   button.attachDoubleClick(doubleclick);
+  //button.attachTrippleClick(trippleclick);
+  button.attachLongPressStart(longPress);
+  button.attachLongPressStop(longPressStop);
+  button.attachDuringLongPress(duringLongPress);
 } // setup
   
 
@@ -41,13 +48,46 @@ void loop() {
   delay(10);
 } // loop
 
-
-// this function will be called when the button was pressed 2 times in a short timeframe.
-void doubleclick() {
-  static int m = LOW;
+void click() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
+  Serial.print("1-clk: "); //Serial.println(button.getNclicks());
+} // singleClick
+
+// this function will be called when the button was pressed 2 times in a short timeframe.
+void doubleclick() {
+  // reverse the LED 
+  m = !m;
+  digitalWrite(13, m);
+  Serial.print("2-clk: ");//Serial.println(button.getNclicks());
 } // doubleclick
 
+void trippleclick() {
+  // reverse the LED 
+  m = !m;
+  digitalWrite(13, m);
+  Serial.print("3-clk: ");//Serial.println(button.getNclicks());
+} // trippleclick
+
+void longPress() {
+  // reverse the LED 
+  m = !m;
+  digitalWrite(13, m);
+  Serial.print("LongPress: ");//Serial.println(button.getNclicks());
+} // 
+
+void duringLongPress() {
+  // reverse the LED 
+  m = !m;
+  digitalWrite(13, m);
+  Serial.print("DuringLongPress: ");//Serial.println(button.getNclicks());
+} //DuringLongPress
+
+void longPressStop() {
+  // reverse the LED 
+  m = !m;
+  digitalWrite(13, m);
+  Serial.print("LongPressStop: ");//Serial.println(button.getNclicks());
+} // LongPressStop
 // End
