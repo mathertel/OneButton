@@ -32,7 +32,7 @@ void setup() {
   // link the doubleclick function to be called on a doubleclick event. 
   button.attachClick(click);
   button.attachDoubleClick(doubleclick);
-  //button.attachTrippleClick(trippleclick);
+  button.attachTrippleClick(trippleclick);
   button.attachLongPressStart(longPress);
   button.attachLongPressStop(longPressStop);
   button.attachDuringLongPress(duringLongPress);
@@ -52,7 +52,7 @@ void click() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
-  Serial.print("1-clk: "); //Serial.println(button.getNclicks());
+  Serial.print("1-clk: "); Serial.println(button.getNumberClicks());
 } // singleClick
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
@@ -60,34 +60,35 @@ void doubleclick() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
-  Serial.print("2-clk: ");//Serial.println(button.getNclicks());
+  Serial.print("2-clk: ");Serial.println(button.getNumberClicks());
 } // doubleclick
 
+// this function will be called when the button was pressed 3 times and more in a short timeframe.
 void trippleclick() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
-  Serial.print("3-clk: ");//Serial.println(button.getNclicks());
+  Serial.print("3-clk: ");Serial.println(button.getNumberClicks());
 } // trippleclick
 
 void longPress() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
-  Serial.print("LongPress: ");//Serial.println(button.getNclicks());
+  Serial.print("LongPress: ");Serial.println(button.getNumberClicks());
 } // 
 
 void duringLongPress() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
-  Serial.print("DuringLongPress: ");//Serial.println(button.getNclicks());
+  Serial.print("DuringLongPress: ");Serial.println(button.getNumberClicks());
 } //DuringLongPress
 
 void longPressStop() {
   // reverse the LED 
   m = !m;
   digitalWrite(13, m);
-  Serial.print("LongPressStop: ");//Serial.println(button.getNclicks());
+  Serial.print("LongPressStop: ");Serial.println(button.getNumberClicks());
 } // LongPressStop
 // End

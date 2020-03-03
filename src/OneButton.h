@@ -18,6 +18,12 @@
 // sources of input.
 // 26.09.2018 Initialization moved into class declaration.
 // 26.09.2018 Jay M Ericsson: compiler warnings removed.
+// 29.01.2020 ShaggyDog18: optimized by using switch() instead of multiple if()-s; PARAM_FUNC functions are optional to save space
+// 12.02.2020 ShaggyDog18: 
+// - modified state machine (still same number of states), maintained full compatibility with initial library
+// - introduced new functions: trippleClickFunc() for 3+ clicks; getNumberClicks() to return number of clicks;
+// - optomized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code 
+// - modified SimpleOneButton example to test more functions incl. new trippleClickFunc() and getNumberClicks() functions
 // -----
 
 #ifndef OneButton_h
@@ -25,11 +31,16 @@
 
 #include "Arduino.h"
 
+
+#define PARAM_FUNC		// uncomment in case need calling functions with parameters
+
 // ----- Callback function types -----
 
 extern "C" {
 typedef void (*callbackFunction)(void);
-typedef void (*parameterizedCallbackFunction)(void*);
+#ifdef PARAM_FUNC
+  typedef void (*parameterizedCallbackFunction)(void*);
+#endif
 }
 
 
@@ -55,18 +66,33 @@ public:
   // attach functions that will be called when button was pressed in the
   // specified way.
   void attachClick(callbackFunction newFunction);
-  void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
+  #ifdef PARAM_FUNC
+    void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
+  #endif
   void attachDoubleClick(callbackFunction newFunction);
-  void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
+  #ifdef PARAM_FUNC
+    void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
+  #endif
+  void attachTrippleClick(callbackFunction newFunction);
+  #ifdef PARAM_FUNC
+    void attachTrippleClick(parameterizedCallbackFunction newFunction, void* parameter);
+  #endif  
+  
   void attachPress(
       callbackFunction newFunction); // DEPRECATED, replaced by longPressStart,
                                      // longPressStop and duringLongPress
   void attachLongPressStart(callbackFunction newFunction);
-  void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
+  #ifdef PARAM_FUNC
+    void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
+  #endif
   void attachLongPressStop(callbackFunction newFunction);
-  void attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter);
+  #ifdef PARAM_FUNC
+    void attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter);
+  #endif
   void attachDuringLongPress(callbackFunction newFunction);
-  void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
+  #ifdef PARAM_FUNC
+    void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
+  #endif
 
   // ----- State machine functions -----
 
@@ -86,6 +112,7 @@ public:
   bool isLongPressed();
   int getPressedTicks();
   void reset(void);
+  uint8_t getNumberClicks(void);	// ShaggyDog: return number of clicks
 
 private:
   int _pin; // hardware pin number.
@@ -95,37 +122,56 @@ private:
   unsigned int _pressTicks = 1000; // number of ticks that have to pass by
                                    // before a long button press is detected
 
-  int _buttonPressed = false;
+  bool _buttonPressed = false;
 
   bool _isLongPressed = false;
 
+  uint8_t _nClicks = 0;	// ShaggyDog - count number of clicks
+
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
-  parameterizedCallbackFunction _paramClickFunc = NULL;
-  void* _clickFuncParam = NULL;
+  #ifdef PARAM_FUNC
+    parameterizedCallbackFunction _paramClickFunc = NULL;
+    void* _clickFuncParam = NULL;
+  #endif
 
   callbackFunction _doubleClickFunc = NULL;
-  parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
-  void* _doubleClickFuncParam = NULL;
+  #ifdef PARAM_FUNC
+    parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
+    void* _doubleClickFuncParam = NULL;
+  #endif
+
+// new multiple click function
+  callbackFunction _trippleClickFunc = NULL;
+  #ifdef PARAM_FUNC
+    parameterizedCallbackFunction _paramTrippleClickFunc = NULL;
+    void* _trippleClickFuncParam = NULL;
+  #endif
 
   callbackFunction _pressFunc = NULL;
 
   callbackFunction _longPressStartFunc = NULL;
-  parameterizedCallbackFunction _paramLongPressStartFunc = NULL;
-  void* _longPressStartFuncParam = NULL;
+  #ifdef PARAM_FUNC
+    parameterizedCallbackFunction _paramLongPressStartFunc = NULL;
+    void* _longPressStartFuncParam = NULL;
+  #endif
 
   callbackFunction _longPressStopFunc = NULL;
-  parameterizedCallbackFunction _paramLongPressStopFunc = NULL;
-  void* _longPressStopFuncParam;
+  #ifdef PARAM_FUNC
+    parameterizedCallbackFunction _paramLongPressStopFunc = NULL;
+    void* _longPressStopFuncParam;
+  #endif
 
   callbackFunction _duringLongPressFunc = NULL;
-  parameterizedCallbackFunction _paramDuringLongPressFunc = NULL;
-  void* _duringLongPressFuncParam = NULL;
+  #ifdef PARAM_FUNC
+    parameterizedCallbackFunction _paramDuringLongPressFunc = NULL;
+    void* _duringLongPressFuncParam = NULL;
+  #endif
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the
   // tick function is called.
-  int _state = 0;
+  uint8_t _state = 0;
   unsigned long _startTime; // will be set in state 1
   unsigned long _stopTime; // will be set in state 2
 };
