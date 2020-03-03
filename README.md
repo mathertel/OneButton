@@ -10,3 +10,11 @@ This is also a sample for implementing simple finite-state machines by using the
 
 You can find more detail on this library at
 http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
+
+12.02.2020 ShaggyDog18: 
+- modified state machine (still same number of states), maintained full compatibility with the initial library; 
+- introduced a new functions: trippleClickFunc() for multiple 3+ clicks; getNumberClicks() to return number of clicks; 
+- optimized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code; 
+- optimized - by using switch() instead of multiple if()-s; 
+- introdiced #define PARAM_FUNC - if commented in oneButton.h , call functions with parameters will not be used to save space; 
+- modified SimpleOneButton example to test more functions incl. new trippleClickFunc() and getNumberClicks() functions.
