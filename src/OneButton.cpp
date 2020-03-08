@@ -168,6 +168,13 @@ void OneButton::reset(void){
   _isLongPressed = false;
 }
 
+// getter for state and pin
+int OneButton::getState(){ return _state; }
+int OneButton::getPin(){ return _pin; }
+
+// enable and disable double click handler 
+void OneButton::enableDoubleClickEvent(){ _doubleClickEnabled = true; }
+void OneButton::disableDoubleClickEvent(){ _doubleClickEnabled = false; }
 
 /**
  * @brief Check input of the configured pin and then advance the finite state
@@ -211,12 +218,18 @@ void OneButton::tick(bool activeLevel)
     } else if ((activeLevel) &&
                ((unsigned long)(now - _startTime) > _pressTicks)) {
       _isLongPressed = true; // Keep track of long press state
+
+      pressEvent();
       if (_pressFunc)
         _pressFunc();
+
+      longPressStartEvent();
       if (_longPressStartFunc)
         _longPressStartFunc();
       if (_paramLongPressStartFunc)
         _paramLongPressStartFunc(_longPressStartFuncParam);
+
+      duringLongPressEvent();
       if (_duringLongPressFunc)
         _duringLongPressFunc();
       if (_paramDuringLongPressFunc)
@@ -229,9 +242,10 @@ void OneButton::tick(bool activeLevel)
 
   } else if (_state == 2) {
     // waiting for menu pin being pressed the second time or timeout.
-    if ((_doubleClickFunc == NULL && _paramDoubleClickFunc == NULL) ||
+    if ((_doubleClickFunc == NULL && _paramDoubleClickFunc == NULL && _doubleClickEnabled == false ) ||
         (unsigned long)(now - _startTime) > _clickTicks) {
       // this was only a single short click
+      clickEvent();
       if (_clickFunc)
         _clickFunc();
       if (_paramClickFunc)
@@ -250,6 +264,7 @@ void OneButton::tick(bool activeLevel)
     if ((!activeLevel) &&
         ((unsigned long)(now - _startTime) > _debounceTicks)) {
       // this was a 2 click sequence.
+      doubleClickEvent();
       if (_doubleClickFunc)
         _doubleClickFunc();
       if (_paramDoubleClickFunc)
@@ -262,6 +277,7 @@ void OneButton::tick(bool activeLevel)
     // waiting for menu pin being release after long press.
     if (!activeLevel) {
       _isLongPressed = false; // Keep track of long press state
+      longPressStopEvent();
       if (_longPressStopFunc)
         _longPressStopFunc();
       if (_paramLongPressStopFunc)
@@ -271,6 +287,7 @@ void OneButton::tick(bool activeLevel)
     } else {
       // button is being long pressed
       _isLongPressed = true; // Keep track of long press state
+      duringLongPressEvent();
       if (_duringLongPressFunc)
         _duringLongPressFunc();
       if (_paramDuringLongPressFunc)

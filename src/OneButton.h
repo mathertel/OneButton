@@ -68,6 +68,24 @@ public:
   void attachDuringLongPress(callbackFunction newFunction);
   void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
 
+  // get FSM state
+  int getState();
+
+  // get PIN
+  virtual int getPin();
+
+  // events based handlers to be overritten as needed in child classes
+  virtual void pressEvent(){return;};
+  virtual void longPressStartEvent(){return;};
+  virtual void longPressStopEvent(){return;};
+  virtual void duringLongPressEvent(){return;};
+  virtual void clickEvent(){return;};
+  virtual void doubleClickEvent(){return;};
+
+  // enabling and disablign doubleClick
+  void enableDoubleClickEvent();
+  void disableDoubleClickEvent();
+
   // ----- State machine functions -----
 
   /**
@@ -98,6 +116,8 @@ private:
   int _buttonPressed;
 
   bool _isLongPressed = false;
+
+  bool _doubleClickEnabled = false;
 
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
