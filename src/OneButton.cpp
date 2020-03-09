@@ -13,6 +13,9 @@
  * More information on: https://www.mathertel.de/Arduino/OneButtonLibrary.aspx
  *
  * Changelog: see OneButton.h
+ * 
+ * Modified by ShaggyDog18@gmaol.com
+ * see Modification log in OneButton.h
  */
 
 #include "OneButton.h"

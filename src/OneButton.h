@@ -18,11 +18,12 @@
 // sources of input.
 // 26.09.2018 Initialization moved into class declaration.
 // 26.09.2018 Jay M Ericsson: compiler warnings removed.
+//
 // 29.01.2020 ShaggyDog18: optimized by using switch() instead of multiple if()-s; PARAM_FUNC functions are optional to save space
-// 12.02.2020 ShaggyDog18: 
-// - modified state machine (still same number of states), maintained full compatibility with initial library
+// 12.02.2020 ShaggyDog18: Modification Log:
+// - modified the State Machine (still the same number of states), maintained full compatibility with initial Author development
 // - introduced new functions: trippleClickFunc() for 3+ clicks; getNumberClicks() to return number of clicks;
-// - optomized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code 
+// - optimized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code 
 // - modified SimpleOneButton example to test more functions incl. new trippleClickFunc() and getNumberClicks() functions
 // -----
 
