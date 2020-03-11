@@ -195,7 +195,7 @@ uint8_t OneButton::getNumberClicks(void) {
 }
 
 void OneButton::reset(void){
-  _state = 0; // restart.
+  _state = WAIT_FOR_INITIAL_PRESS; // restart.
   _startTime = 0;
   _stopTime = 0;
   _isLongPressed = false;
@@ -217,47 +217,46 @@ void OneButton::tick(void)
 /**
  * @brief Advance the finite state machine (FSM) using the given level.
  */
-void OneButton::tick(bool activeLevel)
-{
+void OneButton::tick(bool buttonIsPressed) {
   unsigned long now = millis(); // current (relative) time in msecs.
 
   // Implementation of the state machine
   // replacing multiple if()-s by switch() to optimize the code
   switch( _state ) {
-  case 0:// waiting for menu pin being pressed.
-    if (activeLevel) {
-      _state = 1; // step to state 1
+  case WAIT_FOR_INITIAL_PRESS:  // waiting for button to be pressed.
+    if (buttonIsPressed) {
+      _state = DEBOUNCE_OR_LONG_PRESS; // step to state 1
       _startTime = now; // remember starting time
       _nClicks = 0;
     } // if
     break;
-	
-  case 1:  // waiting for menu pin being released.
-    if (activeLevel) {
+
+  case DEBOUNCE_OR_LONG_PRESS:  // waiting for button being released.
+    if (buttonIsPressed) {
       if ((unsigned long)(now - _startTime) > _pressTicks) {
-        _isLongPressed = true; // Keep track of long press state
+        _isLongPressed = true;  // Keep track of long press state
         _nClicks = 1;
         if (_longPressStartFunc) _longPressStartFunc();
 	      #ifdef PARAM_FUNC
           if (_paramLongPressStartFunc) _paramLongPressStartFunc(_longPressStartFuncParam);
 	      #endif
-        _state = 6; // step to state 6
+        _state = LONG_PRESS; // step to state 6
         _stopTime = now; // remember stopping time
       } 	    
-    } else {
+    } else {  // button was released
       if ((unsigned long)(now - _startTime) < _debounceTicks) {
-        // button was released to quickly so I assume some debouncing.
+        // button was released to quickly, so I assume some debouncing.
         // go back to state 0 without calling a function.
-        _state = 0;
+        _state = WAIT_FOR_INITIAL_PRESS;
 	  } else {
-        _state = 2; // step to state 2
+        _state = DETECT_CLICK; // step to state 2
         _stopTime = now; // remember stopping time
       } // if
     } // if
     break;
-	
-  case 2:	    // waiting for button being pressed or timeout.
-    if ((unsigned long)(now - _startTime) > _clickTicks) {  // this was a click
+
+  case DETECT_CLICK:  // waiting for button being pressed or timeout.
+    if ((unsigned long)(now - _startTime) > _clickTicks) {  // a click is detected
 	  _nClicks++;
 	  switch(_nClicks) {
 	  case 1:  // one click
@@ -279,28 +278,28 @@ void OneButton::tick(bool activeLevel)
           if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
      	#endif
 	  } // switch() number of clicks
-      _state = 0; // restart.
+      _state = WAIT_FOR_INITIAL_PRESS; // restart.
     } else { 
-	  if (activeLevel && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
-        _state = 3; // step to state 3
+	  if (buttonIsPressed && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
+        _state = COUNT_CLICKS; // step to state 3
         _startTime = now; // remember starting time
       } // if
     } // if
 	break;
-	
-  case 3:  // waiting for menu pin being released
+
+  case COUNT_CLICKS:  // waiting for button to be released
     // Stay here for at least _debounceTicks because else we might end up in
     // state 1 if the button bounces for too long.
-    if ((!activeLevel) && ((unsigned long)(now - _startTime) > _debounceTicks)) {
+    if ((!buttonIsPressed) && ((unsigned long)(now - _startTime) > _debounceTicks)) {
       // this was a two(2) clicks sequence or an X-number of clicks sequence.
       _nClicks++;
-      _state = 2; // go to state 2 for more clicks
+      _state = DETECT_CLICK; // go to state 2 for more clicks
       _stopTime = now; // remember stopping time
     } // if
     break;
-	
-  case 6:  // waiting for menu pin being release after long press.
-    if (activeLevel) {	// button is still pressed
+
+  case LONG_PRESS:  // waiting for button to be released after a long press
+    if (buttonIsPressed) {	// button is still pressed
       _isLongPressed = true; // Keep track of long press state
       if (_duringLongPressFunc) _duringLongPressFunc();
       #ifdef PARAM_FUNC
@@ -312,11 +311,10 @@ void OneButton::tick(bool activeLevel)
       #ifdef PARAM_FUNC
         if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
       #endif
-      _state = 0; // restart
+      _state = WAIT_FOR_INITIAL_PRESS; // restart
       _stopTime = now; // remember stopping time
     } // if
     break;
-  } // switch() _state machine
+  } // switch(_state)  machine
 } // OneButton.tick()
-
 // end.
