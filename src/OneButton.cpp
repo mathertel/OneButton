@@ -25,14 +25,12 @@
 /**
  * @brief Construct a new OneButton object but not (yet) initialize the IO pin.
  */
-OneButton::OneButton()
-{
+OneButton::OneButton() {
   _pin = -1;
   // further initialization has moved to OneButton.h
 }
 
-OneButton::OneButton(int pin, bool activeLow, bool pullupActive)
-{
+OneButton::OneButton(int pin, bool activeLow, bool pullupActive) {
   // OneButton();
   _pin = pin;
   /*
@@ -64,36 +62,31 @@ OneButton::OneButton(int pin, bool activeLow, bool pullupActive)
 
 // explicitly set the number of millisec that have to pass by before a click is
 // assumed as safe.
-void OneButton::setDebounceTicks(int ticks)
-{
+void OneButton::setDebounceTicks(int ticks) {
   _debounceTicks = ticks;
 } // setDebounceTicks
 
 // explicitly set the number of millisec that have to pass by before a click is
 // detected.
-void OneButton::setClickTicks(int ticks)
-{
+void OneButton::setClickTicks(int ticks) {
   _clickTicks = ticks;
 } // setClickTicks
 
 
 // explicitly set the number of millisec that have to pass by before a long
 // button press is detected.
-void OneButton::setPressTicks(int ticks)
-{
+void OneButton::setPressTicks(int ticks) {
   _pressTicks = ticks;
 } // setPressTicks
 
 
 // save function for click event
-void OneButton::attachClick(callbackFunction newFunction)
-{
+void OneButton::attachClick(callbackFunction newFunction) {
   _clickFunc = newFunction;
 } // attachClick
 #ifdef PARAM_FUNC
 // save function for parameterized click event
-void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* parameter)
-{
+void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* parameter) {
   _paramClickFunc = newFunction;
   _clickFuncParam = parameter;
 } // attachClick
@@ -101,14 +94,12 @@ void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* par
 
 
 // save function for doubleClick event
-void OneButton::attachDoubleClick(callbackFunction newFunction)
-{
+void OneButton::attachDoubleClick(callbackFunction newFunction) {
   _doubleClickFunc = newFunction;
 } // attachDoubleClick
 #ifdef PARAM_FUNC
 // save function for parameterized doubleClick event
-void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter)
-{
+void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter) {
   _paramDoubleClickFunc = newFunction;
   _doubleClickFuncParam = parameter;
 } // attachDoubleClick
@@ -133,59 +124,52 @@ void OneButton::attachTrippleClick(parameterizedCallbackFunction newFunction, vo
 // save function for press event
 // DEPRECATED, is replaced by attachLongPressStart, attachLongPressStop,
 // attachDuringLongPress,
-void OneButton::attachPress(callbackFunction newFunction)
-{
+void OneButton::attachPress(callbackFunction newFunction) {
   _pressFunc = newFunction;
 } // attachPress
 
 // save function for longPressStart event
-void OneButton::attachLongPressStart(callbackFunction newFunction)
-{
+void OneButton::attachLongPressStart(callbackFunction newFunction) {
   _longPressStartFunc = newFunction;
 } // attachLongPressStart
 #ifdef PARAM_FUNC
 // save function for parameterized longPressStart event
-void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter)
-{
+void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter) {
   _paramLongPressStartFunc = newFunction;
   _longPressStartFuncParam = parameter;
 } // attachLongPressStart
 #endif
 
 // save function for longPressStop event
-void OneButton::attachLongPressStop(callbackFunction newFunction)
-{
+void OneButton::attachLongPressStop(callbackFunction newFunction) {
   _longPressStopFunc = newFunction;
 } // attachLongPressStop
 #ifdef PARAM_FUNC
 // save function for parameterized longPressStop event
-void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter)
-{
+void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter) {
   _paramLongPressStopFunc = newFunction;
   _longPressStopFuncParam = parameter;
 } // attachLongPressStop
 #endif
 
 // save function for during longPress event
-void OneButton::attachDuringLongPress(callbackFunction newFunction)
-{
+void OneButton::attachDuringLongPress(callbackFunction newFunction) {
   _duringLongPressFunc = newFunction;
 } // attachDuringLongPress
 #ifdef PARAM_FUNC
 // save function for parameterized during longPress event
-void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter)
-{
+void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter) {
   _paramDuringLongPressFunc = newFunction;
   _duringLongPressFuncParam = parameter;
 } // attachDuringLongPress
 #endif
 
 // function to get the current long pressed state
-bool OneButton::isLongPressed(){
+bool OneButton::isLongPressed() {
   return _isLongPressed;
 }
 
-int OneButton::getPressedTicks(){
+int OneButton::getPressedTicks() {
   return _stopTime - _startTime;
 }
 
@@ -194,7 +178,7 @@ uint8_t OneButton::getNumberClicks(void) {
   return _nClicks;
 }
 
-void OneButton::reset(void){
+void OneButton::reset(void) {
   _state = WAIT_FOR_INITIAL_PRESS; // restart.
   _startTime = 0;
   _stopTime = 0;
@@ -206,8 +190,7 @@ void OneButton::reset(void){
  * @brief Check input of the configured pin and then advance the finite state
  * machine (FSM).
  */
-void OneButton::tick(void)
-{
+void OneButton::tick(void) {
   if (_pin >= 0) {
     tick(digitalRead(_pin) == _buttonPressed);
   }
@@ -248,7 +231,7 @@ void OneButton::tick(bool buttonIsPressed) {
         // button was released to quickly, so I assume some debouncing.
         // go back to state 0 without calling a function.
         _state = WAIT_FOR_INITIAL_PRESS;
-	  } else {
+	    } else {
         _state = DETECT_CLICK; // step to state 2
         _stopTime = now; // remember stopping time
       } // if
@@ -257,35 +240,35 @@ void OneButton::tick(bool buttonIsPressed) {
 
   case DETECT_CLICK:  // waiting for button being pressed or timeout.
     if ((unsigned long)(now - _startTime) > _clickTicks) {  // a click is detected
-	  _nClicks++;
-	  switch(_nClicks) {
-	  case 1:  // one click
+	    _nClicks++;
+	    switch(_nClicks) {
+	    case 1:  // one click
         if (_pressFunc) _pressFunc();
         if (_clickFunc) _clickFunc(); 
-		#ifdef PARAM_FUNC
+		    #ifdef PARAM_FUNC
         	if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
    	    #endif
-		break;
-	  case 2:  // two clicks
+		    break;
+	    case 2:  // two clicks
         if (_doubleClickFunc ) _doubleClickFunc(); 
-		#ifdef PARAM_FUNC
+		    #ifdef PARAM_FUNC
           if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
-     	#endif
-		break;
-	  default: // number of clicks > 2
+     	  #endif
+		    break;
+	    default: // number of clicks > 2
         if (_trippleClickFunc ) _trippleClickFunc();
-		#ifdef PARAM_FUNC
+		    #ifdef PARAM_FUNC
           if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
-     	#endif
-	  } // switch() number of clicks
+     	  #endif
+	    } // switch() number of clicks
       _state = WAIT_FOR_INITIAL_PRESS; // restart.
     } else { 
-	  if (buttonIsPressed && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
+	    if (buttonIsPressed && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
         _state = COUNT_CLICKS; // step to state 3
         _startTime = now; // remember starting time
       } // if
     } // if
-	break;
+	  break;
 
   case COUNT_CLICKS:  // waiting for button to be released
     // Stay here for at least _debounceTicks because else we might end up in
