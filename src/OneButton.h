@@ -45,8 +45,7 @@ typedef void (*callbackFunction)(void);
 }
 
 
-class OneButton
-{
+class OneButton {
 public:
   // ----- Constructor -----
   OneButton();
@@ -173,14 +172,13 @@ private:
   // They are initialized once on program start and are updated every time the
   // tick function is called.
   
-  //uint8_t _state = 0;
   // define FiniteStateMachine
   enum stateMachine_t : uint8_t {
-  WAIT_FOR_INITIAL_PRESS = 0, // 0
-  DEBOUNCE_OR_LONG_PRESS,	  // 1
-  DETECT_CLICK,  // 2
-  COUNT_CLICKS,  // 3
-  LONG_PRESS     // used to be 6, now equal to 4
+    WAIT_FOR_INITIAL_PRESS = 0, // 0
+    DEBOUNCE_OR_LONG_PRESS,	  // 1
+    DETECT_CLICK,  // 2
+    COUNT_CLICKS,  // 3
+    LONG_PRESS     // used to be 6, now is equal to 4
   } _state = WAIT_FOR_INITIAL_PRESS;
   
   unsigned long _startTime; // will be set in state 1
