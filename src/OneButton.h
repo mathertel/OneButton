@@ -71,9 +71,23 @@ public:
    */
   void attachDoubleClick(callbackFunction newFunction);
   void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
-  void attachPress(
-      callbackFunction newFunction); // DEPRECATED, replaced by longPressStart,
-                                     // longPressStop and duringLongPress
+
+  /**
+   * @deprecated Replaced by longPressStart, longPressStop, and duringLongPress.
+   * @param newFunction
+   */
+  void attachPress(callbackFunction newFunction);
+
+  /**
+   * Attach an event to fire as soon as the button is pressed down.
+   * @param newFunction
+   */
+  void attachPressStart(callbackFunction newFunction);
+
+  /**
+   * Attach an event to fire when the button is pressed and held down.
+   * @param newFunction
+   */
   void attachLongPressStart(callbackFunction newFunction);
   void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
 
@@ -145,6 +159,7 @@ private:
   void* _doubleClickFuncParam = NULL;
 
   callbackFunction _pressFunc = NULL;
+  callbackFunction _pressStartFunc = NULL;
 
   callbackFunction _longPressStartFunc = NULL;
   parameterizedCallbackFunction _paramLongPressStartFunc = NULL;
