@@ -39,23 +39,36 @@ public:
   // ----- Constructor -----
   OneButton();
 
-  OneButton(int pin, int active, bool pullupActive = true);
+  OneButton(int pin, int active = LOW, bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
-  // set # millisec after safe click is assumed.
+  /**
+   * set # millisec after safe click is assumed.
+   */
   void setDebounceTicks(int ticks);
 
-  // set # millisec after single click is assumed.
+  /**
+   * set # millisec after single click is assumed.
+   */
   void setClickTicks(int ticks);
 
-  // set # millisec after press is assumed.
+  /**
+   * set # millisec after press is assumed.
+   */
   void setPressTicks(int ticks);
 
-  // attach functions that will be called when button was pressed in the
-  // specified way.
+  /**
+   * Attach an event to be called when a single click is detected.
+   * @param newFunction
+   */
   void attachClick(callbackFunction newFunction);
   void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
+
+  /**
+   * Attach an event to be called after a double click is detected.
+   * @param newFunction
+   */
   void attachDoubleClick(callbackFunction newFunction);
   void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
   void attachPress(
@@ -63,8 +76,18 @@ public:
                                      // longPressStop and duringLongPress
   void attachLongPressStart(callbackFunction newFunction);
   void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
+
+  /**
+   * Attach an event to fire as soon as the button is released after a long press.
+   * @param newFunction
+   */
   void attachLongPressStop(callbackFunction newFunction);
   void attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter);
+
+  /**
+   * Attach an event to fire periodically while the button is held down.
+   * @param newFunction
+   */
   void attachDuringLongPress(callbackFunction newFunction);
   void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
 
@@ -83,8 +106,21 @@ public:
    */
   void tick(bool level);
 
+  /**
+   * Detect whether or not the button is currently inside a long press.
+   * @return
+   */
   bool isLongPressed();
+
+  /**
+   * Get the current number of ticks that the button has been held down for.
+   * @return
+   */
   int getPressedTicks();
+
+  /**
+   * Reset the button state machine.
+   */
   void reset(void);
 
 private:
