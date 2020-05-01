@@ -113,6 +113,10 @@ void OneButton::attachPress(callbackFunction newFunction)
   _pressFunc = newFunction;
 } // attachPress
 
+void OneButton::attachPressStart(callbackFunction newFunction) {
+  _pressStartFunc = newFunction;
+} // attachPressStart
+
 // save function for longPressStart event
 void OneButton::attachLongPressStart(callbackFunction newFunction)
 {
@@ -224,7 +228,10 @@ void OneButton::tick(bool activeLevel)
       _state = 6; // step to state 6
       _stopTime = now; // remember stopping time
     } else {
-      // wait. Stay in this state.
+      // Button was pressed down. wait. Stay in this state.
+      // if a pressStart event is registered, call it:
+      if (_pressStartFunc)
+        _pressStartFunc();
     } // if
 
   } else if (_state == 2) {
