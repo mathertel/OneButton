@@ -15,18 +15,18 @@
  
 // 03.03.2011 created by Matthias Hertel
 // 01.12.2011 extension changed to work with the Arduino 1.0 environment
-// 12.02.2020 extended to test more functions
+// 12.02.2020 extended to test more functions including new for multiple clicks - by ShaggyDog18
 
 #include "OneButton.h"
 
 // Setup a new OneButton on pin A1.  
 OneButton button(A1, true);
-bool m = LOW;
+bool ledState = LOW;
 
 // setup code here, to run once:
 void setup() {
   // enable the standard led on pin 13.
-  pinMode(13, OUTPUT);      // sets the digital pin as output
+  pinMode(LED_BUILTIN, OUTPUT);      // sets the digital pin as output
   Serial.begin(9600);
   
   // link the doubleclick function to be called on a doubleclick event. 
@@ -49,46 +49,40 @@ void loop() {
 } // loop
 
 void click() {
-  // reverse the LED 
-  m = !m;
-  digitalWrite(13, m);
-  Serial.print("1-clk: "); Serial.println(button.getNumberClicks());
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);
+  Serial.print("1-clik: "); Serial.println(button.getNumberClicks());
 } // singleClick
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
 void doubleclick() {
-  // reverse the LED 
-  m = !m;
-  digitalWrite(13, m);
-  Serial.print("2-clk: ");Serial.println(button.getNumberClicks());
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);
+  Serial.print("2-clik: ");Serial.println(button.getNumberClicks());
 } // doubleclick
 
 // this function will be called when the button was pressed 3 times and more in a short timeframe.
 void trippleclick() {
-  // reverse the LED 
-  m = !m;
-  digitalWrite(13, m);
-  Serial.print("3-clk: ");Serial.println(button.getNumberClicks());
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);;
+  Serial.print("3-clik: ");Serial.println(button.getNumberClicks());
 } // trippleclick
 
 void longPress() {
-  // reverse the LED 
-  m = !m;
-  digitalWrite(13, m);
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);
   Serial.print("LongPress: ");Serial.println(button.getNumberClicks());
 } // 
 
 void duringLongPress() {
-  // reverse the LED 
-  m = !m;
-  digitalWrite(13, m);
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);
   Serial.print("DuringLongPress: ");Serial.println(button.getNumberClicks());
 } //DuringLongPress
 
 void longPressStop() {
-  // reverse the LED 
-  m = !m;
-  digitalWrite(13, m);
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);
   Serial.print("LongPressStop: ");Serial.println(button.getNumberClicks());
 } // LongPressStop
 // End
