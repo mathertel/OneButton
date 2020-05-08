@@ -18,11 +18,14 @@ setPressTicks	KEYWORD2
 setDebounceTicks	KEYWORD2
 attachClick	KEYWORD2
 attachDoubleClick	KEYWORD2
+attachTrippleClick	KEYWORD2
 attachLongPressStart	KEYWORD2
 attachLongPressStop	KEYWORD2
 attachDuringLongPress	KEYWORD2
 isLongPressed	KEYWORD2
 tick	KEYWORD2
+getPressedTicks	KEYWORD2
+getNumberClicks	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)

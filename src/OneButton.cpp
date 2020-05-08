@@ -14,7 +14,7 @@
  *
  * Changelog: see OneButton.h
  * 
- * Modified by ShaggyDog18@gmaol.com
+ * Modified by ShaggyDog18@gmail.com
  * see Modification log in OneButton.h
  */
 
@@ -246,20 +246,20 @@ void OneButton::tick(bool buttonIsPressed) {
         if (_pressFunc) _pressFunc();
         if (_clickFunc) _clickFunc(); 
 		    #ifdef PARAM_FUNC
-        	if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
-   	    #endif
+        	  if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
+   	        #endif
 		    break;
 	    case 2:  // two clicks
         if (_doubleClickFunc ) _doubleClickFunc(); 
 		    #ifdef PARAM_FUNC
-          if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
-     	  #endif
+              if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
+     	    #endif
 		    break;
 	    default: // number of clicks > 2
         if (_trippleClickFunc ) _trippleClickFunc();
 		    #ifdef PARAM_FUNC
-          if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
-     	  #endif
+              if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
+     	    #endif
 	    } // switch() number of clicks
       _state = WAIT_FOR_INITIAL_PRESS; // restart.
     } else { 
