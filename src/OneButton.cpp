@@ -269,12 +269,13 @@ void OneButton::tick(bool activeLevel)
     // waiting for menu pin being release after long press.
     if (!activeLevel) {
       _isLongPressed = false; // Keep track of long press state
+      _stopTime = now; // remember stopping time
       if (_longPressStopFunc)
         _longPressStopFunc();
       if (_paramLongPressStopFunc)
         _paramLongPressStopFunc(_longPressStopFuncParam);
       _state = 0; // restart.
-      _stopTime = now; // remember stopping time
+      
     } else {
       // button is being long pressed
       _isLongPressed = true; // Keep track of long press state
