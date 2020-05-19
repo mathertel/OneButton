@@ -231,7 +231,7 @@ void OneButton::tick(bool buttonIsPressed) {
         // button was released to quickly, so I assume some debouncing.
         // go back to state 0 without calling a function.
         _state = WAIT_FOR_INITIAL_PRESS;
-	    } else {
+	  } else {
         _state = DETECT_CLICK; // step to state 2
         _stopTime = now; // remember stopping time
       } // if
@@ -243,25 +243,25 @@ void OneButton::tick(bool buttonIsPressed) {
 	    _nClicks++;
 	    switch(_nClicks) {
 	    case 1:  // one click
-        if (_pressFunc) _pressFunc();
-        if (_clickFunc) _clickFunc(); 
+        	if (_pressFunc) _pressFunc();
+       		if (_clickFunc) _clickFunc(); 
 		    #ifdef PARAM_FUNC
         	  if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
    	        #endif
 		    break;
 	    case 2:  // two clicks
-        if (_doubleClickFunc ) _doubleClickFunc(); 
+        	if (_doubleClickFunc ) _doubleClickFunc(); 
 		    #ifdef PARAM_FUNC
               if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
      	    #endif
 		    break;
 	    default: // number of clicks > 2
-        if (_trippleClickFunc ) _trippleClickFunc();
+        	if (_trippleClickFunc ) _trippleClickFunc();
 		    #ifdef PARAM_FUNC
               if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
      	    #endif
 	    } // switch() number of clicks
-      _state = WAIT_FOR_INITIAL_PRESS; // restart.
+        _state = WAIT_FOR_INITIAL_PRESS; // restart.
     } else { 
 	    if (buttonIsPressed && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
         _state = COUNT_CLICKS; // step to state 3
