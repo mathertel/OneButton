@@ -28,7 +28,13 @@ OneButton::OneButton()
   // further initialization has moved to OneButton.h
 }
 
-OneButton::OneButton(int pin, int activeLow, bool pullupActive)
+/**
+ * Initialize the OneButton library.
+ * @param pin The pin to be used for input from a momentary button.
+ * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
+ * @param pullupActive Activate the internal pullup when available. Default is true.
+ */
+OneButton::OneButton(int pin, boolean activeLow, bool pullupActive)
 {
   // OneButton();
   _pin = pin;
@@ -83,7 +89,7 @@ void OneButton::attachClick(callbackFunction newFunction)
 
 
 // save function for parameterized click event
-void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* parameter)
+void OneButton::attachClick(parameterizedCallbackFunction newFunction, void *parameter)
 {
   _paramClickFunc = newFunction;
   _clickFuncParam = parameter;
@@ -98,7 +104,7 @@ void OneButton::attachDoubleClick(callbackFunction newFunction)
 
 
 // save function for parameterized doubleClick event
-void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter)
+void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void *parameter)
 {
   _paramDoubleClickFunc = newFunction;
   _doubleClickFuncParam = parameter;
@@ -113,7 +119,8 @@ void OneButton::attachPress(callbackFunction newFunction)
   _pressFunc = newFunction;
 } // attachPress
 
-void OneButton::attachPressStart(callbackFunction newFunction) {
+void OneButton::attachPressStart(callbackFunction newFunction)
+{
   _pressStartFunc = newFunction;
 } // attachPressStart
 
@@ -124,7 +131,7 @@ void OneButton::attachLongPressStart(callbackFunction newFunction)
 } // attachLongPressStart
 
 // save function for parameterized longPressStart event
-void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter)
+void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void *parameter)
 {
   _paramLongPressStartFunc = newFunction;
   _longPressStartFuncParam = parameter;
@@ -137,7 +144,7 @@ void OneButton::attachLongPressStop(callbackFunction newFunction)
 } // attachLongPressStop
 
 // save function for parameterized longPressStop event
-void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter)
+void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void *parameter)
 {
   _paramLongPressStopFunc = newFunction;
   _longPressStopFuncParam = parameter;
@@ -150,22 +157,25 @@ void OneButton::attachDuringLongPress(callbackFunction newFunction)
 } // attachDuringLongPress
 
 // save function for parameterized during longPress event
-void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter)
+void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void *parameter)
 {
   _paramDuringLongPressFunc = newFunction;
   _duringLongPressFuncParam = parameter;
 } // attachDuringLongPress
 
 // function to get the current long pressed state
-bool OneButton::isLongPressed(){
+bool OneButton::isLongPressed()
+{
   return _isLongPressed;
 }
 
-int OneButton::getPressedTicks(){
+int OneButton::getPressedTicks()
+{
   return _stopTime - _startTime;
 }
 
-void OneButton::reset(void){
+void OneButton::reset(void)
+{
   _state = 0; // restart.
   _startTime = 0;
   _stopTime = 0;

@@ -39,7 +39,13 @@ public:
   // ----- Constructor -----
   OneButton();
 
-  OneButton(int pin, int active = LOW, bool pullupActive = true);
+  /**
+   * Initialize the OneButton library.
+   * @param pin The pin to be used for input from a momentary button.
+   * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
+   * @param pullupActive Activate the internal pullup when available. Default is true.
+   */
+  OneButton(int pin, boolean activeLow = true, bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
