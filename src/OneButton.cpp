@@ -224,6 +224,7 @@ void OneButton::tick(bool activeLevel)
 
     } else if ((activeLevel) &&
                ((unsigned long)(now - _startTime) > _pressTicks)) {
+      _stopTime = now; // remember stopping time
       _isLongPressed = true; // Keep track of long press state
       if (_pressFunc)
         _pressFunc();
@@ -236,7 +237,6 @@ void OneButton::tick(bool activeLevel)
       if (_paramDuringLongPressFunc)
         _paramDuringLongPressFunc(_duringLongPressFuncParam);
       _state = 6; // step to state 6
-      _stopTime = now; // remember stopping time
     } else {
       // Button was pressed down. wait. Stay in this state.
       // if a pressStart event is registered, call it:
@@ -266,27 +266,28 @@ void OneButton::tick(bool activeLevel)
     // state 1 if the button bounces for too long.
     if ((!activeLevel) &&
         ((unsigned long)(now - _startTime) > _debounceTicks)) {
+      _stopTime = now; // remember stopping time
       // this was a 2 click sequence.
       if (_doubleClickFunc)
         _doubleClickFunc();
       if (_paramDoubleClickFunc)
         _paramDoubleClickFunc(_doubleClickFuncParam);
       _state = 0; // restart.
-      _stopTime = now; // remember stopping time
     } // if
 
   } else if (_state == 6) {
     // waiting for menu pin being release after long press.
     if (!activeLevel) {
       _isLongPressed = false; // Keep track of long press state
+      _stopTime = now; // remember stopping time
       if (_longPressStopFunc)
         _longPressStopFunc();
       if (_paramLongPressStopFunc)
         _paramLongPressStopFunc(_longPressStopFuncParam);
       _state = 0; // restart.
-      _stopTime = now; // remember stopping time
     } else {
       // button is being long pressed
+      _stopTime = now; // remember stopping time
       _isLongPressed = true; // Keep track of long press state
       if (_duringLongPressFunc)
         _duringLongPressFunc();
