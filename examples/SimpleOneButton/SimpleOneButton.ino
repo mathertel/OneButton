@@ -12,42 +12,64 @@
  The Sketch shows how to setup the library and bind a special function to the doubleclick event.
  In the loop function the button.tick function has to be called as often as you like.
 */
- 
+
 // 03.03.2011 created by Matthias Hertel
 // 01.12.2011 extension changed to work with the Arduino 1.0 environment
 
 #include "OneButton.h"
 
-// Setup a new OneButton on pin A1.  
-OneButton button(A1, true);
+// Example for Arduino UNO with input button on A1
+#define PIN_INPUT A1
+#define PIN_LED 13
+
+// Example for ESP8266 with input button on D5 and using the led on -12 module.
+// #define PIN_INPUT D5
+// #define PIN_LED D4
+
+// Setup a new OneButton on pin PIN_INPUT
+
+// The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
+OneButton button(PIN_INPUT, true);
+
+// In case the momentary button puts the input to HIGH when pressed:
+// The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
+// The 3. parameter can be used to disable the PullUp .
+// OneButton button(PIN_INPUT, false, false);
 
 
 // setup code here, to run once:
-void setup() {
-  // enable the standard led on pin 13.
-  pinMode(13, OUTPUT);      // sets the digital pin as output
-  
-  // link the doubleclick function to be called on a doubleclick event.   
-  button.attachDoubleClick(doubleclick);
-} // setup
-  
+void setup()
+{
+  Serial.begin(115200);
 
-// main code here, to run repeatedly: 
-void loop() {
+  // enable the standard led on pin 13.
+  pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
+
+  // link the doubleclick function to be called on a doubleclick event.
+  button.attachDoubleClick(doubleclick);
+
+
+} // setup
+
+
+// main code here, to run repeatedly:
+void loop()
+{
   // keep watching the push button:
   button.tick();
 
-  // You can implement other code in here or just wait a while 
+  // You can implement other code in here or just wait a while
   delay(10);
 } // loop
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
-void doubleclick() {
+void doubleclick()
+{
   static int m = LOW;
-  // reverse the LED 
+  // reverse the LED
   m = !m;
-  digitalWrite(13, m);
+  digitalWrite(PIN_LED, m);
 } // doubleclick
 
 // End
