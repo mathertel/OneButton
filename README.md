@@ -38,9 +38,9 @@ Each physical button requires its own `OneButton` instance. You can initialize t
  */
 
 OneButton btn = OneButton(
-  BUTTON_PIN, // Input pin for the button
-  LOW,       // Button is active LOW
-  true       // Enable internal pull-up resistor
+  BUTTON_PIN,  // Input pin for the button
+  true,        // Button is active LOW
+  true         // Enable internal pull-up resistor
 );
 ```
 
@@ -58,9 +58,9 @@ OneButton btn = OneButton(
  */
 
 OneButton btn = OneButton(
-  BUTTON_PIN, // Input pin for the button
-  HIGH,       // Button is active high
-  false       // Disable internal pull-up resistor
+  BUTTON_PIN,  // Input pin for the button
+  false,       // Button is active high
+  false        // Disable internal pull-up resistor
 );
 ```
 
@@ -81,7 +81,7 @@ btn.attachClick(handleClick);
 
 // Double Click event attachment with lambda
 btn.attachDoubleClick([]() {
-  Serial.println("Double Press!");
+  Serial.println("Double Pressed!");
 });
 ```
 
