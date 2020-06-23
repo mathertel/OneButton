@@ -54,41 +54,82 @@ public:
 
   // ----- Set runtime parameters -----
 
-  // set # millisec after safe click is assumed.
+  /**
+   * set # millisec after safe click is assumed.
+   */
   void setDebounceTicks(int ticks);
 
-  // set # millisec after single click is assumed.
+  /**
+   * set # millisec after single click is assumed.
+   */
   void setClickTicks(int ticks);
 
-  // set # millisec after press is assumed.
+  /**
+   * set # millisec after press is assumed.
+   */
   void setPressTicks(int ticks);
 
-  // attach functions that will be called when button was pressed in the
-  // specified way.
+  /**
+   * Attach an event to be called when a single click is detected.
+   * @param newFunction
+   */
   void attachClick(callbackFunction newFunction);
   #ifdef PARAM_FUNC
     void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
+
+  /**
+   * Attach an event to be called after a double click is detected.
+   * @param newFunction
+   */
   void attachDoubleClick(callbackFunction newFunction);
   #ifdef PARAM_FUNC
     void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
+
+  /**
+   * Attach an event to be called after a tripple and more clicks are detected.
+   * @param newFunction
+   */
   void attachTrippleClick(callbackFunction newFunction);
   #ifdef PARAM_FUNC
     void attachTrippleClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif  
-  
-  void attachPress(
-      callbackFunction newFunction); // DEPRECATED, replaced by longPressStart,
-                                     // longPressStop and duringLongPress
+
+  /**
+   * @deprecated Replaced by longPressStart, longPressStop, and duringLongPress.
+   * @param newFunction
+   */
+  void attachPress(callbackFunction newFunction);
+
+  /**
+   * Attach an event to fire as soon as the button is pressed down.
+   * @param newFunction
+   */
+  void attachPressStart(callbackFunction newFunction);
+
+  /**
+   * Attach an event to fire when the button is pressed and held down.
+   * @param newFunction
+   */
   void attachLongPressStart(callbackFunction newFunction);
   #ifdef PARAM_FUNC
     void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
+
+  /**
+   * Attach an event to fire as soon as the button is released after a long press.
+   * @param newFunction
+   */
   void attachLongPressStop(callbackFunction newFunction);
   #ifdef PARAM_FUNC
     void attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
+
+  /**
+   * Attach an event to fire periodically while the button is held down.
+   * @param newFunction
+   */
   void attachDuringLongPress(callbackFunction newFunction);
   #ifdef PARAM_FUNC
     void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
@@ -109,9 +150,26 @@ public:
    */
   void tick(bool level);
 
+  /**
+   * Detect whether or not the button is currently inside a long press.
+   * @return
+   */
   bool isLongPressed();
+
+  /**
+   * Get the current number of ticks that the button has been held down for.
+   * @return
+   */
   int getPressedTicks();
+
+  /**
+   * Reset the button state machine.
+   */
   void reset(void);
+
+  /**
+   * Get number of clicks for the multiple click case.
+   */
   uint8_t getNumberClicks(void);	// ShaggyDog: return number of clicks
 
 private:
@@ -149,6 +207,7 @@ private:
   #endif
 
   callbackFunction _pressFunc = NULL;
+  callbackFunction _pressStartFunc = NULL;
 
   callbackFunction _longPressStartFunc = NULL;
   #ifdef PARAM_FUNC

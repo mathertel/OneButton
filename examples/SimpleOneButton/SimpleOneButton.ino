@@ -16,7 +16,8 @@
 // 03.03.2011 created by Matthias Hertel
 // 01.12.2011 extension changed to work with the Arduino 1.0 environment
 // 12.02.2020 extended to test more functions including new for multiple clicks - by ShaggyDog18
-
+// 23.06.2020 synch up with the original library version 1.5; added attachPressStart() function; test includes almost all functions
+//--------------------
 #include "OneButton.h"
 
 // Setup a new OneButton on pin A1.  
@@ -28,6 +29,11 @@ void setup() {
   // enable the standard led on pin 13.
   pinMode(LED_BUILTIN, OUTPUT);      // sets the digital pin as output
   Serial.begin(9600);
+
+  // set more aggressive timing
+  button.setDebounceTicks( 20 );// default is 50
+  button.setClickTicks(300);  // defaul is 600
+  button.setPressTicks(500);  // defaulty is 1000
   
   // link the doubleclick function to be called on a doubleclick event. 
   button.attachClick(click);
@@ -36,6 +42,7 @@ void setup() {
   button.attachLongPressStart(longPress);
   button.attachLongPressStop(longPressStop);
   button.attachDuringLongPress(duringLongPress);
+  button.attachPressStart(pressStart); // new function added to the original library v1.5 
 } // setup
   
 
@@ -84,5 +91,11 @@ void longPressStop() {
   ledState = !ledState;// reverse the LED 
   digitalWrite(LED_BUILTIN, ledState);
   Serial.print("LongPressStop: ");Serial.println(button.getNumberClicks());
+} // LongPressStop
+
+void pressStart() {
+  ledState = !ledState;// reverse the LED 
+  digitalWrite(LED_BUILTIN, ledState);
+  Serial.print("PressStart: ");
 } // LongPressStop
 // End

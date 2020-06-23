@@ -84,6 +84,7 @@ void OneButton::setPressTicks(int ticks) {
 void OneButton::attachClick(callbackFunction newFunction) {
   _clickFunc = newFunction;
 } // attachClick
+
 #ifdef PARAM_FUNC
 // save function for parameterized click event
 void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* parameter) {
@@ -97,6 +98,7 @@ void OneButton::attachClick(parameterizedCallbackFunction newFunction, void* par
 void OneButton::attachDoubleClick(callbackFunction newFunction) {
   _doubleClickFunc = newFunction;
 } // attachDoubleClick
+
 #ifdef PARAM_FUNC
 // save function for parameterized doubleClick event
 void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter) {
@@ -128,10 +130,17 @@ void OneButton::attachPress(callbackFunction newFunction) {
   _pressFunc = newFunction;
 } // attachPress
 
+
+void OneButton::attachPressStart(callbackFunction newFunction) {
+  _pressStartFunc = newFunction;
+} // attachPressStart
+
+
 // save function for longPressStart event
 void OneButton::attachLongPressStart(callbackFunction newFunction) {
   _longPressStartFunc = newFunction;
 } // attachLongPressStart
+
 #ifdef PARAM_FUNC
 // save function for parameterized longPressStart event
 void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter) {
@@ -140,10 +149,12 @@ void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, 
 } // attachLongPressStart
 #endif
 
+
 // save function for longPressStop event
 void OneButton::attachLongPressStop(callbackFunction newFunction) {
   _longPressStopFunc = newFunction;
 } // attachLongPressStop
+
 #ifdef PARAM_FUNC
 // save function for parameterized longPressStop event
 void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter) {
@@ -152,10 +163,12 @@ void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, v
 } // attachLongPressStop
 #endif
 
+
 // save function for during longPress event
 void OneButton::attachDuringLongPress(callbackFunction newFunction) {
   _duringLongPressFunc = newFunction;
 } // attachDuringLongPress
+
 #ifdef PARAM_FUNC
 // save function for parameterized during longPress event
 void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter) {
@@ -225,7 +238,7 @@ void OneButton::tick(bool buttonIsPressed) {
 	      #endif
         _state = LONG_PRESS; // step to state 6
         _stopTime = now; // remember stopping time
-      } 	    
+      }	    
     } else {  // button was released
       if ((unsigned long)(now - _startTime) < _debounceTicks) {
         // button was released to quickly, so I assume some debouncing.
@@ -234,6 +247,7 @@ void OneButton::tick(bool buttonIsPressed) {
 	  } else {
         _state = DETECT_CLICK; // step to state 2
         _stopTime = now; // remember stopping time
+        if (_pressStartFunc) _pressStartFunc();
       } // if
     } // if
     break;
