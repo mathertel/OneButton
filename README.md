@@ -13,8 +13,8 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 
 Modified by ShaggyDog18@gmail.com
 
-Major modification: 
-- adding new functions:
+Major modification:
+- added new functions:
   - trippleClickFunc() for multiple 3+ clicks (for 3 clicks and more)
   - getNumberClicks() to return number of multiple clicks;
   
