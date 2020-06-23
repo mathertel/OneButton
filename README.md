@@ -124,14 +124,15 @@ void loop() {
 
 Here's a full list of events handled by this library:
 
-| Attach Function         | Description                                            |
-| ----------------------- | ------------------------------------------------------ |
-| `attachClick`           | Fires as soon as a single click is detected.           |
-| `attachDoubleClick`     | Fires as soon as a double click is detected.           |
-| `attachPressStart`      | Fires as soon as the button is pressed down.           |
-| `attachLongPressStart`  | Fires as soon as the button is held down for 1 second. |
-| `attachDuringLongPress` | Fires periodically as long as the button is held down. |
-| `attachLongPressStop`   | Fires when the button is released after a long hold.   |
+| Attach Function         | Description                                                |
+| ----------------------- | ---------------------------------------------------------- |
+| `attachClick`           | Fires as soon as a single click is detected.               |
+| `attachDoubleClick`     | Fires as soon as a double click is detected.               |
+| `attachTrippleClick`    | Fires as soon as tripple click or more clicks are detected.|
+| `attachPressStart`      | Fires as soon as the button is pressed down.               |
+| `attachLongPressStart`  | Fires as soon as the button is held down for 1 second.     |
+| `attachDuringLongPress` | Fires periodically as long as the button is held down.     |
+| `attachLongPressStop`   | Fires when the button is released after a long hold.       |
 
 
 ### Event Timing
@@ -154,11 +155,11 @@ otherwise it must wait for the double click timeout to pass.
 
 `OneButton` also provides a couple additional functions to use for querying button status:
 
-| Function                | Description                                                                    |
-| ----------------------- | ------------------------------------------------------------------------------ |
-| `bool isLongPressed()`  | Detect whether or not the button is currently inside a long press.             |
-| `int getPressedTicks()` | Get the current number of milliseconds that the button has been held down for. |
-
+| Function                   | Description                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `bool isLongPressed()`     | Detect whether or not the button is currently inside a long press.             |
+| `int getPressedTicks()`    | Get the current number of milliseconds that the button has been held down for. |
+| `uint8_t getNumberClicks()`| Get number of detected clicks. Return single or multiple number of clicks.     |
 
 ### `tick()` and `reset()`
 
