@@ -12,12 +12,14 @@ You can find more details on this library at
 http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 
 Modified by ShaggyDog18@gmail.com
+
 Major modification: 
 - adding new functions:
   - trippleClickFunc() for multiple 3+ clicks (for 3 clicks and more)
   - getNumberClicks() to return number of multiple clicks;
   
 ShaggyDog18 Change Log:
+
 12.02.2020: 
 - modified state machine (still same number of states), maintained full compatibility with the initial library; 
 - introduced a new functions: trippleClickFunc() for multiple 3+ clicks; getNumberClicks() to return number of clicks; 
