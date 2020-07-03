@@ -64,6 +64,10 @@ OneButton btn = OneButton(
 );
 ```
 
+The same by using active low as a default settings:
+```CPP
+OneButton btn = OneButton( BUTTON_PIN ); // Input pin for the button
+```
 
 ### Initialize a Button to VCC
 
