@@ -32,7 +32,7 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 - sync up with the original library, release v1.5, by adding the new function `attachPressStart()`.
 - extensed `SimpleOneButton` example that includes new function and allows to test almost all library functions.
 
-**If you like new functions and use the modified library, please, consider making a small donation using [PayPal](https://paypal.me/shaggyDog18/3USD)**
+**If you like new functions and use the modified library, please, consider making a small "cup of coffee" donation using [PayPal](https://paypal.me/shaggyDog18/3USD)**
 
 ## Getting Started
 
@@ -181,4 +181,4 @@ If your buttons aren't acting they way they should, check these items:
 2. Did you call `tick()` on each button instance in your loop?
 3. Did you alter your clock timers in any way without adjusting ticks?
    
-**If you like new functions and use the modified library, please, consider making a small donation using [PayPal](https://paypal.me/shaggyDog18/3USD)**
+**If you like new functions and use the modified library, please, consider making a small "cup of coffee" donation using [PayPal](https://paypal.me/shaggyDog18/3USD)**
