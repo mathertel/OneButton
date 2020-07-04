@@ -29,8 +29,8 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 - modified `SimpleOneButton` example to test more functions incl. new `trippleClickFunc()` and `getNumberClicks()` functions.
 
 23.06.2020:
-- sync up with original library release v1.5 by adding new function `attachPressStart()`
-- extensed `SimpleOneButton` example that includes new function now and allows to test almost all library functions
+- sync up with the original library, release v1.5, by adding the new function `attachPressStart()`.
+- extensed `SimpleOneButton` example that includes new function and allows to test almost all library functions.
 
 **If you like new functions and use the modified library, please, consider making a small donation using [PayPal](https://paypal.me/shaggyDog18/3USD)**
 
