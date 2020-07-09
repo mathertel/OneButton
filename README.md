@@ -13,14 +13,15 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 
 **Modified by ShaggyDog18@gmail.com**
 
-**Major modification**:
+**Major Modification**:
 - added new functions:
   - `tripleClickFunc()` for multiple 3+ clicks (for 3 clicks and more)
   - `getNumberClicks()` to return number of multiple clicks;
+  - `attachPressStart()` to mainatin compatibility with the new release v1.5 of the parent library: fires immediately as the button is pressed down. 
   
 ## Change Log:
 
-12.02.2020: 
+**12.02.2020**
 - modified state machine (still same number of states), maintained full compatibility with the initial library; 
 - introduced a new functions: `tripleClickFunc()` for multiple 3+ clicks; `getNumberClicks()` to return number of clicks; 
 - optimized - changed some types of variables (f.e.: `bool _buttonPressed`, `uint8_t _state`) to compact the code; 
@@ -28,9 +29,12 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 - introdiced `#define PARAM_FUNC` - if commented in `oneButton.h`, the call functions with parameters will not be used to save space; 
 - modified `SimpleOneButton` example to test more functions incl. new `tripleClickFunc()` and `getNumberClicks()` functions.
 
-23.06.2020:
+**23.06.2020**
 - sync up with the original library, release v1.5, by adding the new function `attachPressStart()`.
 - extensed `SimpleOneButton` example that includes new function and allows to test almost all library functions.
+
+**09.07.2020**
+- corrected spelling of `attachTripleClic()` function; now it is with just one 'p': `Triple` instead of `Tripple`. So, if you use my library, you would need to correct the function name in your application. 
 
 **If you like new functions and use the modified library, please, consider making a small "cup of coffee" donation using [PayPal](https://paypal.me/shaggyDog18/3USD)**
 
@@ -143,7 +147,6 @@ Here's a full list of events handled by this library:
 | `attachLongPressStart`  | Fires as soon as the button is held down for 1 second.     |
 | `attachDuringLongPress` | Fires periodically as long as the button is held down.     |
 | `attachLongPressStop`   | Fires when the button is released after a long hold.       |
-| `attachPressStart`      | **NEW** Fires immediately as the button press event is detected. |
 
 ### Event Timing
 
