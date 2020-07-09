@@ -143,7 +143,7 @@ Here's a full list of events handled by this library:
 | `attachLongPressStart`  | Fires as soon as the button is held down for 1 second.     |
 | `attachDuringLongPress` | Fires periodically as long as the button is held down.     |
 | `attachLongPressStop`   | Fires when the button is released after a long hold.       |
-| `attachPressStart`      | **NEW** Fires immediatly as the button press event is detected   |
+| `attachPressStart`      | **NEW** Fires immediately as the button press event is detected. |
 
 ### Event Timing
 
