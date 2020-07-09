@@ -107,10 +107,14 @@ btn.attachClick(handleClick);
 
 // Double Click event attachment with lambda
 btn.attachDoubleClick([]() {
-  Serial.println("Double Press!");
-});
-```
+  Serial.println("Double Click!");
+};
 
+// Triple Click event attachment
+btn.attachTripleClick([]() {
+  Serial.println("Triple Click!");
+};
+```
 
 ### Don't forget to `tick()`!
 
@@ -134,7 +138,7 @@ Here's a full list of events handled by this library:
 | ----------------------- | ---------------------------------------------------------- |
 | `attachClick`           | Fires as soon as a single click is detected.               |
 | `attachDoubleClick`     | Fires as soon as a double click is detected.               |
-| `attachTripleClick`     | Fires as soon as triple click or more clicks are detected. |
+| `attachTripleClick`     | **NEW** Fires as soon as triple click or more clicks are detected. |
 | `attachPressStart`      | **NEW** Fires as soon as the button is pressed down.               |
 | `attachLongPressStart`  | Fires as soon as the button is held down for 1 second.     |
 | `attachDuringLongPress` | Fires periodically as long as the button is held down.     |
@@ -164,7 +168,7 @@ otherwise it must wait for the double click timeout to pass.
 | Function                   | Description                                                                        |
 | -------------------------- | ---------------------------------------------------------------------------------- |
 | `bool isLongPressed()`     | Detect whether or not the button is currently inside a long press.                 |
-| `int getPressedTicks()`    | **NEW** Get the current number of milliseconds that the button has been held down for. |
+| `int getPressedTicks()`    | Get the current number of milliseconds that the button has been held down for. |
 | `uint8_t getNumberClicks()`| **NEW** Get number of detected clicks. Return single or multiple number of clicks.     |
 
 ### `tick()` and `reset()`
