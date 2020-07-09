@@ -108,16 +108,16 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
 #endif
 
 
-// ShaggyDog ---- Tripple and Multiple Clicks ----
-// save function for trippleClick event
-void OneButton::attachTrippleClick(callbackFunction newFunction) {
-  _trippleClickFunc = newFunction;
+// ShaggyDog ---- Triple and Multiple Clicks ----
+// save function for tripleClick event
+void OneButton::attachTripleClick(callbackFunction newFunction) {
+  _tripleClickFunc = newFunction;
 } // attachTrippleClick
 #ifdef PARAM_FUNC
 // save function for parameterized doubleClick event
-void OneButton::attachTrippleClick(parameterizedCallbackFunction newFunction, void* parameter) {
-  _paramTrippleClickFunc = newFunction;
-  _trippleClickFuncParam = parameter;
+void OneButton::attachTripleClick(parameterizedCallbackFunction newFunction, void* parameter) {
+  _paramTripleClickFunc = newFunction;
+  _tripleClickFuncParam = parameter;
 } // attachTrippleClick
 #endif
 // ShaggyDog ---- Tripple and Multiple Clicks ----
@@ -270,9 +270,9 @@ void OneButton::tick(bool buttonIsPressed) {
      	    #endif
 		    break;
 	    default: // number of clicks > 2
-        	if (_trippleClickFunc ) _trippleClickFunc();
+        	if (_tripleClickFunc ) _tripleClickFunc();
 		    #ifdef PARAM_FUNC
-              if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
+              if (_paramTripleClickFunc) _paramTripleClickFunc(_tripleClickFuncParam);
      	    #endif
 	    } // switch() number of clicks
         _state = WAIT_FOR_INITIAL_PRESS; // restart.
