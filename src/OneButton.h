@@ -91,9 +91,9 @@ public:
    * Attach an event to be called after a tripple and more clicks are detected.
    * @param newFunction
    */
-  void attachTrippleClick(callbackFunction newFunction);
+  void attachTripleClick(callbackFunction newFunction);
   #ifdef PARAM_FUNC
-    void attachTrippleClick(parameterizedCallbackFunction newFunction, void* parameter);
+    void attachTripleClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif  
 
   /**
@@ -200,10 +200,10 @@ private:
   #endif
 
 // new multiple click function
-  callbackFunction _trippleClickFunc = NULL;
+  callbackFunction _tripleClickFunc = NULL;
   #ifdef PARAM_FUNC
-    parameterizedCallbackFunction _paramTrippleClickFunc = NULL;
-    void* _trippleClickFuncParam = NULL;
+    parameterizedCallbackFunction _paramTripleClickFunc = NULL;
+    void* _tripleClickFuncParam = NULL;
   #endif
 
   callbackFunction _pressFunc = NULL;
