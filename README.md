@@ -15,18 +15,18 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
 
 **Major modification**:
 - added new functions:
-  - `trippleClickFunc()` for multiple 3+ clicks (for 3 clicks and more)
+  - `tripleClickFunc()` for multiple 3+ clicks (for 3 clicks and more)
   - `getNumberClicks()` to return number of multiple clicks;
   
 ## Change Log:
 
 12.02.2020: 
 - modified state machine (still same number of states), maintained full compatibility with the initial library; 
-- introduced a new functions: `trippleClickFunc()` for multiple 3+ clicks; `getNumberClicks()` to return number of clicks; 
+- introduced a new functions: `tripleClickFunc()` for multiple 3+ clicks; `getNumberClicks()` to return number of clicks; 
 - optimized - changed some types of variables (f.e.: `bool _buttonPressed`, `uint8_t _state`) to compact the code; 
 - optimized - by using `switch()` instead of multiple `if()`-s; 
 - introdiced `#define PARAM_FUNC` - if commented in `oneButton.h`, the call functions with parameters will not be used to save space; 
-- modified `SimpleOneButton` example to test more functions incl. new `trippleClickFunc()` and `getNumberClicks()` functions.
+- modified `SimpleOneButton` example to test more functions incl. new `tripleClickFunc()` and `getNumberClicks()` functions.
 
 23.06.2020:
 - sync up with the original library, release v1.5, by adding the new function `attachPressStart()`.
@@ -134,7 +134,7 @@ Here's a full list of events handled by this library:
 | ----------------------- | ---------------------------------------------------------- |
 | `attachClick`           | Fires as soon as a single click is detected.               |
 | `attachDoubleClick`     | Fires as soon as a double click is detected.               |
-| `attachTrippleClick`    | Fires as soon as tripple click or more clicks are detected.|
+| `attachTripleClick`     | Fires as soon as triple click or more clicks are detected. |
 | `attachPressStart`      | **NEW** Fires as soon as the button is pressed down.               |
 | `attachLongPressStart`  | Fires as soon as the button is held down for 1 second.     |
 | `attachDuringLongPress` | Fires periodically as long as the button is held down.     |

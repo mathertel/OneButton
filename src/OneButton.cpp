@@ -112,15 +112,15 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
 // save function for tripleClick event
 void OneButton::attachTripleClick(callbackFunction newFunction) {
   _tripleClickFunc = newFunction;
-} // attachTrippleClick
+} // attachTripleClick
 #ifdef PARAM_FUNC
 // save function for parameterized doubleClick event
 void OneButton::attachTripleClick(parameterizedCallbackFunction newFunction, void* parameter) {
   _paramTripleClickFunc = newFunction;
   _tripleClickFuncParam = parameter;
-} // attachTrippleClick
+} // attachTripleClick
 #endif
-// ShaggyDog ---- Tripple and Multiple Clicks ----
+// ShaggyDog ---- Triple and Multiple Clicks ----
 
 
 // save function for press event

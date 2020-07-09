@@ -22,9 +22,9 @@
 // 29.01.2020 ShaggyDog18: optimized by using switch() instead of multiple if()-s; PARAM_FUNC functions are optional to save space
 // 12.02.2020 ShaggyDog18: Modification Log:
 // - modified the State Machine (still the same number of states), maintained full compatibility with initial Author development
-// - introduced new functions: trippleClickFunc() for 3+ clicks; getNumberClicks() to return number of clicks;
+// - introduced new functions: tripleClickFunc() for 3+ clicks; getNumberClicks() to return number of clicks;
 // - optimized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code 
-// - modified SimpleOneButton example to test more functions incl. new trippleClickFunc() and getNumberClicks() functions
+// - modified SimpleOneButton example to test more functions incl. new tripleClickFunc() and getNumberClicks() functions
 // -----
 
 #ifndef OneButton_h
@@ -88,7 +88,7 @@ public:
   #endif
 
   /**
-   * Attach an event to be called after a tripple and more clicks are detected.
+   * Attach an event to be called after a triple and more clicks are detected.
    * @param newFunction
    */
   void attachTripleClick(callbackFunction newFunction);
