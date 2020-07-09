@@ -38,7 +38,7 @@ void setup() {
   // link the doubleclick function to be called on a doubleclick event. 
   button.attachClick(click);
   button.attachDoubleClick(doubleclick);
-  button.attachTrippleClick(trippleclick);
+  button.attachTripleClick(tripleclick);
   button.attachLongPressStart(longPress);
   button.attachLongPressStop(longPressStop);
   button.attachDuringLongPress(duringLongPress);
@@ -69,11 +69,11 @@ void doubleclick() {
 } // doubleclick
 
 // this function will be called when the button was pressed 3 times and more in a short timeframe.
-void trippleclick() {
+void tripleclick() {
   ledState = !ledState;// reverse the LED 
   digitalWrite(LED_BUILTIN, ledState);;
   Serial.print("3-clik: ");Serial.println(button.getNumberClicks());
-} // trippleclick
+} // tripleclick
 
 void longPress() {
   ledState = !ledState;// reverse the LED 
