@@ -18,7 +18,7 @@ setPressTicks	KEYWORD2
 setDebounceTicks	KEYWORD2
 attachClick	KEYWORD2
 attachDoubleClick	KEYWORD2
-attachTrippleClick	KEYWORD2
+attachTripleClick	KEYWORD2
 attachPress	KEYWORD2
 attachPressStart	KEYWORD2
 attachLongPressStart	KEYWORD2
