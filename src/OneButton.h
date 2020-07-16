@@ -25,6 +25,13 @@
 // - introduced new functions: tripleClickFunc() for 3+ clicks; getNumberClicks() to return number of clicks;
 // - optimized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code 
 // - modified SimpleOneButton example to test more functions incl. new tripleClickFunc() and getNumberClicks() functions
+// 23.06.2020
+// - sync up with the original library, release v1.5, by adding the new function attachPressStart().
+// - extensed SimpleOneButton example that includes new function and allows to test almost all library functions.
+// 09.07.2020
+// - corrected spelling of attachTripleClic() function; now it is with just one 'p': Triple instead of Tripple. 
+//   So, if you use my library, you would need to correct the function name in your application.
+//
 // -----
 
 #ifndef OneButton_h
