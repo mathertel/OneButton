@@ -30,7 +30,7 @@ OneButton::OneButton() {
   // further initialization has moved to OneButton.h
 }
 
-OneButton::OneButton(int pin, bool activeLow, bool pullupActive) {
+OneButton::OneButton(const int pin, const bool activeLow, const bool pullupActive) {
   // OneButton();
   _pin = pin;
   /*
@@ -62,20 +62,20 @@ OneButton::OneButton(int pin, bool activeLow, bool pullupActive) {
 
 // explicitly set the number of millisec that have to pass by before a click is
 // assumed as safe.
-void OneButton::setDebounceTicks(int ticks) {
+void OneButton::setDebounceTicks(const int ticks) {
   _debounceTicks = ticks;
 } // setDebounceTicks
 
 // explicitly set the number of millisec that have to pass by before a click is
 // detected.
-void OneButton::setClickTicks(int ticks) {
+void OneButton::setClickTicks(const int ticks) {
   _clickTicks = ticks;
 } // setClickTicks
 
 
 // explicitly set the number of millisec that have to pass by before a long
 // button press is detected.
-void OneButton::setPressTicks(int ticks) {
+void OneButton::setPressTicks(const int ticks) {
   _pressTicks = ticks;
 } // setPressTicks
 
@@ -213,7 +213,7 @@ void OneButton::tick(void) {
 /**
  * @brief Advance the finite state machine (FSM) using the given level.
  */
-void OneButton::tick(bool buttonIsPressed) {
+void OneButton::tick(const bool buttonIsPressed) {
   unsigned long now = millis(); // current (relative) time in msecs.
 
   // Implementation of the state machine
@@ -271,11 +271,11 @@ void OneButton::tick(bool buttonIsPressed) {
 		    break;
 	    default: // number of clicks > 2
         	if (_tripleClickFunc ) _tripleClickFunc();
-		    #ifdef PARAM_FUNC
+		      #ifdef PARAM_FUNC
               if (_paramTripleClickFunc) _paramTripleClickFunc(_tripleClickFuncParam);
      	    #endif
 	    } // switch() number of clicks
-        _state = WAIT_FOR_INITIAL_PRESS; // restart.
+      _state = WAIT_FOR_INITIAL_PRESS; // restart.
     } else { 
 	    if (buttonIsPressed && ((unsigned long)(now - _stopTime) > _debounceTicks)) {
         _state = COUNT_CLICKS; // step to state 3

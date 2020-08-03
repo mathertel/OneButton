@@ -25,13 +25,6 @@
 // - introduced new functions: tripleClickFunc() for 3+ clicks; getNumberClicks() to return number of clicks;
 // - optimized - changed some types of variables (f.e.: bool _buttonPressed, uint8_t _state) to compact the code 
 // - modified SimpleOneButton example to test more functions incl. new tripleClickFunc() and getNumberClicks() functions
-// 23.06.2020
-// - sync up with the original library, release v1.5, by adding the new function attachPressStart().
-// - extensed SimpleOneButton example that includes new function and allows to test almost all library functions.
-// 09.07.2020
-// - corrected spelling of attachTripleClic() function; now it is with just one 'p': Triple instead of Tripple. 
-//   So, if you use my library, you would need to correct the function name in your application.
-//
 // -----
 
 #ifndef OneButton_h
@@ -40,7 +33,7 @@
 #include "Arduino.h"
 
 
-#define PARAM_FUNC		// uncomment in case need calling functions with parameters
+//#define PARAM_FUNC		// uncomment in case need calling functions with parameters
 
 // ----- Callback function types -----
 
@@ -57,24 +50,24 @@ public:
   // ----- Constructor -----
   OneButton();
 
-  OneButton(int pin, bool activeLow = true, bool pullupActive = true);
+  OneButton(const int pin, const bool activeLow = true, const bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
   /**
    * set # millisec after safe click is assumed.
    */
-  void setDebounceTicks(int ticks);
+  void setDebounceTicks(const int ticks);
 
   /**
    * set # millisec after single click is assumed.
    */
-  void setClickTicks(int ticks);
+  void setClickTicks(const int ticks);
 
   /**
    * set # millisec after press is assumed.
    */
-  void setPressTicks(int ticks);
+  void setPressTicks(const int ticks);
 
   /**
    * Attach an event to be called when a single click is detected.
