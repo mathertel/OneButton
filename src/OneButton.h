@@ -30,6 +30,7 @@
 extern "C" {
 typedef void (*callbackFunction)(void);
 typedef void (*parameterizedCallbackFunction)(void*);
+typedef void (*taggetCallbackFunction)(int);
 }
 
 
@@ -70,6 +71,7 @@ public:
    */
   void attachClick(callbackFunction newFunction);
   void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
+  void attachClick(taggetCallbackFunction newFunction);
 
   /**
    * Attach an event to be called after a double click is detected.
@@ -77,6 +79,7 @@ public:
    */
   void attachDoubleClick(callbackFunction newFunction);
   void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
+  void attachDoubleClick(taggetCallbackFunction newFunction);
 
   /**
    * @deprecated Replaced by longPressStart, longPressStop, and duringLongPress.
@@ -143,6 +146,8 @@ public:
    */
   void reset(void);
 
+  int Tag;
+
 private:
   int _pin; // hardware pin number.
   unsigned int _debounceTicks = 50; // number of ticks for debounce times.
@@ -159,10 +164,12 @@ private:
   callbackFunction _clickFunc = NULL;
   parameterizedCallbackFunction _paramClickFunc = NULL;
   void* _clickFuncParam = NULL;
+  taggetCallbackFunction _taggetClickFunc = NULL;
 
   callbackFunction _doubleClickFunc = NULL;
   parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
   void* _doubleClickFuncParam = NULL;
+  taggetCallbackFunction _taggetDoubleClickFunc = NULL;
 
   callbackFunction _pressFunc = NULL;
   callbackFunction _pressStartFunc = NULL;

@@ -95,6 +95,11 @@ void OneButton::attachClick(parameterizedCallbackFunction newFunction, void *par
   _clickFuncParam = parameter;
 } // attachClick
 
+void OneButton::attachClick(taggetCallbackFunction newFunction)
+{
+    _taggetClickFunc = newFunction;
+} // attachClick
+
 
 // save function for doubleClick event
 void OneButton::attachDoubleClick(callbackFunction newFunction)
@@ -108,6 +113,11 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
 {
   _paramDoubleClickFunc = newFunction;
   _doubleClickFuncParam = parameter;
+} // attachDoubleClick
+
+void OneButton::attachDoubleClick(taggetCallbackFunction newFunction)
+{
+    _taggetDoubleClickFunc = newFunction;
 } // attachDoubleClick
 
 
@@ -251,6 +261,8 @@ void OneButton::tick(bool activeLevel)
       // this was only a single short click
       if (_clickFunc)
         _clickFunc();
+      if (_taggetClickFunc)
+          _taggetClickFunc(Tag);
       if (_paramClickFunc)
         _paramClickFunc(_clickFuncParam);
       _state = 0; // restart.
@@ -272,6 +284,8 @@ void OneButton::tick(bool activeLevel)
         _doubleClickFunc();
       if (_paramDoubleClickFunc)
         _paramDoubleClickFunc(_doubleClickFuncParam);
+      if (_taggetDoubleClickFunc)
+          _taggetDoubleClickFunc(Tag);
       _state = 0; // restart.
     } // if
 
