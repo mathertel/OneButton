@@ -95,7 +95,7 @@ void OneButton::attachClick(parameterizedCallbackFunction newFunction, void *par
   _clickFuncParam = parameter;
 } // attachClick
 
-void OneButton::attachClick(taggetCallbackFunction newFunction)
+void OneButton::attachClick(taggedCallbackFunction newFunction)
 {
     _taggetClickFunc = newFunction;
 } // attachClick
