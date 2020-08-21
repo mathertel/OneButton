@@ -179,12 +179,27 @@ private:
                                   // before a click is detected.
   unsigned int _pressTicks = 1000; // number of ticks that have to pass by
                                    // before a long button press is detected
-
   bool _buttonPressed = false;
 
   bool _isLongPressed = false;
 
   uint8_t _nClicks = 0;	// ShaggyDog - count number of clicks
+
+  // These variables that hold information across the upcoming tick calls.
+  // They are initialized once on program start and are updated every time the
+  // tick function is called.
+  
+  // define FiniteStateMachine
+  enum stateMachine_t : uint8_t {
+    WAIT_FOR_INITIAL_PRESS = 0, // 0
+    DEBOUNCE_OR_LONG_PRESS,	  // 1
+    DETECT_CLICK,  // 2
+    COUNT_CLICKS,  // 3
+    LONG_PRESS     // used to be 6, now is equal to 4
+  } _state = WAIT_FOR_INITIAL_PRESS;
+
+  unsigned long _startTime; // will be set in state 1
+  unsigned long _stopTime; // will be set in state 2
 
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
@@ -227,21 +242,7 @@ private:
     void* _duringLongPressFuncParam = NULL;
   #endif
 
-  // These variables that hold information across the upcoming tick calls.
-  // They are initialized once on program start and are updated every time the
-  // tick function is called.
-  
-  // define FiniteStateMachine
-  enum stateMachine_t : uint8_t {
-    WAIT_FOR_INITIAL_PRESS = 0, // 0
-    DEBOUNCE_OR_LONG_PRESS,	  // 1
-    DETECT_CLICK,  // 2
-    COUNT_CLICKS,  // 3
-    LONG_PRESS     // used to be 6, now is equal to 4
-  } _state = WAIT_FOR_INITIAL_PRESS;
-  
-  unsigned long _startTime; // will be set in state 1
-  unsigned long _stopTime; // will be set in state 2
+
 };
 
 #endif
