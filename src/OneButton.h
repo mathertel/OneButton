@@ -143,6 +143,13 @@ public:
    */
   void reset(void);
 
+  /**
+   * @return true if we are currently handling button press flow
+   * 
+   * (This allows power sensitive applications to know when it is safe to power down the main CPU)
+   */
+  bool isIdle() const { return _state == 0; }
+
 private:
   int _pin; // hardware pin number.
   unsigned int _debounceTicks = 50; // number of ticks for debounce times.
