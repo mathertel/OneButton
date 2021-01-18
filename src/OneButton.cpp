@@ -113,6 +113,7 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
 void OneButton::attachTripleClick(callbackFunction newFunction) {
   _tripleClickFunc = newFunction;
 } // attachTripleClick
+
 #ifdef PARAM_FUNC
 // save function for parameterized doubleClick event
 void OneButton::attachTripleClick(parameterizedCallbackFunction newFunction, void* parameter) {
@@ -257,23 +258,23 @@ void OneButton::tick(const bool buttonIsPressed) {
 	    _nClicks++;
 	    switch(_nClicks) {
 	    case 1:  // one click
-        	if (_pressFunc) _pressFunc();
-       		if (_clickFunc) _clickFunc(); 
+        if (_pressFunc) _pressFunc();
+       	if (_clickFunc) _clickFunc(); 
 		    #ifdef PARAM_FUNC
-        	  if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
-   	        #endif
+        	if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
+   	    #endif
 		    break;
 	    case 2:  // two clicks
-        	if (_doubleClickFunc ) _doubleClickFunc(); 
+        if (_doubleClickFunc ) _doubleClickFunc(); 
 		    #ifdef PARAM_FUNC
-              if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
-     	    #endif
+          if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
+     	  #endif
 		    break;
 	    default: // number of clicks > 2
-        	if (_tripleClickFunc ) _tripleClickFunc();
-		      #ifdef PARAM_FUNC
-              if (_paramTripleClickFunc) _paramTripleClickFunc(_tripleClickFuncParam);
-     	    #endif
+        if (_tripleClickFunc ) _tripleClickFunc();
+		    #ifdef PARAM_FUNC
+          if (_paramTripleClickFunc) _paramTripleClickFunc(_tripleClickFuncParam);
+     	  #endif
 	    } // switch() number of clicks
       _state = WAIT_FOR_INITIAL_PRESS; // restart.
     } else { 
