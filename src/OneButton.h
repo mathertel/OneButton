@@ -27,8 +27,7 @@
 // - modified SimpleOneButton example to test more functions incl. new tripleClickFunc() and getNumberClicks() functions
 // -----
 
-#ifndef OneButton_h
-#define OneButton_h
+#pragma once
 
 #include "Arduino.h"
 
@@ -244,5 +243,3 @@ private:
 
 
 };
-
-#endif

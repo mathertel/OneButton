@@ -7,6 +7,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
+OneButton	KEYWORD1
 callbackFunction	KEYWORD1
 
 #######################################
@@ -33,7 +34,6 @@ getNumberClicks	KEYWORD2
 # Instances (KEYWORD2)
 #######################################
 
-OneButton	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
