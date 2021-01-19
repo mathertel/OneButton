@@ -18,18 +18,25 @@
 
 #include "OneButton.h"
 
-// Example for Arduino UNO with input button on A1
+#if defined(ARDUINO_AVR_UNO)
+// Example for Arduino UNO with input button on A1 and builtin LED on pin 13
 #define PIN_INPUT A1
 #define PIN_LED 13
 
-// Example for ESP8266 with input button on D5 and using the led on -12 module.
-// #define PIN_INPUT D5
-// #define PIN_LED D4
+#else if defined(ESP8266)
+// Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
+#define PIN_INPUT D3
+#define PIN_LED D4
+
+#endif
 
 // Setup a new OneButton on pin PIN_INPUT
 
 // The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
 OneButton button(PIN_INPUT, true);
+
+// current LED state, staring with LOW (0)
+bool ledState = LOW;
 
 // In case the momentary button puts the input to HIGH when pressed:
 // The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
@@ -46,9 +53,7 @@ void setup()
   pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
 
   // link the doubleclick function to be called on a doubleclick event.
-  button.attachDoubleClick(doubleclick);
-
-
+  button.attachDoubleClick(doubleClick);
 } // setup
 
 
@@ -64,12 +69,11 @@ void loop()
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
-void doubleclick()
+
+void doubleClick()
 {
-  static int m = LOW;
-  // reverse the LED
-  m = !m;
-  digitalWrite(PIN_LED, m);
+  ledState = ! ledState; // reverse the LED
+  digitalWrite(LED_BUILTIN, ledState);
 } // doubleclick
 
 // End
