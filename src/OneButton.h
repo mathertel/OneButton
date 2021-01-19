@@ -18,6 +18,7 @@
 // sources of input.
 // 26.09.2018 Initialization moved into class declaration.
 // 26.09.2018 Jay M Ericsson: compiler warnings removed.
+// 29.01.2020 improvements from ShaggyDog18
 // -----
 
 #ifndef OneButton_h
