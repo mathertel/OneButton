@@ -31,7 +31,6 @@
 
 #include "Arduino.h"
 
-
 //#define PARAM_FUNC		// uncomment in case need calling functions with parameters
 
 // ----- Callback function types -----
@@ -49,30 +48,38 @@ public:
   // ----- Constructor -----
   OneButton();
 
-  OneButton(const int pin, const bool activeLow = true, const bool pullupActive = true);
+  OneButton(const int16_t pin, const bool activeLow = true, const bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
   /**
    * set # millisec after safe click is assumed.
    */
-  void setDebounceTicks(const int ticks);
+  inline void setDebounceTicks(const uint16_t ticks){
+    _debounceTicks = ticks;
+  }
 
   /**
    * set # millisec after single click is assumed.
    */
-  void setClickTicks(const int ticks);
+  inline void setClickTicks(const uint16_t ticks){
+    _clickTicks = ticks;
+  }
 
   /**
    * set # millisec after press is assumed.
    */
-  void setPressTicks(const int ticks);
+  inline void setPressTicks(const uint16_t ticks){
+    _pressTicks = ticks;
+  }
 
   /**
    * Attach an event to be called when a single click is detected.
    * @param newFunction
    */
-  void attachClick(callbackFunction newFunction);
+  inline void attachClick(callbackFunction newFunction){
+    _clickFunc = newFunction;
+  }
   #ifdef PARAM_FUNC
     void attachClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
@@ -81,7 +88,9 @@ public:
    * Attach an event to be called after a double click is detected.
    * @param newFunction
    */
-  void attachDoubleClick(callbackFunction newFunction);
+  inline void attachDoubleClick(callbackFunction newFunction){
+    _doubleClickFunc = newFunction;
+  }
   #ifdef PARAM_FUNC
     void attachDoubleClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
@@ -90,7 +99,9 @@ public:
    * Attach an event to be called after a triple and more clicks are detected.
    * @param newFunction
    */
-  void attachTripleClick(callbackFunction newFunction);
+  inline void attachTripleClick(callbackFunction newFunction){
+    _tripleClickFunc = newFunction;
+  }
   #ifdef PARAM_FUNC
     void attachTripleClick(parameterizedCallbackFunction newFunction, void* parameter);
   #endif  
@@ -99,19 +110,25 @@ public:
    * @deprecated Replaced by longPressStart, longPressStop, and duringLongPress.
    * @param newFunction
    */
-  void attachPress(callbackFunction newFunction);
+  inline void attachPress(callbackFunction newFunction){
+     _pressFunc = newFunction;
+  }
 
   /**
    * Attach an event to fire as soon as the button is pressed down.
    * @param newFunction
    */
-  void attachPressStart(callbackFunction newFunction);
+  inline void attachPressStart(callbackFunction newFunction){
+    _pressStartFunc = newFunction;
+  }
 
   /**
    * Attach an event to fire when the button is pressed and held down.
    * @param newFunction
    */
-  void attachLongPressStart(callbackFunction newFunction);
+  inline void attachLongPressStart(callbackFunction newFunction){
+    _longPressStartFunc = newFunction;
+  }
   #ifdef PARAM_FUNC
     void attachLongPressStart(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
@@ -120,7 +137,9 @@ public:
    * Attach an event to fire as soon as the button is released after a long press.
    * @param newFunction
    */
-  void attachLongPressStop(callbackFunction newFunction);
+  inline void attachLongPressStop(callbackFunction newFunction){
+    _longPressStopFunc = newFunction;
+  }
   #ifdef PARAM_FUNC
     void attachLongPressStop(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
@@ -129,7 +148,9 @@ public:
    * Attach an event to fire periodically while the button is held down.
    * @param newFunction
    */
-  void attachDuringLongPress(callbackFunction newFunction);
+  inline void attachDuringLongPress(callbackFunction newFunction){
+    _duringLongPressFunc = newFunction;
+  }
   #ifdef PARAM_FUNC
     void attachDuringLongPress(parameterizedCallbackFunction newFunction, void* parameter);
   #endif
@@ -153,14 +174,17 @@ public:
    * Detect whether or not the button is currently inside a long press.
    * @return
    */
-  bool isLongPressed();
+  inline bool isLongPressed(){
+    return _isLongPressed;
+  }
 
   /**
    * Get the current number of ticks that the button has been held down for.
    * @return
    */
-  int getPressedTicks();
-
+  inline int getPressedTicks(){
+    return _stopTime - _startTime;
+  }
   /**
    * Reset the button state machine.
    */
@@ -169,37 +193,11 @@ public:
   /**
    * Get number of clicks for the multiple click case.
    */
-  uint8_t getNumberClicks(void);	// ShaggyDog: return number of clicks
+  inline uint8_t getNumberClicks(void){	// ShaggyDog: return number of clicks
+    return _nClicks;
+  }
 
 private:
-  int _pin; // hardware pin number.
-  unsigned int _debounceTicks = 50; // number of ticks for debounce times.
-  unsigned int _clickTicks = 600; // number of ticks that have to pass by
-                                  // before a click is detected.
-  unsigned int _pressTicks = 1000; // number of ticks that have to pass by
-                                   // before a long button press is detected
-  bool _buttonPressed = false;
-
-  bool _isLongPressed = false;
-
-  uint8_t _nClicks = 0;	// ShaggyDog - count number of clicks
-
-  // These variables that hold information across the upcoming tick calls.
-  // They are initialized once on program start and are updated every time the
-  // tick function is called.
-  
-  // define FiniteStateMachine
-  enum stateMachine_t : uint8_t {
-    WAIT_FOR_INITIAL_PRESS = 0, // 0
-    DEBOUNCE_OR_LONG_PRESS,	  // 1
-    DETECT_CLICK,  // 2
-    COUNT_CLICKS,  // 3
-    LONG_PRESS     // used to be 6, now is equal to 4
-  } _state = WAIT_FOR_INITIAL_PRESS;
-
-  unsigned long _startTime; // will be set in state 1
-  unsigned long _stopTime; // will be set in state 2
-
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
   #ifdef PARAM_FUNC
@@ -241,5 +239,32 @@ private:
     void* _duringLongPressFuncParam = NULL;
   #endif
 
+  // These variables that hold information across the upcoming tick calls.
+  // They are initialized once on program start and are updated every time the
+  // tick function is called.
 
+  int16_t  _pin; // hardware pin number.
+  uint16_t _debounceTicks = 50; // number of ticks for debounce times.
+  uint16_t _clickTicks = 400; // number of ticks that have to pass by
+                                  // before a click is detected.
+  uint16_t _pressTicks = 800; // number of ticks that have to pass by
+                                   // before a long button press is detected
+
+  unsigned long _startTime; // will be set in state 1
+  unsigned long _stopTime; // will be set in state 2
+
+  bool _buttonPressed = false;
+
+  bool _isLongPressed = false;
+
+  uint8_t _nClicks = 0;	// ShaggyDog - count number of clicks  
+
+  // define FiniteStateMachine
+  enum stateMachine_t : uint8_t {
+    WAIT_FOR_INITIAL_PRESS = 0, // 0
+    DEBOUNCE_OR_LONG_PRESS,	  // 1
+    DETECT_CLICK,  // 2
+    COUNT_CLICKS,  // 3
+    LONG_PRESS     // used to be 6, now is equal to 4
+  } _state = WAIT_FOR_INITIAL_PRESS;
 };

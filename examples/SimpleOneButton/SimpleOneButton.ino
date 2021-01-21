@@ -19,6 +19,7 @@
 // 23.06.2020 synch up with the original library version 1.5; added attachPressStart() function; test includes almost all functions
 //--------------------
 #include "OneButton.h"
+// 3300 / 299
 
 // Setup a new OneButton on pin A1.  
 OneButton button(A1, true);
@@ -31,9 +32,9 @@ void setup() {
   Serial.begin(9600);
 
   // set more aggressive timing
-  button.setDebounceTicks( 20 );// default is 50
-  button.setClickTicks(300);  // defaul is 600
-  button.setPressTicks(500);  // defaulty is 1000
+  button.setDebounceTicks( 40 );// default is 50
+  button.setClickTicks(400);  // defaul is 400
+  button.setPressTicks(800);  // defaulty is 800
   
   // link the doubleclick function to be called on a doubleclick event. 
   button.attachClick(click);
