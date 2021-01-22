@@ -111,14 +111,6 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
 } // attachDoubleClick
 
 
-// save function for press event
-// DEPRECATED, is replaced by attachLongPressStart, attachLongPressStop,
-// attachDuringLongPress,
-void OneButton::attachPress(callbackFunction newFunction)
-{
-  _pressFunc = newFunction;
-} // attachPress
-
 void OneButton::attachPressStart(callbackFunction newFunction)
 {
   _pressStartFunc = newFunction;
@@ -226,8 +218,7 @@ void OneButton::tick(bool activeLevel)
                ((unsigned long)(now - _startTime) > _pressTicks)) {
       _stopTime = now; // remember stopping time
       _isLongPressed = true; // Keep track of long press state
-      if (_pressFunc)
-        _pressFunc();
+
       if (_longPressStartFunc)
         _longPressStartFunc();
       if (_paramLongPressStartFunc)

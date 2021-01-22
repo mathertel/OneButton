@@ -165,7 +165,6 @@ private:
   parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
   void *_doubleClickFuncParam = NULL;
 
-  callbackFunction _pressFunc = NULL;
   callbackFunction _pressStartFunc = NULL;
 
   callbackFunction _longPressStartFunc = NULL;
