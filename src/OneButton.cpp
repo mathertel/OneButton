@@ -255,8 +255,13 @@ void OneButton::tick(bool activeLevel)
   } else if (_state == OneButton::COUNT_CLICKS) { // waiting for menu pin being released finally.
     // Stay here for at least _debounceTicks because else we might end up in
     // state 1 if the button bounces for too long.
-    if ((!activeLevel) &&
-        ((unsigned long)(now - _startTime) > _debounceTicks)) {
+
+    if ((!activeLevel) && ((unsigned long)(now - _startTime) < _debounceTicks)) {
+      // button was released to quickly so I assume some debouncing.
+      // go back to state DETECT_CLICK
+      _state = OneButton::DETECT_CLICK;
+
+    } else if ((!activeLevel) && ((unsigned long)(now - _startTime) > _debounceTicks)) {
       _stopTime = now; // remember stopping time
       // this was a 2 click sequence.
       if (_doubleClickFunc)
