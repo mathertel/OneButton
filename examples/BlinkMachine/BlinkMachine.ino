@@ -67,7 +67,7 @@ MyActions nextAction = ACTION_OFF; // no action when starting
 // setup code here, to run once.
 void setup() {
   // enable the standard led on pin 13.
-  pinMode(13, OUTPUT);      // sets the digital pin as output
+  pinMode(LED_BUILTIN, OUTPUT);      // sets the digital pin as output
 
   // link the myClickFunction function to be called on a click event.   
   button.attachClick(myClickFunction);
@@ -76,7 +76,7 @@ void setup() {
   button.attachDoubleClick(myDoubleClickFunction);
 
   // set 80 msec. debouncing time. Default is 50 msec.
-  button.setDebounceTicks(80);
+  button.setDebounceTicks(40);
 } // setup
 
 
@@ -91,26 +91,26 @@ void loop() {
 
   if (nextAction == ACTION_OFF) {
     // do nothing.
-    digitalWrite(13, LOW);
+    digitalWrite(LED_BUILTIN, LOW);
 
   } else if (nextAction == ACTION_ON) {
     // turn LED on
-    digitalWrite(13, HIGH);
+    digitalWrite(LED_BUILTIN, HIGH);
 
   } else if (nextAction == ACTION_SLOW) {
     // do a slow blinking
     if (now % 1000 < 500) {
-      digitalWrite(13, LOW);
+      digitalWrite(LED_BUILTIN, LOW);
     } else {
-      digitalWrite(13, HIGH);
+      digitalWrite(LED_BUILTIN, HIGH);
     } // if
 
   } else if (nextAction == ACTION_FAST) {
     // do a fast blinking
     if (now % 200 < 100) {
-      digitalWrite(13, LOW);
+      digitalWrite(LED_BUILTIN, LOW);
     } else {
-      digitalWrite(13, HIGH);
+      digitalWrite(LED_BUILTIN, HIGH);
     } // if
   } // if
 } // loop
