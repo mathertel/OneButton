@@ -20,7 +20,7 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
   - `attachPressStart()` to mainatin compatibility with the new release v1.5 of the parent library: fires immediately as the button is pressed down. 
   
 ## Change Log:
-**22.01.2001**
+**22.01.2001, Release 1.5.0** 
 - optimized: defined all "small" one-line functions as `inline` and moved them to `OneButton.h` file;
 - the tick() method is compact and can be called from an Interrupt routine;
 - changed default for ClickTicks=400 and PressTicks=800 to make a button more "responsive".
