@@ -33,18 +33,27 @@
 #define PIN_LED 13
 
 #else if defined(ESP8266)
-// #error This Example uses interrupts  NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
+// Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
 #define PIN_INPUT D3
 #define PIN_LED D4
 
 #endif
 
-
-// Setup a new OneButton on pin A1.
+// Setup a new OneButton on pin PIN_INPUT
+// The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
 OneButton button(PIN_INPUT, true);
 
+// current LED state, staring with LOW (0)
+int ledState = LOW;
 
-// This function is called when the signal on the PIN_INPUT has changed.
+// In case the momentary button puts the input to HIGH when pressed:
+// The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
+// The 3. parameter can be used to disable the PullUp .
+// OneButton button(PIN_INPUT, false, false);
+
+
+// This function is called from the interrupt when the signal on the PIN_INPUT has changed.
+// do not use Serial in here.
 void checkTicks()
 {
   // include all buttons here to be checked
@@ -58,14 +67,16 @@ void setup()
   Serial.begin(115200);
   Serial.println("One Button Example with interrupts.");
 
-  pinMode(PIN_LED, OUTPUT); // sets the digital pin for LED as output
+  // enable the led output.
+  pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
+  digitalWrite(LED_BUILTIN, ledState);
 
   // setup interrupt routine
   pinMode(PIN_INPUT, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(PIN_INPUT), checkTicks, CHANGE);
 
   // link the doubleclick function to be called on a doubleclick event.
-  button.attachDoubleClick(doubleclick);
+  button.attachDoubleClick(doubleClick);
 
   // A1-Option:
   // it is possible to use e.g. A1 but then some direct register modifications and an ISR has to be used:
@@ -94,14 +105,12 @@ void loop()
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
-void doubleclick()
+void doubleClick()
 {
   Serial.println("x2");
 
-  static int m = LOW;
-  // reverse the LED
-  m = !m;
-  digitalWrite(13, m);
-} // doubleclick
+  ledState = !ledState; // reverse the LED
+  digitalWrite(PIN_LED, ledState);
+} // doubleClick
 
 // End

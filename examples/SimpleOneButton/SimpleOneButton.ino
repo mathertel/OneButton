@@ -19,8 +19,8 @@
 #include "OneButton.h"
 
 #if defined(ARDUINO_AVR_UNO)
-// Example for Arduino UNO with input button on A1 and builtin LED on pin 13
-#define PIN_INPUT A1
+// Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
+#define PIN_INPUT 2
 #define PIN_LED 13
 
 #else if defined(ESP8266)
@@ -31,12 +31,11 @@
 #endif
 
 // Setup a new OneButton on pin PIN_INPUT
-
 // The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
 OneButton button(PIN_INPUT, true);
 
 // current LED state, staring with LOW (0)
-bool ledState = LOW;
+int ledState = LOW;
 
 // In case the momentary button puts the input to HIGH when pressed:
 // The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
@@ -48,9 +47,11 @@ bool ledState = LOW;
 void setup()
 {
   Serial.begin(115200);
+  Serial.println("One Button Example with polling.");
 
   // enable the standard led on pin 13.
   pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
+  digitalWrite(PIN_LED, ledState);
 
   // link the doubleclick function to be called on a doubleclick event.
   button.attachDoubleClick(doubleClick);
@@ -69,11 +70,12 @@ void loop()
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
-
 void doubleClick()
 {
-  ledState = ! ledState; // reverse the LED
-  digitalWrite(LED_BUILTIN, ledState);
-} // doubleclick
+  Serial.println("x2");
+
+  ledState = !ledState; // reverse the LED
+  digitalWrite(PIN_LED, ledState);
+} // doubleClick
 
 // End
