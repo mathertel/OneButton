@@ -31,7 +31,7 @@ OneButton button(A1, true);
 // setup code here, to run once:
 void setup() {
   // enable the standard led on pin 13.
-  pinMode(13, OUTPUT);      // sets the digital pin as output
+  pinMode(LED_BUILTIN, OUTPUT);      // sets the digital pin as output
   
   // link the doubleclick function to be called on a doubleclick event.   
   button.attachDoubleClick(doubleclick);
@@ -53,16 +53,17 @@ ISR(PCINT1_vect) {
 // main code here, to run repeatedly: 
 void loop() {
   // You can implement other code in here or just wait a while 
+  button.tick(); // call tick() in the main loop() to make button even momre responsive.
   delay(10);
 } // loop
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
 void doubleclick() {
-  static int m = LOW;
+  static bool m = LOW;
   // reverse the LED 
   m = !m;
-  digitalWrite(13, m);
+  digitalWrite(LED_BUILTIN, m);
 } // doubleclick
 
 // End
