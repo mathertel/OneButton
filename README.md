@@ -20,14 +20,19 @@ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
   - `attachPressStart()` to mainatin compatibility with the new release v1.5 of the parent library: fires immediately as the button is pressed down. 
   
 ## Change Log:
+**22.01.2001**
+- optimized: defined all "small" one-line functions as `inline` and moved them to `OneButton.h` file;
+- the tick() method is compact and can be called from an Interrupt routine;
+- changed default for ClickTicks=400 and PressTicks=800 to make a button more "responsive".
+- still maintained a full compatibility with the original library and previous releases; so no change is required to your existing projects :-)
 
 **12.02.2020**
 - modified state machine (still same number of states), maintained full compatibility with the initial library; 
 - introduced a new functions: `tripleClickFunc()` for multiple 3+ clicks; `getNumberClicks()` to return number of clicks; 
 - optimized - changed some types of variables (f.e.: `bool _buttonPressed`, `uint8_t _state`) to compact the code; 
 - optimized - by using `switch()` instead of multiple `if()`-s; 
-- introdiced `#define PARAM_FUNC` - if commented in `oneButton.h`, the call functions with parameters will not be used to save space; 
-- modified `SimpleOneButton` example to test more functions incl. new `tripleClickFunc()` and `getNumberClicks()` functions.
+- introdiced `#define PARAM_FUNC`- if commented in `oneButton.h` (commented y default), call functions with parameters will not be used/compiled to save space; If you need call functions with parameters, include `#define PARAM_FUNC` line right before the `#include <OneButton.h>` line;
+- modified `SimpleOneButton` example to test more functions including new `tripleClickFunc()` and `getNumberClicks()` functions.
 
 **23.06.2020**
 - sync up with the original library, release v1.5, by adding the new function `attachPressStart()`.
