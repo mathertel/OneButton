@@ -67,29 +67,24 @@ public:
 
   /**
    * Attach an event to be called when a single click is detected.
-   * @param newFunction
+   * @param newFunction This function will be called when the event has been detected.
    */
   void attachClick(callbackFunction newFunction);
   void attachClick(parameterizedCallbackFunction newFunction, void *parameter);
 
   /**
    * Attach an event to be called after a double click is detected.
-   * @param newFunction
+   * @param newFunction This function will be called when the event has been detected.
    */
   void attachDoubleClick(callbackFunction newFunction);
   void attachDoubleClick(parameterizedCallbackFunction newFunction, void *parameter);
 
   /**
-   * @deprecated Replaced by longPressStart, longPressStop, and duringLongPress.
-   * @param newFunction
+   * Attach an event to be called after a multi click is detected.
+   * @param newFunction This function will be called when the event has been detected.
    */
-  void attachPress(callbackFunction newFunction);
-
-  /**
-   * Attach an event to fire as soon as the button is pressed down.
-   * @param newFunction
-   */
-  void attachPressStart(callbackFunction newFunction);
+  void attachMultiClick(callbackFunction newFunction);
+  void attachMultiClick(parameterizedCallbackFunction newFunction, void *parameter);
 
   /**
    * Attach an event to fire when the button is pressed and held down.
@@ -120,6 +115,7 @@ public:
    */
   void tick(void);
 
+
   /**
    * @brief Call this function every time the input level has changed.
    * Using this function no digital input pin is checked because the current
@@ -127,17 +123,6 @@ public:
    */
   void tick(bool level);
 
-  /**
-   * Detect whether or not the button is currently inside a long press.
-   * @return
-   */
-  bool isLongPressed();
-
-  /**
-   * Get the current number of ticks that the button has been held down for.
-   * @return
-   */
-  int getPressedTicks();
 
   /**
    * Reset the button state machine.
@@ -145,11 +130,23 @@ public:
   void reset(void);
 
 
-/**
+  /*
+   * return number of clicks in any case: single or multiple clicks
+   */
+  int getNumberClicks(void);
+
+
+  /**
    * @return true if we are currently handling button press flow
    * (This allows power sensitive applications to know when it is safe to power down the main CPU)
    */
-  bool isIdle() const { return _state == 0; }
+  bool isIdle() const { return _state == OCS_INIT; }
+
+  /**
+   * @return true when a long press is detected
+   */
+  bool isLongPressed() const { return _state == OCS_PRESS; };
+
 
 private:
   int _pin;                         // hardware pin number.
@@ -161,8 +158,6 @@ private:
 
   int _buttonPressed;
 
-  bool _isLongPressed = false;
-
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
   parameterizedCallbackFunction _paramClickFunc = NULL;
@@ -172,7 +167,9 @@ private:
   parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
   void *_doubleClickFuncParam = NULL;
 
-  callbackFunction _pressStartFunc = NULL;
+  callbackFunction _multiClickFunc = NULL;
+  parameterizedCallbackFunction _paramMultiClickFunc = NULL;
+  void *_multiClickFuncParam = NULL;
 
   callbackFunction _longPressStartFunc = NULL;
   parameterizedCallbackFunction _paramLongPressStartFunc = NULL;
@@ -192,18 +189,26 @@ private:
 
   // define FiniteStateMachine
   enum stateMachine_t : int {
-    WAIT_FOR_INITIAL_PRESS = 0,
-    DEBOUNCE_OR_LONG_PRESS = 1,
-    DETECT_CLICK = 2,
-    COUNT_CLICKS = 3,
-    LONG_PRESS = 6
+    OCS_INIT = 0,
+    OCS_DOWN = 1,
+    OCS_UP = 2,
+    OCS_COUNT = 3,
+    OCS_PRESS = 6,
+    OCS_PRESSEND = 7,
+    UNKNOWN = 99
   };
 
-  stateMachine_t _state = WAIT_FOR_INITIAL_PRESS;
+  /**
+   *  Advance to a new state and save the last one to come back in cas of bouncing detection.
+   */
+  void _newState(stateMachine_t nextState);
 
-  unsigned long _startTime; // will be set in state 1
-  unsigned long _stopTime;  // will be set in state 2
-  int _numberOfClicks; // count the number of clicks with this variable
+  stateMachine_t _state = OCS_INIT;
+  stateMachine_t _lastState = OCS_INIT; // used for debouncing
+
+  unsigned long _startTime; // start of current input change to checking debouncing
+  int _nClicks;             // count the number of clicks with this variable
+  int _maxClicks = 1;       // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
 };
 
 #endif

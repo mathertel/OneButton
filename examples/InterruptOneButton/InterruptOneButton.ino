@@ -14,8 +14,9 @@
  * The pin 13 (StatusPin) is used for output attach a led and resistor to ground
    or see the built-in led on the standard arduino board.
    
- The Sketch shows how to setup the library and bind a special function to the doubleclick event.
- By using interrupts the doubleclick function will be called not from the main program.
+ The sketch shows how to setup the library and bind the functions (singleClick, doubleClick) to the events.
+ In the loop function the button.tick function must be called as often as you like.
+ By using interrupts the internal state advances even when for longer time the button.tick is not called.
 */
 
 // 03.03.2011 created by Matthias Hertel
@@ -46,6 +47,9 @@ OneButton button(PIN_INPUT, true);
 // current LED state, staring with LOW (0)
 int ledState = LOW;
 
+// save the millis when a press has started.
+unsigned long pressStartTime;
+
 // In case the momentary button puts the input to HIGH when pressed:
 // The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
 // The 3. parameter can be used to disable the PullUp .
@@ -60,6 +64,51 @@ void checkTicks()
   button.tick(); // just call tick() to check the state.
 }
 
+// this function will be called when the button was pressed 1 time only.
+void singleClick()
+{
+  Serial.println("singleClick() detected.");
+} // singleClick
+
+
+// this function will be called when the button was pressed 2 times in a short timeframe.
+void doubleClick()
+{
+  Serial.println("doubleClick() detected.");
+
+  ledState = !ledState; // reverse the LED
+  digitalWrite(PIN_LED, ledState);
+} // doubleClick
+
+
+// this function will be called when the button was pressed 2 times in a short timeframe.
+void multiClick()
+{
+  Serial.print("multiClick(");
+  Serial.print(button.getNumberClicks());
+  Serial.println(") detected.");
+
+  ledState = !ledState; // reverse the LED
+  digitalWrite(PIN_LED, ledState);
+} // multiClick
+
+
+// this function will be called when the button was pressed 2 times in a short timeframe.
+void pressStart()
+{
+  Serial.println("pressStart()");
+  pressStartTime = millis() - 1000; // as set in setPressTicks()
+} // pressStart()
+
+
+// this function will be called when the button was pressed 2 times in a short timeframe.
+void pressStop()
+{
+  Serial.print("pressStop(");
+  Serial.print(millis() - pressStartTime);
+  Serial.println(") detected.");
+} // pressStop()
+
 
 // setup code here, to run once:
 void setup()
@@ -69,16 +118,22 @@ void setup()
 
   // enable the led output.
   pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
-  digitalWrite(LED_BUILTIN, ledState);
+  digitalWrite(PIN_LED, ledState);
 
   // setup interrupt routine
-  pinMode(PIN_INPUT, INPUT_PULLUP);
+  // when not registering to the interrupt the sketch also works when the tick is called frequently.
   attachInterrupt(digitalPinToInterrupt(PIN_INPUT), checkTicks, CHANGE);
 
-  // link the doubleclick function to be called on a doubleclick event.
+  // link the xxxclick functions to be called on xxxclick event.
+  button.attachClick(singleClick);
   button.attachDoubleClick(doubleClick);
+  button.attachMultiClick(multiClick);
 
-  // A1-Option:
+  button.setPressTicks(1000); // that is the time when pressStart is called
+  button.attachLongPressStart(pressStart);
+  button.attachLongPressStop(pressStop);
+
+  // A1-Option for UNO:
   // it is possible to use e.g. A1 but then some direct register modifications and an ISR has to be used:
   // You may have to modify the next 2 lines if using another pin than A1
   // PCICR |= (1 << PCIE1);   // This enables Pin Change Interrupt 1 that covers the Analog input pins or Port C.
@@ -86,7 +141,7 @@ void setup()
 
 } // setup
 
-// A1-Option:
+// A1-Option for UNO:
 // The Interrupt Service Routine for Pin Change Interrupt 1
 // This routine will only be called on any signal change on A1: exactly where we need to check.
 // ISR(PCINT1_vect)
@@ -99,18 +154,12 @@ void setup()
 // main code here, to run repeatedly:
 void loop()
 {
+  // keep watching the push button, even when no interrupt happens:
+  button.tick();
+
   // You can implement other code in here or just wait a while
   delay(10);
 } // loop
 
-
-// this function will be called when the button was pressed 2 times in a short timeframe.
-void doubleClick()
-{
-  Serial.println("x2");
-
-  ledState = !ledState; // reverse the LED
-  digitalWrite(PIN_LED, ledState);
-} // doubleClick
 
 // End

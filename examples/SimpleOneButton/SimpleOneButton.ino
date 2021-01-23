@@ -9,8 +9,8 @@
  * The pin 13 (StatusPin) is used for output attach a led and resistor to ground
    or see the built-in led on the standard arduino board.
    
- The Sketch shows how to setup the library and bind a special function to the doubleclick event.
- In the loop function the button.tick function has to be called as often as you like.
+ The sketch shows how to setup the library and bind the functions (singleClick, doubleClick) to the events.
+ In the loop function the button.tick function must be called as often as you like.
 */
 
 // 03.03.2011 created by Matthias Hertel
@@ -34,14 +34,13 @@
 // The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
 OneButton button(PIN_INPUT, true);
 
-// current LED state, staring with LOW (0)
-int ledState = LOW;
-
 // In case the momentary button puts the input to HIGH when pressed:
 // The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
 // The 3. parameter can be used to disable the PullUp .
 // OneButton button(PIN_INPUT, false, false);
 
+// current LED state, staring with LOW (0)
+int ledState = LOW;
 
 // setup code here, to run once:
 void setup()
@@ -51,6 +50,8 @@ void setup()
 
   // enable the standard led on pin 13.
   pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
+
+  // enable the standard led on pin 13.
   digitalWrite(PIN_LED, ledState);
 
   // link the doubleclick function to be called on a doubleclick event.

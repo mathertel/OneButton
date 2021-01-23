@@ -1,5 +1,4 @@
-Arduino OneButton Library
-===
+# Arduino OneButton Library
 
 This Arduino library is improving the usage of a singe button for input.
 It shows how to use an digital input pin with a single pushbutton attached
@@ -10,6 +9,8 @@ This is also a sample for implementing simple finite-state machines by using the
 
 You can find more details on this library at
 http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
+
+Many thanks to **ShaggyDog18** and **aslobodyanuk** for contributions to the library.
 
 
 ## Getting Started
