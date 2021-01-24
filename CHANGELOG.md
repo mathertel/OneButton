@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file starting 202
 ## [2.0.0] - 2021-01-22 
 
 * CHANGELOG created.
-* Many thanks to the improvements included from #27 (**aslobodyanuk**), #59 (**ShaggyDog18**) and #73 (**geeksville**).
+* Many thanks to the improvements included from #27 (**@aslobodyanuk**), #59 (**@ShaggyDog18**) and #73 (**@geeksville**).
 
 This is a major update with breaking changes.
 
