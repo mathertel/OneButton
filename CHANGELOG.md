@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file starting 202
 ## [2.0.0] - 2021-01-22 
 
 * CHANGELOG created.
-* include improvements from #27 (aslobodyanuk), #59 (ShaggyDog18) and #73 (geeksville)
+* Many thanks to the improvements included from #27 (**aslobodyanuk**), #59 (**ShaggyDog18**) and #73 (**geeksville**).
 
 This is a major update with breaking changes.
 
@@ -43,8 +43,8 @@ The library now supports to detect multiple (>2) clicks in a row using **attachM
 
 * Examples run on NodeMCU boards. (the library worked already).
 
-* The **SimpleOneButton.ino** got some cleanup and definition to be used with ESP8266 boards as well.
+* The **SimpleOneButton.ino** example got some cleanup and definition to be used with ESP8266 boards as well.
 
-* The **InterruptOneButton.ino** now is using attachInterrupt instead of UNO specific register modifications.
+* The **InterruptOneButton.ino** example now is using attachInterrupt instead of UNO specific register modifications.
 
 * The **SpecialInput.ino** example was added to shpow how to use the OneButton algorythm and input pattern recognition with your own source of input.
