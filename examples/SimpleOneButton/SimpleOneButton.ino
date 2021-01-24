@@ -18,7 +18,7 @@
 
 #include "OneButton.h"
 
-#if defined(ARDUINO_AVR_UNO)
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY)
 // Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
 #define PIN_INPUT 2
 #define PIN_LED 13

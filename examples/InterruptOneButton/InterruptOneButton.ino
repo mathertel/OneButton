@@ -26,14 +26,14 @@
 
 #include "OneButton.h"
 
-#if defined(ARDUINO_AVR_UNO)
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY)
 // Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
 // attachInterrupt only supports pin 2 and 3 on UNO.
 // See https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
 #define PIN_INPUT 2
 #define PIN_LED 13
 
-#else if defined(ESP8266)
+#elif defined(ESP8266)
 // Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
 // This LED is lighting on output level LOW.
 #define PIN_INPUT D3
@@ -59,14 +59,14 @@ unsigned long pressStartTime;
 
 // This function is called from the interrupt when the signal on the PIN_INPUT has changed.
 // do not use Serial in here.
-#if defined(ARDUINO_AVR_UNO)
+#if defined(ARDUINO_AVR_UNO) || defined (ARDUINO_AVR_NANO_EVERY)
 void checkTicks()
 {
   // include all buttons here to be checked
   button.tick(); // just call tick() to check the state.
 }
 
-#else if defined(ESP8266)
+#elif defined(ESP8266)
 ICACHE_RAM_ATTR void checkTicks()
 {
   // include all buttons here to be checked
