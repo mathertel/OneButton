@@ -35,6 +35,7 @@
 
 #else if defined(ESP8266)
 // Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
+// This LED is lighting on output level LOW.
 #define PIN_INPUT D3
 #define PIN_LED D4
 
@@ -58,11 +59,22 @@ unsigned long pressStartTime;
 
 // This function is called from the interrupt when the signal on the PIN_INPUT has changed.
 // do not use Serial in here.
+#if defined(ARDUINO_AVR_UNO)
 void checkTicks()
 {
   // include all buttons here to be checked
   button.tick(); // just call tick() to check the state.
 }
+
+#else if defined(ESP8266)
+ICACHE_RAM_ATTR void checkTicks()
+{
+  // include all buttons here to be checked
+  button.tick(); // just call tick() to check the state.
+}
+
+#endif
+
 
 // this function will be called when the button was pressed 1 time only.
 void singleClick()

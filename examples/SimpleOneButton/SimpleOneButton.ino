@@ -25,6 +25,7 @@
 
 #else if defined(ESP8266)
 // Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
+// This LED is lighting on output level LOW.
 #define PIN_INPUT D3
 #define PIN_LED D4
 
