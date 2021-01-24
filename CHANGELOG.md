@@ -47,3 +47,4 @@ The library now supports to detect multiple (>2) clicks in a row using **attachM
 
 * The **InterruptOneButton.ino** now is using attachInterrupt instead of UNO specific register modifications.
 
+* The **SpecialInput.ino** example was added to shpow how to use the OneButton algorythm and input pattern recognition with your own source of input.
