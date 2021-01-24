@@ -9,8 +9,8 @@
  * The pin 13 (StatusPin) is used for output attach a led and resistor to ground
    or see the built-in led on the standard arduino board.
    
- The Sketch shows how to setup the library and bind a special function to the doubleclick event.
- In the loop function the button.tick function has to be called as often as you like.
+ The sketch shows how to setup the library and bind the functions (singleClick, doubleClick) to the events.
+ In the loop function the button.tick function must be called as often as you like.
 */
 
 // 03.03.2011 created by Matthias Hertel
@@ -18,16 +18,20 @@
 
 #include "OneButton.h"
 
-// Example for Arduino UNO with input button on A1
-#define PIN_INPUT A1
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY)
+// Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
+#define PIN_INPUT 2
 #define PIN_LED 13
 
-// Example for ESP8266 with input button on D5 and using the led on -12 module.
-// #define PIN_INPUT D5
-// #define PIN_LED D4
+#else if defined(ESP8266)
+// Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
+// This LED is lighting on output level LOW.
+#define PIN_INPUT D3
+#define PIN_LED D4
+
+#endif
 
 // Setup a new OneButton on pin PIN_INPUT
-
 // The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
 OneButton button(PIN_INPUT, true);
 
@@ -36,19 +40,23 @@ OneButton button(PIN_INPUT, true);
 // The 3. parameter can be used to disable the PullUp .
 // OneButton button(PIN_INPUT, false, false);
 
+// current LED state, staring with LOW (0)
+int ledState = LOW;
 
 // setup code here, to run once:
 void setup()
 {
   Serial.begin(115200);
+  Serial.println("One Button Example with polling.");
 
   // enable the standard led on pin 13.
   pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
 
+  // enable the standard led on pin 13.
+  digitalWrite(PIN_LED, ledState);
+
   // link the doubleclick function to be called on a doubleclick event.
-  button.attachDoubleClick(doubleclick);
-
-
+  button.attachDoubleClick(doubleClick);
 } // setup
 
 
@@ -64,12 +72,12 @@ void loop()
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
-void doubleclick()
+void doubleClick()
 {
-  static int m = LOW;
-  // reverse the LED
-  m = !m;
-  digitalWrite(PIN_LED, m);
-} // doubleclick
+  Serial.println("x2");
+
+  ledState = !ledState; // reverse the LED
+  digitalWrite(PIN_LED, ledState);
+} // doubleClick
 
 // End

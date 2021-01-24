@@ -1,5 +1,4 @@
-Arduino OneButton Library
-===
+# Arduino OneButton Library
 
 This Arduino library is improving the usage of a singe button for input.
 It shows how to use an digital input pin with a single pushbutton attached
@@ -10,6 +9,8 @@ This is also a sample for implementing simple finite-state machines by using the
 
 You can find more details on this library at
 http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
+
+The change log of this library can be found in [CHANGELOG](CHANGELOG.md).
 
 
 ## Getting Started
@@ -123,11 +124,14 @@ the following functions to change the timing.
 click event is not attached, the library will assume a valid single click after one click duration,
 otherwise it must wait for the double click timeout to pass.
 
-| Function                | Default (ms) | Description                                                   |
-| ----------------------- | ------------ | ------------------------------------------------------------- |
-| `setDebounceTicks(int)` | `50`         | Period of time in which to ignore additional level changes.   |
-| `setClickTicks(int)`    | `600`        | Timeout used to distinguish single clicks from double clicks. |
-| `setPressTicks(int)`    | `1000`       | Duration to hold a button to trigger a long press.            |
+| Function                | Default    | Description                                                   |
+| ----------------------- | ---------- | ------------------------------------------------------------- |
+| `setDebounceTicks(int)` | `50 msec`  | Period of time in which to ignore additional level changes.   |
+| `setClickTicks(int)`    | `500 msec` | Timeout used to distinguish single clicks from double clicks. |
+| `setPressTicks(int)`    | `800 msec` | Duration to hold a button to trigger a long press.            |
+
+You may change these default values but be aware that when you specify too short times
+it is hard to click twice or you will create a press instead of a click.
 
 
 ### Additional Functions

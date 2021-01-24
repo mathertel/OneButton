@@ -46,7 +46,7 @@ OneButton button2(A2, true);
 // setup code here, to run once:
 void setup() {
   // Setup the Serial port. see http://arduino.cc/en/Serial/IfSerial
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
