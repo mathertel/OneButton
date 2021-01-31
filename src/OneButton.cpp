@@ -320,6 +320,10 @@ void OneButton::tick(bool activeLevel)
       reset();
     }
     break;
+
+  default:
+    // nothing to do.
+    break;
   } // if
 
 } // OneButton.tick()

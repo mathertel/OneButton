@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
+## [2.0.1] - 2021-01-31
+
+* Compiler warning removed
+* Documentation
+
 ## [2.0.0] - 2021-01-22 
 
 * CHANGELOG created.
