@@ -109,7 +109,7 @@ Here's a full list of events handled by this library:
 | ----------------------- | ------------------------------------------------------ |
 | `attachClick`           | Fires as soon as a single click is detected.           |
 | `attachDoubleClick`     | Fires as soon as a double click is detected.           |
-| `attachPressStart`      | Fires as soon as the button is pressed down.           |
+| `attachMultiClick`      | Fires as soon as multiple clicks have been detected.   |
 | `attachLongPressStart`  | Fires as soon as the button is held down for 1 second. |
 | `attachDuringLongPress` | Fires periodically as long as the button is held down. |
 | `attachLongPressStop`   | Fires when the button is released after a long hold.   |

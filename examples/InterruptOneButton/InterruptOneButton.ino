@@ -141,7 +141,7 @@ void setup()
   button.attachDoubleClick(doubleClick);
   button.attachMultiClick(multiClick);
 
-  button.setPressTicks(1000); // that is the time when pressStart is called
+  button.setPressTicks(1000); // that is the time when LongPressStart is called
   button.attachLongPressStart(pressStart);
   button.attachLongPressStop(pressStop);
 
