@@ -28,10 +28,17 @@
 
 // ----- Callback function types -----
 
+#if defined(__arm__) || defined(ESP8266) || defined(ESP32)
+#include <functional>
+using callbackFunction = std::function<void()>;
+using parameterizedCallbackFunction = std::function<void(void*)>;
+#else
 extern "C" {
 typedef void (*callbackFunction)(void);
-typedef void (*parameterizedCallbackFunction)(void *);
+typedef void (*parameterizedCallbackFunction)(void*);
 }
+#endif
+
 
 
 class OneButton
