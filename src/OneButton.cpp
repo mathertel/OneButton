@@ -110,6 +110,20 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
   _maxClicks = max(_maxClicks, 2);
 } // attachDoubleClick
 
+// save function for trippleClick event
+void OneButton::attachTrippleClick(callbackFunction newFunction)
+{
+  _trippleClickFunc = newFunction;
+  _maxClicks = max(_maxClicks, 3);
+} // attachTrippleClick
+
+// save function for parameterized trippleClick event
+void OneButton::attachTrippleClick(parameterizedCallbackFunction newFunction, void *parameter)
+{
+  _paramTrippleClickFunc = newFunction;
+  _trippleClickFuncParam = parameter;
+  _maxClicks = max(_maxClicks, 3);
+} // attachTrippleClick
 
 // save function for multiClick event
 void OneButton::attachMultiClick(callbackFunction newFunction)
@@ -283,10 +297,15 @@ void OneButton::tick(bool activeLevel)
         if (_doubleClickFunc) _doubleClickFunc();
         if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
 
+      } else if (_nClicks == 3) {
+        // this was a 3 click sequence.
+        if (_trippleClickFunc) _trippleClickFunc();
+        if (_paramTrippleClickFunc) _paramTrippleClickFunc(_trippleClickFuncParam);
+
       } else {
         // this was a multi click sequence.
         if (_multiClickFunc) _multiClickFunc();
-        if (_paramMultiClickFunc) _paramMultiClickFunc(_doubleClickFuncParam);
+        if (_paramMultiClickFunc) _paramMultiClickFunc(_multiClickFuncParam);
       } // if
 
       reset();

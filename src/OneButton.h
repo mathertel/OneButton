@@ -80,6 +80,13 @@ public:
   void attachDoubleClick(parameterizedCallbackFunction newFunction, void *parameter);
 
   /**
+   * Attach an event to be called after a tripple click is detected.
+   * @param newFunction This function will be called when the event has been detected.
+   */
+  void attachTrippleClick(callbackFunction newFunction);
+  void attachTrippleClick(parameterizedCallbackFunction newFunction, void *parameter);
+
+  /**
    * Attach an event to be called after a multi click is detected.
    * @param newFunction This function will be called when the event has been detected.
    */
@@ -164,6 +171,10 @@ private:
   callbackFunction _doubleClickFunc = NULL;
   parameterizedCallbackFunction _paramDoubleClickFunc = NULL;
   void *_doubleClickFuncParam = NULL;
+  
+  callbackFunction _trippleClickFunc = NULL;
+  parameterizedCallbackFunction _paramTrippleClickFunc = NULL;
+  void *_trippleClickFuncParam = NULL;
 
   callbackFunction _multiClickFunc = NULL;
   parameterizedCallbackFunction _paramMultiClickFunc = NULL;
