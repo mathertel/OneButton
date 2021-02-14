@@ -322,7 +322,8 @@ void OneButton::tick(bool activeLevel)
     break;
 
   default:
-    // nothing to do.
+    // unknown state detected -> reset state machine
+    _newState(OneButton::OCS_INIT);
     break;
   } // if
 
