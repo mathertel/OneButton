@@ -93,7 +93,7 @@ void doubleClick()
 } // doubleClick
 
 
-// this function will be called when the button was pressed 2 times in a short timeframe.
+// this function will be called when the button was pressed multiple times in a short timeframe.
 void multiClick()
 {
   Serial.print("multiClick(");
@@ -105,7 +105,7 @@ void multiClick()
 } // multiClick
 
 
-// this function will be called when the button was pressed 2 times in a short timeframe.
+// this function will be called when the button was held down for 1 second or more.
 void pressStart()
 {
   Serial.println("pressStart()");
@@ -113,7 +113,7 @@ void pressStart()
 } // pressStart()
 
 
-// this function will be called when the button was pressed 2 times in a short timeframe.
+// this function will be called when the button was released after a long hold.
 void pressStop()
 {
   Serial.print("pressStop(");
