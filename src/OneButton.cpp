@@ -286,7 +286,7 @@ void OneButton::tick(bool activeLevel)
       } else {
         // this was a multi click sequence.
         if (_multiClickFunc) _multiClickFunc();
-        if (_paramMultiClickFunc) _paramMultiClickFunc(_doubleClickFuncParam);
+        if (_paramMultiClickFunc) _paramMultiClickFunc(_multiClickFuncParam);
       } // if
 
       reset();
