@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
+## [2.0.3] - 2021-10-26
+
+* fixing parameter missuse and potential crash
+
 ## [2.0.1] - 2021-01-31
 
 * Compiler warning removed
