@@ -23,11 +23,18 @@
 #define PIN_INPUT 2
 #define PIN_LED 13
 
-#else if defined(ESP8266)
+#elif defined(ESP8266)
 // Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
 // This LED is lighting on output level LOW.
 #define PIN_INPUT D3
 #define PIN_LED D4
+
+#elif defined(ESP32)
+// Example pin assignments for a ESP32 board
+// Some boards have a BOOT switch using GPIO 0.
+#define PIN_INPUT 0
+// Attach a LED using GPIO 25 and VCC. The LED is on when output level is LOW.
+#define PIN_LED 25
 
 #endif
 

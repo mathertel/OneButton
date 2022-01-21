@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
+## [2.0.4] - 2022-01-22
+
+* checked for ESP32 (SimpleOneButton, InterruptOneButton, BlinkMachine)
+and included example PIN definitions for ESP32
+* Documentation changes
+
 ## [2.0.3] - 2021-10-26
 
 * fixing parameter missuse and potential crash

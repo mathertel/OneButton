@@ -69,9 +69,16 @@ MyActions;
 #define PIN_INPUT D3
 #define PIN_LED D4
 
+#elif defined(ESP32)
+// Example pin assignments for a ESP32 board
+// Some boards have a BOOT switch using GPIO 0.
+#define PIN_INPUT 0
+// Attach a LED using GPIO 25 and VCC. The LED is on when output level is LOW.
+#define PIN_LED 25
+
 #endif
 
-// Setup a new OneButton on pin A1.  
+// Setup a new OneButton on pin PIN_INPUT.  
 OneButton button(PIN_INPUT, true);
 
 MyActions nextAction = ACTION_OFF; // no action when starting
