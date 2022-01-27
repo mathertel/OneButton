@@ -15,8 +15,9 @@ jobs:
           force_language: c++
           other_options: --suppressions-list=suppressions.txt -I./src ./src/*
 
-      - name: publish report
-        uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: "master" # your branch name goes here
+# TODO: not sure why not working
+#      - name: publish report
+#        uses: mikeal/publish-to-github-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          BRANCH_NAME: "master" # your branch name goes here
