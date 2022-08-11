@@ -66,6 +66,11 @@ public:
   void setPressTicks(const int ticks);
 
   /**
+   * @set # count of ticks in order to fire attachHappenAfterTickNumber callback
+  */
+ void setAfterTicks(const int ticks);
+
+  /**
    * Attach an event to be called when a single click is detected.
    * @param newFunction This function will be called when the event has been detected.
    */
@@ -106,6 +111,14 @@ public:
    */
   void attachDuringLongPress(callbackFunction newFunction);
   void attachDuringLongPress(parameterizedCallbackFunction newFunction, void *parameter);
+
+  /**
+   * Attach an event to fire when the button is pressed after given count
+   * @param newFunction
+   */
+  void attachHappenAfterTickNumber(callbackFunction newFunction);
+  void attachHappenAfterTickNumber(parameterizedCallbackFunction newFunction, void *parameter);
+
 
   // ----- State machine functions -----
 
@@ -153,6 +166,7 @@ private:
   unsigned int _debounceTicks = 50; // number of ticks for debounce times.
   unsigned int _clickTicks = 400;   // number of msecs before a click is detected.
   unsigned int _pressTicks = 800;   // number of msecs before a long button press is detected
+  int _cnt = 0;
 
   int _buttonPressed;
 
@@ -181,6 +195,10 @@ private:
   parameterizedCallbackFunction _paramDuringLongPressFunc = NULL;
   void *_duringLongPressFuncParam = NULL;
 
+  callbackFunction _happenAfterTickNumber = NULL;
+  parameterizedCallbackFunction _paramHappenAfterTickNumber = NULL;
+  void *_happenAfterTickNumberParam = NULL;
+
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the
   // tick function is called.
@@ -206,7 +224,9 @@ private:
 
   unsigned long _startTime; // start of current input change to checking debouncing
   int _nClicks;             // count the number of clicks with this variable
-  int _maxClicks = 1;       // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
+  int _maxClicks = 1;       // max number (1, 2, multi=3) of clicks of interest by registration of event functions.ü
+  int _checkCount = 0;
+  
 };
 
 #endif

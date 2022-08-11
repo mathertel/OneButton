@@ -78,6 +78,12 @@ void OneButton::setPressTicks(const int ticks)
   _pressTicks = ticks;
 } // setPressTicks
 
+// explicitly set the number of checkcount that have to pass.
+void OneButton::setAfterTicks(const int ticks)
+{
+  _checkCount = ticks;
+} // setAfterTicks
+
 
 // save function for click event
 void OneButton::attachClick(callbackFunction newFunction)
@@ -173,6 +179,20 @@ void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction,
 } // attachDuringLongPress
 
 
+// save function for attachHappenAfterTickNumber event
+void OneButton::attachHappenAfterTickNumber(callbackFunction newFunction)
+{
+  _happenAfterTickNumber = newFunction;
+} // attachHappenAfterTickNumber
+
+
+// save function for parameterized attachHappenAfterTickNumber event
+void OneButton::attachHappenAfterTickNumber(parameterizedCallbackFunction newFunction, void *parameter)
+{
+  _paramHappenAfterTickNumber = newFunction;
+  _happenAfterTickNumberParam = parameter;
+} // attachHappenAfterTickNumber
+
 void OneButton::reset(void)
 {
   _state = OneButton::OCS_INIT;
@@ -226,7 +246,7 @@ void OneButton::tick(bool activeLevel)
     if (activeLevel) {
       _newState(OneButton::OCS_DOWN);
       _startTime = now; // remember starting time
-      _nClicks = 0;
+      _nClicks = 0;      
     } // if
     break;
 
@@ -258,6 +278,7 @@ void OneButton::tick(bool activeLevel)
     } else if (waitTime >= _debounceTicks) {
       // count as a short button down
       _nClicks++;
+      _cnt++;
       _newState(OneButton::OCS_COUNT);
     } // if
     break;
@@ -272,7 +293,13 @@ void OneButton::tick(bool activeLevel)
 
     } else if ((waitTime > _clickTicks) || (_nClicks == _maxClicks)) {
       // now we know how many clicks have been made.
-
+      if (_cnt == _checkCount) {
+        // this was a after given set value for attachHappenAfterTickNumber
+        if (_happenAfterTickNumber) _happenAfterTickNumber();
+        if (_paramHappenAfterTickNumber) _paramHappenAfterTickNumber(_happenAfterTickNumberParam);
+        // reset value to 0 
+        _cnt = 0;
+      } 
       if (_nClicks == 1) {
         // this was 1 click only.
         if (_clickFunc) _clickFunc();
