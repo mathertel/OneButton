@@ -144,6 +144,17 @@ it is hard to click twice or you will create a press instead of a click.
 | `int getPressedTicks()` | Get the current number of milliseconds that the button has been held down for. |
 
 
+### Usage with lambdas that capture context
+
+You **can't pass** a lambda-**with-context** to an argument which expects a **function pointer**. To work that around, 
+use `paramtererizedCallbackFunction`. We pass the context (so the pointer to the object we want to access) to the library
+and it will give it back to the lambda.
+
+```CPP
+okBtn.attachClick([](void *ctx){Serial.println(*(((BtnHandler*)(ctx))) -> state}}), this);
+```
+
+
 ### `tick()` and `reset()`
 
 You can specify a logic level when calling `tick(bool)`, which will skip reading the pin and use
