@@ -116,14 +116,17 @@ public:
   void tick(void);
 
 
+private:
   /**
    * @brief Call this function every time the input level has changed.
    * Using this function no digital input pin is checked because the current
    * level is given by the parameter.
+   * Run the finite state machine (FSM) using the given level.
    */
   void tick(bool level);
 
 
+public:
   /**
    * Reset the button state machine.
    */
@@ -154,7 +157,10 @@ private:
   unsigned int _clickTicks = 400;   // number of msecs before a click is detected.
   unsigned int _pressTicks = 800;   // number of msecs before a long button press is detected
 
-  int _buttonPressed;
+  int _buttonPressed; // this is the level of the input pin when the button is pressed.
+                      // LOW if the button connects the input pin to GND when pressed.
+                      // HIGH if the button connects the input pin to VCC when pressed.
+
 
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
@@ -204,9 +210,18 @@ private:
   stateMachine_t _state = OCS_INIT;
   stateMachine_t _lastState = OCS_INIT; // used for debouncing
 
-  unsigned long _startTime; // start of current input change to checking debouncing
-  int _nClicks;             // count the number of clicks with this variable
-  int _maxClicks = 1;       // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
+  unsigned long _startTime = 0; // start of current input change to checking debouncing
+  int _nClicks = 0;             // count the number of clicks with this variable
+  int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
+
+  int _lastDebouncePinLevel = -1;      // used for debouncing
+  unsigned long _lastDebounceTime = 0; // millis()
+  unsigned long now = 0;               // millis()
+
+public:
+  int pin() const { return _pin; };
+  stateMachine_t state() const { return _state; };
+
 };
 
 #endif

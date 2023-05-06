@@ -190,13 +190,22 @@ int OneButton::getNumberClicks(void)
 
 
 /**
- * @brief Check input of the configured pin and then advance the finite state
+ * @brief Check input of the configured pin, debounce input pin level and then advance the finite state
  * machine (FSM).
  */
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    tick(digitalRead(_pin) == _buttonPressed);
+    int pinLevel = digitalRead(_pin);
+    now = millis(); // current (relative) time in msecs.
+    if (_lastDebouncePinLevel == pinLevel) {
+      if ((now - _lastDebounceTime) >= _debounceTicks) {
+        tick(pinLevel == _buttonPressed); // pinLevel is debounced here
+      }
+    } else {
+      _lastDebouncePinLevel = pinLevel;
+      _lastDebounceTime = now;
+    }
   }
 }
 
@@ -216,7 +225,6 @@ void OneButton::_newState(stateMachine_t nextState)
  */
 void OneButton::tick(bool activeLevel)
 {
-  unsigned long now = millis(); // current (relative) time in msecs.
   unsigned long waitTime = (now - _startTime);
 
   // Implementation of the state machine
@@ -294,7 +302,7 @@ void OneButton::tick(bool activeLevel)
     break;
 
   case OneButton::OCS_PRESS:
-    // waiting for menu pin being release after long press.
+    // waiting for pin being release after long press.
 
     if (!activeLevel) {
       _newState(OneButton::OCS_PRESSEND);
