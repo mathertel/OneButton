@@ -5,7 +5,7 @@ It shows how to use an digital input pin with a single pushbutton attached
 for detecting some of the typical button press events like single clicks, double clicks and long-time pressing.
 This enables you to reuse the same button for multiple functions and lowers the hardware investments.
 
-This is also a sample for implementing simple finite-state machines by using the simple pattern above. 
+This is also a sample for implementing simple finite-state machines by using the simple pattern above.
 
 You can find more details on this library at
 http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
@@ -16,7 +16,7 @@ The change log of this library can be found in [CHANGELOG](CHANGELOG.md).
 ## Getting Started
 
 Clone this repository into `Arduino/Libraries` or use the built-in Arduino IDE Library manager to install
-a copy of this library. You can find more detail about installing libraries 
+a copy of this library. You can find more detail about installing libraries
 [here, on Arduino's website](https://www.arduino.cc/en/guide/libraries).
 
 ```CPP
@@ -100,6 +100,21 @@ void loop() {
 }
 ```
 
+Note that tick() is debouncing by itself but tick(activeLevel) is not.
+See [SpecialInput.ino](https://github.com/mathertel/OneButton/blob/master/examples/SpecialInput/SpecialInput.ino)
+
+```CPP
+void loop()
+{
+  // read your own source of input:
+  bool isPressed = (button->debounce(digitalRead(PIN_INPUT)) == LOW);
+
+  // call tick frequently with current push-state of the input
+  button->tick(isPressed);
+
+  // Do other things...
+}
+```
 
 ## State Events
 
@@ -127,7 +142,7 @@ otherwise it must wait for the double click timeout to pass.
 | Function                | Default    | Description                                                   |
 | ----------------------- | ---------- | ------------------------------------------------------------- |
 | `setDebounceMs(int)`    | `50 msec`  | Period of time in which to ignore additional level changes.   |
-| `setClickMs(int)`       | `500 msec` | Timeout used to distinguish single clicks from double clicks. |
+| `setClickMs(int)`       | `400 msec` | Timeout used to distinguish single clicks from double clicks. |
 | `setPressMs(int)`       | `800 msec` | Duration to hold a button to trigger a long press.            |
 
 You may change these default values but be aware that when you specify too short times
@@ -157,4 +172,3 @@ If your buttons aren't acting they way they should, check these items:
 1. Check your wiring and pin numbers.
 2. Did you call `tick()` on each button instance in your loop?
 3. Did you alter your clock timers in any way without adjusting ticks?
-   
