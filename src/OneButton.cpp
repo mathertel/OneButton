@@ -212,13 +212,14 @@ int OneButton::debounce(const int value) {
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    fsm(debounce(digitalRead(_pin)) == _buttonPressed);
+    _fsm(debounce(digitalRead(_pin)) == _buttonPressed);
+  }
 } // tick()
 
 
 void OneButton::tick(bool activeLevel)
 {
-  fsm(debounce(activeLevel));
+  _fsm(debounce(activeLevel));
 }
 
 
