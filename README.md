@@ -111,6 +111,8 @@ and it will give it back to the lambda.
 okBtn.attachClick([](void *ctx){Serial.println(*(((BtnHandler*)(ctx))) -> state}}), this);
 ```
 
+See also discussion in [Issue #112 ](https://github.com/mathertel/OneButton/issues/112).
+
 
 ## State Events
 
