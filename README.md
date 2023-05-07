@@ -103,7 +103,7 @@ void loop() {
 
 ### Usage with lambdas that capture context
 
-You **can't pass** a lambda-**with-context** to an argument which expects a **function pointer**. To work that around, 
+You **can't pass** a lambda-**with-context** to an argument which expects a **function pointer**. To work that around,
 use `paramtererizedCallbackFunction`. We pass the context (so the pointer to the object we want to access) to the library
 and it will give it back to the lambda.
 
@@ -170,7 +170,3 @@ If your buttons aren't acting they way they should, check these items:
 1. Check your wiring and pin numbers.
 2. Did you call `tick()` on each button instance in your loop?
 3. Did you alter your clock timers in any way without adjusting ticks?
-<<<<<<< HEAD
-=======
-   
->>>>>>> upstream/master
