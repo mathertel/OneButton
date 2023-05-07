@@ -47,7 +47,7 @@ public:
    * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
    * @param pullupActive Activate the internal pullup when available. Default is true.
    */
-  OneButton(const int pin, const boolean activeLow = true, const bool pullupActive = true);
+  explicit OneButton(const int pin, const boolean activeLow = true, const bool pullupActive = true);
 
   // ----- Set runtime parameters -----
 
@@ -163,10 +163,9 @@ private:
   unsigned int _click_ms = 400;   // number of msecs before a click is detected.
   unsigned int _press_ms = 800;   // number of msecs before a long button press is detected
 
-  int _buttonPressed; // this is the level of the input pin when the button is pressed.
-                      // LOW if the button connects the input pin to GND when pressed.
-                      // HIGH if the button connects the input pin to VCC when pressed.
-
+  int _buttonPressed = 0; // this is the level of the input pin when the button is pressed.
+                          // LOW if the button connects the input pin to GND when pressed.
+                          // HIGH if the button connects the input pin to VCC when pressed.
 
   // These variables will hold functions acting as event source.
   callbackFunction _clickFunc = NULL;
@@ -187,7 +186,7 @@ private:
 
   callbackFunction _longPressStopFunc = NULL;
   parameterizedCallbackFunction _paramLongPressStopFunc = NULL;
-  void *_longPressStopFuncParam;
+  void *_longPressStopFuncParam = NULL;
 
   callbackFunction _duringLongPressFunc = NULL;
   parameterizedCallbackFunction _paramDuringLongPressFunc = NULL;
@@ -225,7 +224,6 @@ private:
 public:
   int pin() const { return _pin; };
   stateMachine_t state() const { return _state; };
-
 };
 
 #endif
