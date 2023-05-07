@@ -101,6 +101,17 @@ void loop() {
 ```
 
 
+### Usage with lambdas that capture context
+
+You **can't pass** a lambda-**with-context** to an argument which expects a **function pointer**. To work that around, 
+use `paramtererizedCallbackFunction`. We pass the context (so the pointer to the object we want to access) to the library
+and it will give it back to the lambda.
+
+```CPP
+okBtn.attachClick([](void *ctx){Serial.println(*(((BtnHandler*)(ctx))) -> state}}), this);
+```
+
+
 ## State Events
 
 Here's a full list of events handled by this library:
