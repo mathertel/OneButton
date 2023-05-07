@@ -123,7 +123,7 @@ void multiClick() {
 // this function will be called when the button was held down for 1 second or more.
 void pressStart() {
   Serial.println("pressStart()");
-  pressStartTime = millis() - 1000; // as set in setPressTicks()
+  pressStartTime = millis() - 1000; // as set in setPressMs()
 } // pressStart()
 
 
@@ -153,7 +153,7 @@ void setup() {
   button.attachDoubleClick(doubleClick);
   button.attachMultiClick(multiClick);
 
-  button.setPressTicks(1000); // that is the time when LongPressStart is called
+  button.setPressMs(1000); // that is the time when LongPressStart is called
   button.attachLongPressStart(pressStart);
   button.attachLongPressStop(pressStop);
 

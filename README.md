@@ -126,9 +126,9 @@ otherwise it must wait for the double click timeout to pass.
 
 | Function                | Default    | Description                                                   |
 | ----------------------- | ---------- | ------------------------------------------------------------- |
-| `setDebounceTicks(int)` | `50 msec`  | Period of time in which to ignore additional level changes.   |
-| `setClickTicks(int)`    | `500 msec` | Timeout used to distinguish single clicks from double clicks. |
-| `setPressTicks(int)`    | `800 msec` | Duration to hold a button to trigger a long press.            |
+| `setDebounceMs(int)`    | `50 msec`  | Period of time in which to ignore additional level changes.   |
+| `setClickMs(int)`       | `500 msec` | Timeout used to distinguish single clicks from double clicks. |
+| `setPressMs(int)`       | `800 msec` | Duration to hold a button to trigger a long press.            |
 
 You may change these default values but be aware that when you specify too short times
 it is hard to click twice or you will create a press instead of a click.
