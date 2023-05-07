@@ -62,28 +62,28 @@ OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupAc
 void OneButton::setDebounceTicks(const unsigned int ms)
 {
   _debounce_ms = ms;
-}
+} // setDebounceTicks
 
 
 // explicitly set the number of millisec that have to pass by before a click is detected.
 void OneButton::setClickTicks(const unsigned int ms)
 {
   _click_ms = ms;
-}
+} // setClickTicks
 
 
 // explicitly set the number of millisec that have to pass by before a long button press is detected.
 void OneButton::setPressTicks(const unsigned int ms)
 {
   _press_ms = ms;
-}
+} // setPressTicks
 
 
 // save function for click event
 void OneButton::attachClick(callbackFunction newFunction)
 {
   _clickFunc = newFunction;
-}
+} // attachClick
 
 
 // save function for parameterized click event
@@ -91,7 +91,7 @@ void OneButton::attachClick(parameterizedCallbackFunction newFunction, void *par
 {
   _paramClickFunc = newFunction;
   _clickFuncParam = parameter;
-}
+} // attachClick
 
 
 // save function for doubleClick event
@@ -99,7 +99,7 @@ void OneButton::attachDoubleClick(callbackFunction newFunction)
 {
   _doubleClickFunc = newFunction;
   _maxClicks = max(_maxClicks, 2);
-}
+} // attachDoubleClick
 
 
 // save function for parameterized doubleClick event
@@ -108,7 +108,7 @@ void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, voi
   _paramDoubleClickFunc = newFunction;
   _doubleClickFuncParam = parameter;
   _maxClicks = max(_maxClicks, 2);
-}
+} // attachDoubleClick
 
 
 // save function for multiClick event
@@ -116,7 +116,7 @@ void OneButton::attachMultiClick(callbackFunction newFunction)
 {
   _multiClickFunc = newFunction;
   _maxClicks = max(_maxClicks, 100);
-}
+} // attachMultiClick
 
 
 // save function for parameterized MultiClick event
@@ -125,14 +125,14 @@ void OneButton::attachMultiClick(parameterizedCallbackFunction newFunction, void
   _paramMultiClickFunc = newFunction;
   _multiClickFuncParam = parameter;
   _maxClicks = max(_maxClicks, 100);
-}
+} // attachMultiClick
 
 
 // save function for longPressStart event
 void OneButton::attachLongPressStart(callbackFunction newFunction)
 {
   _longPressStartFunc = newFunction;
-}
+} // attachLongPressStart
 
 
 // save function for parameterized longPressStart event
@@ -140,14 +140,14 @@ void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, 
 {
   _paramLongPressStartFunc = newFunction;
   _longPressStartFuncParam = parameter;
-}
+} // attachLongPressStart
 
 
 // save function for longPressStop event
 void OneButton::attachLongPressStop(callbackFunction newFunction)
 {
   _longPressStopFunc = newFunction;
-}
+} // attachLongPressStop
 
 
 // save function for parameterized longPressStop event
@@ -155,14 +155,14 @@ void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, v
 {
   _paramLongPressStopFunc = newFunction;
   _longPressStopFuncParam = parameter;
-}
+} // attachLongPressStop
 
 
 // save function for during longPress event
 void OneButton::attachDuringLongPress(callbackFunction newFunction)
 {
   _duringLongPressFunc = newFunction;
-}
+} // attachDuringLongPress
 
 
 // save function for parameterized during longPress event
@@ -170,7 +170,7 @@ void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction,
 {
   _paramDuringLongPressFunc = newFunction;
   _duringLongPressFuncParam = parameter;
-}
+} // attachDuringLongPress
 
 
 void OneButton::reset(void)
@@ -189,8 +189,9 @@ int OneButton::getNumberClicks(void)
 
 
 /**
- * @brief Check input of the configured pin, debounce input pin level and then advance the finite state
- * machine (FSM).
+ * @brief Check input of the configured pin,
+ * debounce input pin level and then
+ * advance the finite state machine (FSM).
  */
 void OneButton::tick(void)
 {
@@ -206,7 +207,7 @@ void OneButton::tick(void)
       _lastDebounceTime = now;
     }
   }
-}
+} // tick()
 
 
 /**
@@ -215,7 +216,7 @@ void OneButton::tick(void)
 void OneButton::_newState(stateMachine_t nextState)
 {
   _state = nextState;
-}
+} // _newState()
 
 
 /**
@@ -233,7 +234,7 @@ void OneButton::tick(bool activeLevel)
       _newState(OneButton::OCS_DOWN);
       _startTime = now; // remember starting time
       _nClicks = 0;
-    }
+    } // if
     break;
 
   case OneButton::OCS_DOWN:
@@ -247,7 +248,7 @@ void OneButton::tick(bool activeLevel)
       if (_longPressStartFunc) _longPressStartFunc();
       if (_paramLongPressStartFunc) _paramLongPressStartFunc(_longPressStartFuncParam);
       _newState(OneButton::OCS_PRESS);
-    }
+    } // if
     break;
 
   case OneButton::OCS_UP:
@@ -283,10 +284,10 @@ void OneButton::tick(bool activeLevel)
         // this was a multi click sequence.
         if (_multiClickFunc) _multiClickFunc();
         if (_paramMultiClickFunc) _paramMultiClickFunc(_multiClickFuncParam);
-      }
+      } // if
 
       reset();
-    }
+    } // if
     break;
 
   case OneButton::OCS_PRESS:
@@ -300,7 +301,7 @@ void OneButton::tick(bool activeLevel)
       // still the button is pressed
       if (_duringLongPressFunc) _duringLongPressFunc();
       if (_paramDuringLongPressFunc) _paramDuringLongPressFunc(_duringLongPressFuncParam);
-    }
+    } // if
     break;
 
   case OneButton::OCS_PRESSEND:
@@ -315,6 +316,9 @@ void OneButton::tick(bool activeLevel)
     // unknown state detected -> reset state machine
     _newState(OneButton::OCS_INIT);
     break;
-  }
+  } // if
 
 } // OneButton.tick()
+
+
+// end.

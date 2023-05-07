@@ -202,7 +202,7 @@ private:
     OCS_DOWN = 1, // button is down
     OCS_UP = 2, // button is up
     OCS_COUNT = 3,
-    OCS_PRESS = 6, // button is holded down
+    OCS_PRESS = 6, // button is hold down
     OCS_PRESSEND = 7,
   };
 
