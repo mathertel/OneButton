@@ -187,6 +187,7 @@ int OneButton::getNumberClicks(void)
   return _nClicks;
 }
 
+
 /**
  * @brief Debounce input pin level for use in SpesialInput.
  */
@@ -202,6 +203,7 @@ int OneButton::debounce(const int value) {
     return debouncedPinLevel;
 };
 
+
 /**
  * @brief Check input of the configured pin,
  * debounce input pin level and then
@@ -210,18 +212,14 @@ int OneButton::debounce(const int value) {
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    int pinLevel = digitalRead(_pin);
-    now = millis(); // current (relative) time in msecs.
-    if (_lastDebouncePinLevel == pinLevel) {
-      if ((now - _lastDebounceTime) >= _debounce_ms) {
-        tick(pinLevel == _buttonPressed); // pinLevel is debounced here
-      }
-    } else {
-      _lastDebouncePinLevel = pinLevel;
-      _lastDebounceTime = now;
-    }
-  }
+    fsm(debounce(digitalRead(_pin)) == _buttonPressed);
 } // tick()
+
+
+void OneButton::tick(bool activeLevel)
+{
+  fsm(debounce(activeLevel));
+}
 
 
 /**
@@ -236,7 +234,7 @@ void OneButton::_newState(stateMachine_t nextState)
 /**
  * @brief Run the finite state machine (FSM) using the given level.
  */
-void OneButton::tick(bool activeLevel)
+void OneButton::_fsm(bool activeLevel)
 {
   unsigned long waitTime = (now - _startTime);
 

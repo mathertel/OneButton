@@ -204,6 +204,11 @@ private:
   };
 
   /**
+   * Run the finite state machine (FSM) using the given level.
+   */
+  void _fsm(bool activeLevel);
+
+  /**
    *  Advance to a new state.
    */
   void _newState(stateMachine_t nextState);
