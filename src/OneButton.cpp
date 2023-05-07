@@ -187,6 +187,20 @@ int OneButton::getNumberClicks(void)
   return _nClicks;
 }
 
+/**
+ * @brief Debounce input pin level for use in SpesialInput.
+ */
+int OneButton::debounce(const int value) {
+    now = millis(); // current (relative) time in msecs.
+    if (_lastDebouncePinLevel == value) {
+      if (now - _lastDebounceTime >= _debounce_ms)
+        debouncedPinLevel = value;
+    } else {
+      _lastDebounceTime = now;
+      _lastDebouncePinLevel = value;
+    }
+    return debouncedPinLevel;
+};
 
 /**
  * @brief Check input of the configured pin,
