@@ -19,6 +19,7 @@
 // 26.09.2018 Initialization moved into class declaration.
 // 26.09.2018 Jay M Ericsson: compiler warnings removed.
 // 29.01.2020 improvements from ShaggyDog18
+// 07.05.2023 Debouncing in one point. #118
 // -----
 
 #ifndef OneButton_h
@@ -53,17 +54,22 @@ public:
   /**
    * set # millisec after safe click is assumed.
    */
-  void setDebounceTicks(const int ticks);
+  void setDebounceTicks(const unsigned int ms); // obsolete
+  void setDebounceMs(const unsigned int ms) { setDebounceTicks(ms); };
 
   /**
    * set # millisec after single click is assumed.
    */
-  void setClickTicks(const int ticks);
+  void setClickTicks(const unsigned int ms); // obsolete
+  void setClickMs(const unsigned int ms) { setClickTicks(ms); };
 
   /**
    * set # millisec after press is assumed.
    */
-  void setPressTicks(const int ticks);
+  void setPressTicks(const unsigned int ms); // obsolete
+  void setPressMs(const unsigned int ms) { setPressTicks(ms); };
+
+  // ----- Attach events functions -----
 
   /**
    * Attach an event to be called when a single click is detected.
@@ -152,10 +158,10 @@ public:
 
 
 private:
-  int _pin;                         // hardware pin number.
-  unsigned int _debounceTicks = 50; // number of ticks for debounce times.
-  unsigned int _clickTicks = 400;   // number of msecs before a click is detected.
-  unsigned int _pressTicks = 800;   // number of msecs before a long button press is detected
+  int _pin = -1;                  // hardware pin number.
+  unsigned int _debounce_ms = 50; // number of msecs for debounce times.
+  unsigned int _click_ms = 400;   // number of msecs before a click is detected.
+  unsigned int _press_ms = 800;   // number of msecs before a long button press is detected
 
   int _buttonPressed; // this is the level of the input pin when the button is pressed.
                       // LOW if the button connects the input pin to GND when pressed.
@@ -194,29 +200,27 @@ private:
   // define FiniteStateMachine
   enum stateMachine_t : int {
     OCS_INIT = 0,
-    OCS_DOWN = 1,
-    OCS_UP = 2,
+    OCS_DOWN = 1, // button is down
+    OCS_UP = 2, // button is up
     OCS_COUNT = 3,
-    OCS_PRESS = 6,
+    OCS_PRESS = 6, // button is holded down
     OCS_PRESSEND = 7,
-    UNKNOWN = 99
   };
 
   /**
-   *  Advance to a new state and save the last one to come back in cas of bouncing detection.
+   *  Advance to a new state.
    */
   void _newState(stateMachine_t nextState);
 
   stateMachine_t _state = OCS_INIT;
-  stateMachine_t _lastState = OCS_INIT; // used for debouncing
+
+  int _lastDebouncePinLevel = -1;      // used for pin debouncing
+  unsigned long _lastDebounceTime = 0; // millis()
+  unsigned long now = 0;               // millis()
 
   unsigned long _startTime = 0; // start of current input change to checking debouncing
   int _nClicks = 0;             // count the number of clicks with this variable
   int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
-
-  int _lastDebouncePinLevel = -1;      // used for debouncing
-  unsigned long _lastDebounceTime = 0; // millis()
-  unsigned long now = 0;               // millis()
 
 public:
   int pin() const { return _pin; };
