@@ -78,7 +78,7 @@ void setup()
 void loop()
 {
   // read your own source of input:
-  bool isPressed = (button->debounce(digitalRead(PIN_INPUT)) == LOW);
+  bool isPressed = (digitalRead(PIN_INPUT) == LOW);
 
   // call tick frequently with current push-state of the input
   button->tick(isPressed);

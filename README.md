@@ -100,22 +100,6 @@ void loop() {
 }
 ```
 
-Note that tick() is debouncing by itself but tick(activeLevel) is not.
-See [SpecialInput.ino](https://github.com/mathertel/OneButton/blob/master/examples/SpecialInput/SpecialInput.ino)
-
-```CPP
-void loop()
-{
-  // read your own source of input:
-  bool isPressed = (button->debounce(digitalRead(PIN_INPUT)) == LOW);
-
-  // call tick frequently with current push-state of the input
-  button->tick(isPressed);
-
-  // Do other things...
-}
-```
-
 ## State Events
 
 Here's a full list of events handled by this library:
