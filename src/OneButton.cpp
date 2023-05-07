@@ -6,6 +6,7 @@
  *
  * @author Matthias Hertel, https://www.mathertel.de
  * @Copyright Copyright (c) by Matthias Hertel, https://www.mathertel.de.
+ *                          Ihor Nehrutsa, Ihor.Nehrutsa@gmail.com
  *
  * This work is licensed under a BSD style license. See
  * http://www.mathertel.de/License.aspx
@@ -36,7 +37,6 @@ OneButton::OneButton()
  */
 OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupActive)
 {
-  // OneButton();
   _pin = pin;
 
   if (activeLow) {
@@ -46,7 +46,7 @@ OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupAc
   } else {
     // the button connects the input pin to VCC when pressed.
     _buttonPressed = HIGH;
-  } // if
+  }
 
   if (pullupActive) {
     // use the given pin as input and activate internal PULLUP resistor.
@@ -54,28 +54,28 @@ OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupAc
   } else {
     // use the given pin as input
     pinMode(pin, INPUT);
-  } // if
+  }
 } // OneButton
 
 
 // explicitly set the number of millisec that have to pass by before a click is assumed stable.
-void OneButton::setDebounceTicks(const int ticks)
+void OneButton::setDebounceTicks(const unsigned int ms)
 {
-  _debounceTicks = ticks;
+  _debounce_ms = ms;
 } // setDebounceTicks
 
 
 // explicitly set the number of millisec that have to pass by before a click is detected.
-void OneButton::setClickTicks(const int ticks)
+void OneButton::setClickTicks(const unsigned int ms)
 {
-  _clickTicks = ticks;
+  _click_ms = ms;
 } // setClickTicks
 
 
 // explicitly set the number of millisec that have to pass by before a long button press is detected.
-void OneButton::setPressTicks(const int ticks)
+void OneButton::setPressTicks(const unsigned int ms)
 {
-  _pressTicks = ticks;
+  _press_ms = ms;
 } // setPressTicks
 
 
@@ -176,7 +176,6 @@ void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction,
 void OneButton::reset(void)
 {
   _state = OneButton::OCS_INIT;
-  _lastState = OneButton::OCS_INIT;
   _nClicks = 0;
   _startTime = 0;
 }
@@ -190,15 +189,25 @@ int OneButton::getNumberClicks(void)
 
 
 /**
- * @brief Check input of the configured pin and then advance the finite state
- * machine (FSM).
+ * @brief Check input of the configured pin,
+ * debounce input pin level and then
+ * advance the finite state machine (FSM).
  */
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    tick(digitalRead(_pin) == _buttonPressed);
+    int pinLevel = digitalRead(_pin);
+    now = millis(); // current (relative) time in msecs.
+    if (_lastDebouncePinLevel == pinLevel) {
+      if ((now - _lastDebounceTime) >= _debounce_ms) {
+        tick(pinLevel == _buttonPressed); // pinLevel is debounced here
+      }
+    } else {
+      _lastDebouncePinLevel = pinLevel;
+      _lastDebounceTime = now;
+    }
   }
-}
+} // tick()
 
 
 /**
@@ -206,7 +215,6 @@ void OneButton::tick(void)
  */
 void OneButton::_newState(stateMachine_t nextState)
 {
-  _lastState = _state;
   _state = nextState;
 } // _newState()
 
@@ -216,7 +224,6 @@ void OneButton::_newState(stateMachine_t nextState)
  */
 void OneButton::tick(bool activeLevel)
 {
-  unsigned long now = millis(); // current (relative) time in msecs.
   unsigned long waitTime = (now - _startTime);
 
   // Implementation of the state machine
@@ -233,15 +240,11 @@ void OneButton::tick(bool activeLevel)
   case OneButton::OCS_DOWN:
     // waiting for level to become inactive.
 
-    if ((!activeLevel) && (waitTime < _debounceTicks)) {
-      // button was released to quickly so I assume some bouncing.
-      _newState(_lastState);
-
-    } else if (!activeLevel) {
+    if (!activeLevel) {
       _newState(OneButton::OCS_UP);
       _startTime = now; // remember starting time
 
-    } else if ((activeLevel) && (waitTime > _pressTicks)) {
+    } else if ((activeLevel) && (waitTime > _press_ms)) {
       if (_longPressStartFunc) _longPressStartFunc();
       if (_paramLongPressStartFunc) _paramLongPressStartFunc(_longPressStartFuncParam);
       _newState(OneButton::OCS_PRESS);
@@ -251,15 +254,9 @@ void OneButton::tick(bool activeLevel)
   case OneButton::OCS_UP:
     // level is inactive
 
-    if ((activeLevel) && (waitTime < _debounceTicks)) {
-      // button was pressed to quickly so I assume some bouncing.
-      _newState(_lastState); // go back
-
-    } else if (waitTime >= _debounceTicks) {
       // count as a short button down
       _nClicks++;
       _newState(OneButton::OCS_COUNT);
-    } // if
     break;
 
   case OneButton::OCS_COUNT:
@@ -270,7 +267,7 @@ void OneButton::tick(bool activeLevel)
       _newState(OneButton::OCS_DOWN);
       _startTime = now; // remember starting time
 
-    } else if ((waitTime > _clickTicks) || (_nClicks == _maxClicks)) {
+    } else if ((waitTime >= _click_ms) || (_nClicks == _maxClicks)) {
       // now we know how many clicks have been made.
 
       if (_nClicks == 1) {
@@ -294,7 +291,7 @@ void OneButton::tick(bool activeLevel)
     break;
 
   case OneButton::OCS_PRESS:
-    // waiting for menu pin being release after long press.
+    // waiting for pin being release after long press.
 
     if (!activeLevel) {
       _newState(OneButton::OCS_PRESSEND);
@@ -310,15 +307,9 @@ void OneButton::tick(bool activeLevel)
   case OneButton::OCS_PRESSEND:
     // button was released.
 
-    if ((activeLevel) && (waitTime < _debounceTicks)) {
-      // button was released to quickly so I assume some bouncing.
-      _newState(_lastState); // go back
-
-    } else if (waitTime >= _debounceTicks) {
       if (_longPressStopFunc) _longPressStopFunc();
       if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
       reset();
-    }
     break;
 
   default:
