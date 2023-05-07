@@ -100,6 +100,7 @@ void loop() {
 }
 ```
 
+
 ## State Events
 
 Here's a full list of events handled by this library:
