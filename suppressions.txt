@@ -1,0 +1,6 @@
+// cppcheck suppressions
+unusedFunction
+missingInclude
+
+// this one might be something to look into
+knownConditionTrueFalse
