@@ -121,8 +121,6 @@ public:
    */
   void tick(void);
 
-
-private:
   /**
    * @brief Call this function every time the input level has changed.
    * Using this function no digital input pin is checked because the current
