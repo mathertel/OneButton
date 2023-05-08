@@ -228,6 +228,7 @@ public:
   int pin() const { return _pin; };
   stateMachine_t state() const { return _state; };
   int debounce(const int value);
+  int debouncedValue() const { return debouncedPinLevel; };
 };
 
 #endif
