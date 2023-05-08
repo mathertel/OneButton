@@ -12,8 +12,10 @@
  * In the loop function the button.tick function must be called as often as you like.
  *
  * * 22.01.2021 created by Matthias Hertel
-*/
+ * * 07.02.2023 ESP32 Support added.
+ */
 
+#include "Arduino.h"
 #include "OneButton.h"
 
 // This is an example on how to use the OneClick library on other input sources than standard digital pins.
@@ -40,14 +42,12 @@
 // OneButton instance will be created in setup.
 OneButton *button;
 
-void fClicked(void *s)
-{
+void fClicked(void *s) {
   Serial.print("Click:");
   Serial.println((char *)s);
 }
 
-static void fDoubleClicked(void *oneButton)
-{
+static void fDoubleClicked(void *oneButton) {
   OneButton *button = (OneButton *)oneButton;
   Serial.print("pin=");
   Serial.print(button->pin());
@@ -55,12 +55,11 @@ static void fDoubleClicked(void *oneButton)
   Serial.println(button->state());
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
   Serial.println("One Button Example with custom input.");
 
-// create the OneButton instance without a pin.
+  // create the OneButton instance without a pin.
   button = new OneButton();
 
   // Here is an example on how to use a parameter to the registered functions:
@@ -68,18 +67,19 @@ void setup()
   button->attachDoubleClick(fDoubleClicked, &button);
 
   // Here is an example on how to use an inline function:
-  button->attachDoubleClick([]() { Serial.println("DoubleClick"); });
+  button->attachDoubleClick([]() {
+    Serial.println("DoubleClick");
+  });
 
   // setup your own source of input:
   pinMode(PIN_INPUT, INPUT_PULLUP);
 
-} // setup()
+}  // setup()
 
-void loop()
-{
+void loop() {
   // read your own source of input:
   bool isPressed = (digitalRead(PIN_INPUT) == LOW);
 
   // call tick frequently with current push-state of the input
   button->tick(isPressed);
-} // loop()
+}  // loop()
