@@ -2,14 +2,14 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
-## [2.0.5] - 2023-05-07
+## [2.0.6] - 2023-05-08
 
 * CPP Checks added in Github actions. Thanks to @mkinney
 * Debouncing input levels implemented in a central place. Thanks to @IhorNehrutsa
 * Docu for using lamda functions as callbacks, Thanks to @gergovari
 * .clang-format file added to support code formatting in IDE 2.x (and others)
-* Fixing examples for ESP8266
-
+* Fixing examples for ESP8266 and ESP32.
+* GitHub Action extended to compile for ESP8266 and ESP32
 
 ## [2.0.4] - 2022-01-22
 
@@ -71,4 +71,4 @@ The library now supports to detect multiple (>2) clicks in a row using **attachM
 
 * The **InterruptOneButton.ino** example now is using attachInterrupt instead of UNO specific register modifications.
 
-* The **SpecialInput.ino** example was added to shpow how to use the OneButton algorythm and input pattern recognition with your own source of input.
+* The **SpecialInput.ino** example was added to show how to use the OneButton algorithm and input pattern recognition with your own source of input.

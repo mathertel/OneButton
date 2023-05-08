@@ -54,7 +54,8 @@ public:
   /**
    * set # millisec after safe click is assumed.
    */
-  void setDebounceTicks(const unsigned int ms); // obsolete
+  [[deprecated("Use setDebounceMs() instead.")]]
+  void setDebounceTicks(const unsigned int ms); // deprecated
   void setDebounceMs(const unsigned int ms) { setDebounceTicks(ms); };
 
   /**
