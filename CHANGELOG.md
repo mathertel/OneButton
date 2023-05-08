@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file starting 202
 * CPP Checks added in Github actions. Thanks to @mkinney
 * Debouncing input levels implemented in a central place. Thanks to @IhorNehrutsa
 * Docu for using lamda functions as callbacks, Thanks to @gergovari
+* .clang-format file added to support code formatting in IDE 2.x (and others)
+* Fixing examples for ESP8266
 
 
 ## [2.0.4] - 2022-01-22

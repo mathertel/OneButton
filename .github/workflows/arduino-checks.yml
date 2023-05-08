@@ -23,7 +23,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Arduino - lint
       - name: Arduino-lint
@@ -40,7 +40,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Compile Examples for UNO
       - name: Compile examples on uno
@@ -61,7 +61,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Compile Examples for ESP8266
       - name: compile sketches
