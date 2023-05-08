@@ -189,6 +189,22 @@ int OneButton::getNumberClicks(void)
 
 
 /**
+ * @brief Debounce input pin level for use in SpesialInput.
+ */
+int OneButton::debounce(const int value) {
+    now = millis(); // current (relative) time in msecs.
+    if (_lastDebouncePinLevel == value) {
+      if (now - _lastDebounceTime >= _debounce_ms)
+        debouncedPinLevel = value;
+    } else {
+      _lastDebounceTime = now;
+      _lastDebouncePinLevel = value;
+    }
+    return debouncedPinLevel;
+};
+
+
+/**
  * @brief Check input of the configured pin,
  * debounce input pin level and then
  * advance the finite state machine (FSM).
@@ -196,18 +212,15 @@ int OneButton::getNumberClicks(void)
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    int pinLevel = digitalRead(_pin);
-    now = millis(); // current (relative) time in msecs.
-    if (_lastDebouncePinLevel == pinLevel) {
-      if ((now - _lastDebounceTime) >= _debounce_ms) {
-        tick(pinLevel == _buttonPressed); // pinLevel is debounced here
-      }
-    } else {
-      _lastDebouncePinLevel = pinLevel;
-      _lastDebounceTime = now;
-    }
+    _fsm(debounce(digitalRead(_pin)) == _buttonPressed);
   }
 } // tick()
+
+
+void OneButton::tick(bool activeLevel)
+{
+  _fsm(debounce(activeLevel));
+}
 
 
 /**
@@ -222,7 +235,7 @@ void OneButton::_newState(stateMachine_t nextState)
 /**
  * @brief Run the finite state machine (FSM) using the given level.
  */
-void OneButton::tick(bool activeLevel)
+void OneButton::_fsm(bool activeLevel)
 {
   unsigned long waitTime = (now - _startTime);
 
@@ -254,9 +267,9 @@ void OneButton::tick(bool activeLevel)
   case OneButton::OCS_UP:
     // level is inactive
 
-      // count as a short button down
-      _nClicks++;
-      _newState(OneButton::OCS_COUNT);
+    // count as a short button down
+    _nClicks++;
+    _newState(OneButton::OCS_COUNT);
     break;
 
   case OneButton::OCS_COUNT:
@@ -307,9 +320,9 @@ void OneButton::tick(bool activeLevel)
   case OneButton::OCS_PRESSEND:
     // button was released.
 
-      if (_longPressStopFunc) _longPressStopFunc();
-      if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
-      reset();
+    if (_longPressStopFunc) _longPressStopFunc();
+    if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
+    reset();
     break;
 
   default:

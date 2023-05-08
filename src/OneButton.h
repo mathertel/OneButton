@@ -130,7 +130,6 @@ public:
   void tick(bool level);
 
 
-public:
   /**
    * Reset the button state machine.
    */
@@ -205,12 +204,18 @@ private:
   };
 
   /**
+   * Run the finite state machine (FSM) using the given level.
+   */
+  void _fsm(bool activeLevel);
+
+  /**
    *  Advance to a new state.
    */
   void _newState(stateMachine_t nextState);
 
   stateMachine_t _state = OCS_INIT;
 
+  int debouncedPinLevel = -1;
   int _lastDebouncePinLevel = -1;      // used for pin debouncing
   unsigned long _lastDebounceTime = 0; // millis()
   unsigned long now = 0;               // millis()
@@ -222,6 +227,7 @@ private:
 public:
   int pin() const { return _pin; };
   stateMachine_t state() const { return _state; };
+  int debounce(const int value);
 };
 
 #endif

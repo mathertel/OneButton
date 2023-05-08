@@ -96,7 +96,7 @@ void setup() {
   button.attachDoubleClick(myDoubleClickFunction);
 
   // set 80 msec. debouncing time. Default is 50 msec.
-  button.setDebounceTicks(80);
+  button.setDebounceMs(80);
 } // setup
 
 

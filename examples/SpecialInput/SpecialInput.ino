@@ -7,7 +7,7 @@
  *
  * Setup a test circuit:
  * * Connect a pushbutton to pin 2 (ButtonPin) and ground.
- *   
+ *
  * The sketch shows how to setup the library and bind the functions (singleClick, doubleClick) to the events.
  * In the loop function the button.tick function must be called as often as you like.
  *
@@ -26,8 +26,13 @@
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY)
 #define PIN_INPUT 2
 
-#else if defined(ESP8266)
+#elif defined(ESP8266)
 #define PIN_INPUT D3
+
+#elif defined(ESP32)
+// Example pin assignments for a ESP32 board
+// Some boards have a BOOT switch using GPIO 0.
+#define PIN_INPUT 0
 
 #endif
 
@@ -41,6 +46,15 @@ void fClicked(void *s)
   Serial.println((char *)s);
 }
 
+static void fDoubleClicked(void *oneButton)
+{
+  OneButton *button = (OneButton *)oneButton;
+  Serial.print("pin=");
+  Serial.print(button->pin());
+  Serial.print(" state=");
+  Serial.println(button->state());
+}
+
 void setup()
 {
   Serial.begin(115200);
@@ -49,8 +63,9 @@ void setup()
 // create the OneButton instance without a pin.
   button = new OneButton();
 
-  // Here is an example on how to use a parameter to the registered function:
-  button->attachClick(fClicked, "me");
+  // Here is an example on how to use a parameter to the registered functions:
+  button->attachClick(fClicked, (void *)"me");
+  button->attachDoubleClick(fDoubleClicked, &button);
 
   // Here is an example on how to use an inline function:
   button->attachDoubleClick([]() { Serial.println("DoubleClick"); });
