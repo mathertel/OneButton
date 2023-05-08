@@ -267,9 +267,9 @@ void OneButton::_fsm(bool activeLevel)
   case OneButton::OCS_UP:
     // level is inactive
 
-      // count as a short button down
-      _nClicks++;
-      _newState(OneButton::OCS_COUNT);
+    // count as a short button down
+    _nClicks++;
+    _newState(OneButton::OCS_COUNT);
     break;
 
   case OneButton::OCS_COUNT:
@@ -320,9 +320,9 @@ void OneButton::_fsm(bool activeLevel)
   case OneButton::OCS_PRESSEND:
     // button was released.
 
-      if (_longPressStopFunc) _longPressStopFunc();
-      if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
-      reset();
+    if (_longPressStopFunc) _longPressStopFunc();
+    if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
+    reset();
     break;
 
   default:
