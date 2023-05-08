@@ -62,8 +62,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      # Compile Examples for ESP8266
       - name: compile sketches
         uses: arduino/compile-sketches@v1
         with:
@@ -74,6 +72,31 @@ jobs:
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
               version: 3.1.2
           fqbn: esp8266:esp8266:nodemcuv2
+          sketch-paths: |
+            - 'examples/SimpleOneButton'
+            - 'examples/TwoButtons'
+            - 'examples/BlinkMachine'
+            - 'examples/InterruptOneButton'
+            - 'examples/SpecialInput'
+
+  compile-esp32:
+    name: build examples on ESP32
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: compile sketches
+        uses: arduino/compile-sketches@v1
+        with:
+          verbose: true
+          platforms: |
+            # Install ESP32 platform via Boards Manager
+            - name: "esp32:esp32"
+              source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+              # version: 2.0.4 doesn't work with CLI caused by issue https://github.com/espressif/arduino-esp32/pull/7060
+              version: 2.0.8
+          fqbn: esp32:esp32:esp32
           sketch-paths: |
             - 'examples/SimpleOneButton'
             - 'examples/TwoButtons'
