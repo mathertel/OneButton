@@ -61,13 +61,15 @@ public:
   /**
    * set # millisec after single click is assumed.
    */
-  void setClickTicks(const unsigned int ms); // obsolete
+  [[deprecated("Use setClickMs() instead.")]]
+  void setClickTicks(const unsigned int ms); // deprecated
   void setClickMs(const unsigned int ms) { setClickTicks(ms); };
 
   /**
    * set # millisec after press is assumed.
    */
-  void setPressTicks(const unsigned int ms); // obsolete
+  [[deprecated("Use setPressMs() instead.")]]
+  void setPressTicks(const unsigned int ms); // deprecated
   void setPressMs(const unsigned int ms) { setPressTicks(ms); };
 
   // ----- Attach events functions -----

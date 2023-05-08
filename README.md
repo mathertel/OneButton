@@ -8,10 +8,9 @@ This enables you to reuse the same button for multiple functions and lowers the 
 This is also a sample for implementing simple finite-state machines by using the simple pattern above.
 
 You can find more details on this library at
-http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
+<http://www.mathertel.de/Arduino/OneButtonLibrary.aspx>
 
 The change log of this library can be found in [CHANGELOG](CHANGELOG.md).
-
 
 ## Getting Started
 
@@ -25,7 +24,6 @@ a copy of this library. You can find more detail about installing libraries
 ```
 
 Each physical button requires its own `OneButton` instance. You can initialize them like this:
-
 
 ### Initialize a Button to GND
 
@@ -45,7 +43,6 @@ OneButton btn = OneButton(
 );
 ```
 
-
 ### Initialize a Button to VCC
 
 ```CPP
@@ -64,7 +61,6 @@ OneButton btn = OneButton(
   false        // Disable internal pull-up resistor
 );
 ```
-
 
 ### Attach State Events
 
@@ -86,8 +82,7 @@ btn.attachDoubleClick([]() {
 });
 ```
 
-
-### Don't forget to `tick()`!
+### Don't forget to `tick()`
 
 In order for `OneButton` to work correctly, you must call `tick()` on __each button instance__
 within your main `loop()`. If you're not getting any button events, this is probably why.
@@ -100,10 +95,9 @@ void loop() {
 }
 ```
 
-
 ### Usage with lambdas that capture context
 
-You **can't pass** a lambda-**with-context** to an argument which expects a **function pointer**. To work that around,
+You __can't pass__ a lambda-__with-context__ to an argument which expects a __function pointer__. To work that around,
 use `paramtererizedCallbackFunction`. We pass the context (so the pointer to the object we want to access) to the library
 and it will give it back to the lambda.
 
@@ -111,8 +105,7 @@ and it will give it back to the lambda.
 okBtn.attachClick([](void *ctx){Serial.println(*(((BtnHandler*)(ctx))) -> state}}), this);
 ```
 
-See also discussion in [Issue #112 ](https://github.com/mathertel/OneButton/issues/112).
-
+See also discussion in [Issue #112](https://github.com/mathertel/OneButton/issues/112).
 
 ## State Events
 
@@ -127,15 +120,15 @@ Here's a full list of events handled by this library:
 | `attachDuringLongPress` | Fires periodically as long as the button is held down.        |
 | `attachLongPressStop`   | Fires when the button is released after a long hold.          |
 
-
 ### Event Timing
 
 Valid events occur when `tick()` is called after a specified number of milliseconds. You can use
 the following functions to change the timing.
 
-**Note:** Attaching a double click will increase the delay for detecting a single click. If a double
+__Note:__ Attaching a double click will increase the delay for detecting a single click. If a double
 click event is not attached, the library will assume a valid single click after one click duration,
 otherwise it must wait for the double click timeout to pass.
+This is because a single click callback must not to be triggered in case of a double click event.
 
 | Function                | Default    | Description                                                   |
 | ----------------------- | ---------- | ------------------------------------------------------------- |
@@ -146,6 +139,9 @@ otherwise it must wait for the double click timeout to pass.
 You may change these default values but be aware that when you specify too short times
 it is hard to click twice or you will create a press instead of a click.
 
+The former functions `setDebounceTicks`, `setClickTicks` and `setPressTicks` are marked deprecated.
+The term `Ticks` in these functions where confusing. Replace them with the ...Ms function calls.
+There is no functional change on them.
 
 ### Additional Functions
 
@@ -156,12 +152,10 @@ it is hard to click twice or you will create a press instead of a click.
 | `bool isLongPressed()`  | Detect whether or not the button is currently inside a long press.             |
 | `int getPressedTicks()` | Get the current number of milliseconds that the button has been held down for. |
 
-
 ### `tick()` and `reset()`
 
 You can specify a logic level when calling `tick(bool)`, which will skip reading the pin and use
 that level instead. If you wish to reset the internal state of your buttons, call `reset()`.
-
 
 ## Troubleshooting
 

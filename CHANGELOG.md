@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
-## [2.0.6] - 2023-05-08
+## [2.1.0] - 2023-05-08
+
+This release is a minor update as there is new internal functionality and
+some functions have been renamed.
+
+The former functions `setDebounceTicks`, `setClickTicks` and `setPressTicks` are marked deprecated.
+The term `Ticks` in these functions where confusing. Replace them with the ...Ms function calls.
+There is no functional change on them.
 
 * CPP Checks added in Github actions. Thanks to @mkinney
 * Debouncing input levels implemented in a central place. Thanks to @IhorNehrutsa
@@ -10,6 +17,8 @@ All notable changes to this project will be documented in this file starting 202
 * .clang-format file added to support code formatting in IDE 2.x (and others)
 * Fixing examples for ESP8266 and ESP32.
 * GitHub Action extended to compile for ESP8266 and ESP32
+
+Many thanks to the improvements included by (**@IhorNehrutsa**)
 
 ## [2.0.4] - 2022-01-22
 
@@ -26,7 +35,7 @@ and included example PIN definitions for ESP32
 * Compiler warning removed
 * Documentation
 
-## [2.0.0] - 2021-01-22 
+## [2.0.0] - 2021-01-22
 
 * CHANGELOG created.
 * Many thanks to the improvements included from #27 (**@aslobodyanuk**), #59 (**@ShaggyDog18**) and #73 (**@geeksville**).
@@ -55,13 +64,11 @@ The function **isIdle()** was added to allow detect a current interaction.
 
 The library now supports to detect multiple (>2) clicks in a row using **attachMultiClick()** .
 
-
 * The internal _state is using enum instead of plain numbers to make the library more readable.
 * functions that had been marked deprecated are now removed. (attachPress->attachLongPressXXX)
 * added const to constant parameters to enable meaningful compiler warnings.
 * added code for de-bouncing double clicks from pull 27.
-* added isIdle() function to find out that the internal state is `init`. 
-
+* added isIdle() function to find out that the internal state is `init`.
 
 ### Examples
 
