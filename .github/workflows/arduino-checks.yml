@@ -55,3 +55,28 @@ jobs:
             - 'examples/InterruptOneButton'
             - 'examples/SpecialInput'
 
+  compile-esp8266:
+    name: compile esp8266 examples
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Compile Examples for ESP8266
+      - name: compile sketches
+        uses: arduino/compile-sketches@v1
+        with:
+          verbose: true
+          platforms: |
+            # Install ESP8266 platform via Boards Manager
+            - name: esp8266:esp8266
+              source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
+              version: 3.0.0
+          fqbn: esp8266:esp8266:nodemcuv2
+          sketch-paths: |
+            - 'examples/SimpleOneButton'
+            - 'examples/TwoButtons'
+            - 'examples/BlinkMachine'
+            - 'examples/InterruptOneButton'
+            - 'examples/SpecialInput'
