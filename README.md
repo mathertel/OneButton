@@ -110,7 +110,7 @@ use `paramtererizedCallbackFunction`. We pass the context (so the pointer to the
 and it will give it back to the lambda.
 
 ```CPP
-okBtn.attachClick([](void *ctx){Serial.println(*(((BtnHandler*)(ctx))) -> state}}), this);
+okBtn.attachClick([](void *ctx){Serial.println(*((BtnHandler*)ctx) -> state);}, this);
 ```
 
 See also discussion in [Issue #112](https://github.com/mathertel/OneButton/issues/112).
