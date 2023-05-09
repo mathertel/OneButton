@@ -80,6 +80,14 @@ btn.attachClick(handleClick);
 btn.attachDoubleClick([]() {
   Serial.println("Double Pressed!");
 });
+
+// Handler function for MultiClick the button with self pointer as a parameter
+static void handleMultiClick(OneButton *oneButton) {
+  Serial.println("MultiClick pin=%d debouncedValue=%d!", oneButton->pin(), oneButton->debouncedValue());
+}
+
+// MultiClick button event attachment with self pointer as a parameter
+btn.attachMultiClick(handleMultiClick, &btn);
 ```
 
 ### Don't forget to `tick()`
@@ -151,6 +159,9 @@ There is no functional change on them.
 | ----------------------- | ------------------------------------------------------------------------------ |
 | `bool isLongPressed()`  | Detect whether or not the button is currently inside a long press.             |
 | `int getPressedTicks()` | Get the current number of milliseconds that the button has been held down for. |
+| `int pin()`             | Get the OneButton pin                                                          |
+| `int state()`           | Get the OneButton state                                                        |
+| `int debouncedValue()`  | Get the OneButton debounced value                                              |
 
 ### `tick()` and `reset()`
 
