@@ -59,24 +59,24 @@ OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupAc
 
 
 // explicitly set the number of millisec that have to pass by before a click is assumed stable.
-void OneButton::setDebounceTicks(const unsigned int ms)
+void OneButton::setDebounceMs(const unsigned int ms)
 {
   _debounce_ms = ms;
-} // setDebounceTicks
+} // setDebounceMs
 
 
 // explicitly set the number of millisec that have to pass by before a click is detected.
-void OneButton::setClickTicks(const unsigned int ms)
+void OneButton::setClickMs(const unsigned int ms)
 {
   _click_ms = ms;
-} // setClickTicks
+} // setClickMs
 
 
 // explicitly set the number of millisec that have to pass by before a long button press is detected.
-void OneButton::setPressTicks(const unsigned int ms)
+void OneButton::setPressMs(const unsigned int ms)
 {
   _press_ms = ms;
-} // setPressTicks
+} // setPressMs
 
 
 // save function for click event
