@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
-## [2.1.0] - 2023-05-08
+## [2.1.0] - 2023-05-10
 
 This release is a minor update as there is new internal functionality and
 some functions have been renamed.
