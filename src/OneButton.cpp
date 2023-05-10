@@ -217,9 +217,9 @@ void OneButton::tick(void)
 } // tick()
 
 
-void OneButton::tick(bool activeLevel)
+void OneButton::tick(bool level)
 {
-  _fsm(debounce(activeLevel));
+  _fsm(debounce(level));
 }
 
 
