@@ -308,7 +308,6 @@ void OneButton::_fsm(bool activeLevel)
 
     if (!activeLevel) {
       _newState(OneButton::OCS_PRESSEND);
-      _startTime = now;
 
     } else {
       // still the button is pressed

@@ -223,7 +223,7 @@ private:
   unsigned long _lastDebounceTime = 0; // millis()
   unsigned long now = 0;               // millis()
 
-  unsigned long _startTime = 0; // start of current input change to checking debouncing
+  unsigned long _startTime = 0; // start time of current activeLevel change
   int _nClicks = 0;             // count the number of clicks with this variable
   int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
 
@@ -232,6 +232,12 @@ public:
   stateMachine_t state() const { return _state; };
   int debounce(const int value);
   int debouncedValue() const { return debouncedPinLevel; };
+
+  /**
+   * @brief Use this function in the DuringLongPress and LongPressStop events to get the time since the button was pressed.
+   * @return milliseconds from the start of the button press.
+   */
+  unsigned long getPressedMs() { return(millis() - _startTime); };
 };
 
 #endif
