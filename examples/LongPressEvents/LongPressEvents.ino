@@ -36,7 +36,7 @@ void setup()
   button.attachDuringLongPress(DuringLongPress, &button);
   button.attachLongPressStop(LongPressStop, &button);
 
-  button.setLongPressIntervalMs(400);
+  button.setLongPressIntervalMs(1000);
 } // setup
 
 
