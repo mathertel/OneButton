@@ -35,6 +35,8 @@ void setup()
   button.attachLongPressStart(LongPressStart, &button);
   button.attachDuringLongPress(DuringLongPress, &button);
   button.attachLongPressStop(LongPressStop, &button);
+
+  button.setLongPressIntervalMs(400);
 } // setup
 
 
@@ -63,17 +65,11 @@ void LongPressStop(void *oneButton)
   Serial.println("\t - LongPressStop()\n");
 }
 
-unsigned long previous = 0;
-
 // this function will be called when the button is held down.
 void DuringLongPress(void *oneButton)
 {
-  unsigned long now = millis();
-  if ((now - previous) >= 1000) {
-    previous = now;
-    Serial.print(((OneButton *)oneButton)->getPressedMs());
-    Serial.println("\t - DuringLongPress()");
-  }
+  Serial.print(((OneButton *)oneButton)->getPressedMs());
+  Serial.println("\t - DuringLongPress()");
 }
 
 // End

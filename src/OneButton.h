@@ -72,6 +72,12 @@ public:
   void setPressTicks(const unsigned int ms) { setPressMs(ms); }; // deprecated
   void setPressMs(const unsigned int ms);
 
+  /**
+   * set interval in msecs between calls of the DuringLongPress event.
+   * 0 ms is the fastest events calls.
+   */
+  void setLongPressIntervalMs(const unsigned int ms) { _long_press_intrval_ms = ms; };
+
   // ----- Attach events functions -----
 
   /**
@@ -111,6 +117,7 @@ public:
 
   /**
    * Attach an event to fire periodically while the button is held down.
+   * The period of calls is set by setLongPressIntervalMs(ms).
    * @param newFunction
    */
   void attachDuringLongPress(callbackFunction newFunction);
@@ -226,6 +233,9 @@ private:
   unsigned long _startTime = 0; // start time of current activeLevel change
   int _nClicks = 0;             // count the number of clicks with this variable
   int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
+
+  unsigned int _long_press_intrval_ms = 0; // interval in msecs between calls of the DuringLongPress event
+  unsigned long _lastDuringLongPressTime = 0; // used to produce the DuringLongPress interval
 
 public:
   int pin() const { return _pin; };
