@@ -1,3 +1,30 @@
+/*
+ This is a sample sketch to show how to use the OneButtonLibrary
+ to detect long press events on a button.
+ The library internals are explained at
+ http://www.mathertel.de/Arduino/OneButtonLibrary.aspx
+
+ Setup a test circuit:
+ * Connect a pushbutton to PIN_INPUT (ButtonPin) and ground.
+
+ The sketch shows how to setup the library and bind the functions (LongPressStart, LongPressStop, DuringLongPress) to the events.
+ In the loop function the button.tick function must be called as often as you like.
+ The output of the program is:
+
+OneButton Example.
+Please press and hold the button for a few seconds.
+810	     - LongPressStart()
+820	     - DuringLongPress()
+1820	 - DuringLongPress()
+2820	 - DuringLongPress()
+3820	 - DuringLongPress()
+4820	 - DuringLongPress()
+5820	 - DuringLongPress()
+6550	 - LongPressStop()
+*/
+
+// 05.05.2023 created by Ihor Nehrutsa
+
 #include "OneButton.h"
 
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY)
