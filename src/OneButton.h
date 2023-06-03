@@ -76,7 +76,7 @@ public:
    * set interval in msecs between calls of the DuringLongPress event.
    * 0 ms is the fastest events calls.
    */
-  void setLongPressIntervalMs(const unsigned int ms) { _long_press_intrval_ms = ms; };
+  void setLongPressIntervalMs(const unsigned int ms) { _long_press_interval_ms = ms; };
 
   // ----- Attach events functions -----
 
@@ -234,7 +234,7 @@ private:
   int _nClicks = 0;             // count the number of clicks with this variable
   int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
 
-  unsigned int _long_press_intrval_ms = 0; // interval in msecs between calls of the DuringLongPress event
+  unsigned int _long_press_interval_ms = 0; // interval in msecs between calls of the DuringLongPress event
   unsigned long _lastDuringLongPressTime = 0; // used to produce the DuringLongPress interval
 
 public:

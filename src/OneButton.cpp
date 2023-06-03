@@ -311,7 +311,7 @@ void OneButton::_fsm(bool activeLevel)
 
     } else {
       // still the button is pressed
-      if ((now - _lastDuringLongPressTime) >= _long_press_intrval_ms) {
+      if ((now - _lastDuringLongPressTime) >= _long_press_interval_ms) {
         if (_duringLongPressFunc) _duringLongPressFunc();
         if (_paramDuringLongPressFunc) _paramDuringLongPressFunc(_duringLongPressFuncParam);
         _lastDuringLongPressTime = now;
