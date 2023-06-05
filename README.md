@@ -158,7 +158,7 @@ There is no functional change on them.
 | Function                | Description                                                                    |
 | ----------------------- | ------------------------------------------------------------------------------ |
 | `bool isLongPressed()`  | Detect whether or not the button is currently inside a long press.             |
-| `int getPressedTicks()` | Get the current number of milliseconds that the button has been held down for. |
+| `int getPressedMs()`    | Get the current number of milliseconds that the button has been held down for. |
 | `int pin()`             | Get the OneButton pin                                                          |
 | `int state()`           | Get the OneButton state                                                        |
 | `int debouncedValue()`  | Get the OneButton debounced value                                              |
