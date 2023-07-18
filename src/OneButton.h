@@ -137,7 +137,7 @@ public:
    * level is given by the parameter.
    * Run the finite state machine (FSM) using the given level.
    */
-  void tick(bool level);
+  void tick(bool activeLevel);
 
 
   /**
