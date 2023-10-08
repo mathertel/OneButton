@@ -78,6 +78,11 @@ void OneButton::setPressMs(const unsigned int ms)
   _press_ms = ms;
 } // setPressMs
 
+// explicitly set the number of millisec that have to pass by before button idle is detected.
+void OneButton::setIdleMs(const unsigned int ms)
+{
+  _idle_ms = ms;
+} // setIdleMs
 
 // save function for click event
 void OneButton::attachClick(callbackFunction newFunction)
@@ -173,11 +178,19 @@ void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction,
 } // attachDuringLongPress
 
 
+// save function for idle button event
+void OneButton::attachIdle(callbackFunction newFunction)
+{
+  _idleFunc = newFunction;
+} // attachIdle
+
+
 void OneButton::reset(void)
 {
   _state = OneButton::OCS_INIT;
   _nClicks = 0;
-  _startTime = 0;
+  _startTime = millis();
+  _idleState = false;
 }
 
 
@@ -242,6 +255,13 @@ void OneButton::_fsm(bool activeLevel)
   // Implementation of the state machine
   switch (_state) {
   case OneButton::OCS_INIT:
+    // on idle for idle_ms call idle function
+    if (!_idleState and (waitTime > _idle_ms))
+      if (_idleFunc) {
+        _idleState = true;
+        _idleFunc();
+      }
+      
     // waiting for level to become active.
     if (activeLevel) {
       _newState(OneButton::OCS_DOWN);
