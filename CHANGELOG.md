@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
+## [2.5.0] - 2023-12-02
+
+This release is a minor update including som smaller fixes.
+
+* Functions marked with deprecated will be removed in version 3.x
+* Formatting of source code conformint the standard Arduino IDE 2.0 formatting using .clang-format
+* Version for platform.io in sync with version for Arduino
+* Introducing the `OneButtonTiny` class for small environments with limited program space and memory.
+
+
 ## [2.1.0] - 2023-05-10
 
 This release is a minor update as there is new internal functionality and

@@ -1,0 +1,23 @@
+{
+  "default": true,
+  "no-hard-tabs": true,
+  "no-trailing-spaces": true,
+  "blank_lines": true,
+  "no-multiple-blanks": {
+    "maximum": 2
+  },
+  "ul-indent": {
+    "indent": 2
+  },
+  "ul-style": {
+    "style": "asterisk"
+  },
+  "line-length": false,
+  "no-inline-html": false,
+  "code-block-style": {
+    "style": "fenced"
+  },
+  "no-duplicate-header": {
+    "allow_different_nesting": true
+  }
+}

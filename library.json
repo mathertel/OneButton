@@ -1,6 +1,6 @@
 {
   "name": "OneButton",
-  "version": "2.1.0",
+  "version": "2.5.0",
   "keywords": "arduino, button, pushbutton",
   "description": "This Arduino library is improving the usage of a singe button for input. It shows how to use an digital input pin with a single pushbutton attached for detecting some of the typical button press events like single clicks, double clicks and long-time pressing. This enables you to reuse the same button for multiple functions and lowers the hardware invests.",
   "repository": {

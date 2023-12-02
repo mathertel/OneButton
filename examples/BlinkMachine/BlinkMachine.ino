@@ -28,9 +28,9 @@
   --------              ------    |
  |  OFF   |<--click-+->|  ON  |   |
   --------          |   ------    |
-                    |     |       |
-                    |   d-click   |
-                    |     |       |
+      ^             |     |       |
+      |             |   d-click   |
+  longpress         |     |       |
                     |     V       |
                     |   ------    |
                     +- | SLOW |   |
@@ -47,16 +47,16 @@
 // 06.10.2012 created by Matthias Hertel
 // 26.03.2017 state diagram added, minor changes
 
-#include "OneButton.h"
+// #include "OneButton.h"
+#include "OneButtonTiny.h"  // This example also works with reduced OneButtonTiny class saving.
 
 // The actions I ca do...
 typedef enum {
-  ACTION_OFF,  // set LED "OFF".
-  ACTION_ON,   // set LED "ON"
-  ACTION_SLOW, // blink LED "SLOW"
-  ACTION_FAST  // blink LED "FAST"
-} 
-MyActions;
+  ACTION_OFF,   // set LED "OFF".
+  ACTION_ON,    // set LED "ON"
+  ACTION_SLOW,  // blink LED "SLOW"
+  ACTION_FAST   // blink LED "FAST"
+} MyActions;
 
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY) ||defined(ARDUINO_UNOR4_WIFI)
 // Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
@@ -64,7 +64,7 @@ MyActions;
 #define PIN_LED 13
 
 #elif defined(ARDUINO_attiny)
-// Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
+// Example for Arduino ATTiny85
 #define PIN_INPUT PB0
 #define PIN_LED PB1
 
@@ -83,36 +83,40 @@ MyActions;
 
 #endif
 
-// Setup a new OneButton on pin PIN_INPUT.  
-OneButton button(PIN_INPUT, true);
+// Setup a new OneButton on pin PIN_INPUT.
+// OneButton button(PIN_INPUT, true);
+OneButtonTiny button(PIN_INPUT, true);  // This example also works with reduced OneButtonTiny class saving.
 
-MyActions nextAction = ACTION_OFF; // no action when starting
+MyActions nextAction = ACTION_OFF;  // no action when starting
 
 
 // setup code here, to run once.
 void setup() {
   // enable the standard led on pin 13.
-  pinMode(PIN_LED, OUTPUT);      // sets the digital pin as output
+  pinMode(PIN_LED, OUTPUT);  // sets the digital pin as output
 
-  // link the myClickFunction function to be called on a click event.   
+  // link the myClickFunction function to be called on a click event.
   button.attachClick(myClickFunction);
 
-  // link the doubleclick function to be called on a doubleclick event.   
+  // link the doubleclick function to be called on a doubleclick event.
   button.attachDoubleClick(myDoubleClickFunction);
+
+  // link the doubleclick function to be called on a doubleclick event.
+  button.attachLongPressStart(myDoubleClickFunction);
 
   // set 80 msec. debouncing time. Default is 50 msec.
   button.setDebounceMs(80);
-} // setup
+}  // setup
 
 
-// main code here, to run repeatedly: 
+// main code here, to run repeatedly:
 void loop() {
   unsigned long now = millis();
 
   // keep watching the push button:
   button.tick();
 
-  // You can implement other code in here or just wait a while 
+  // You can implement other code in here or just wait a while
 
   if (nextAction == ACTION_OFF) {
     // do nothing.
@@ -128,7 +132,7 @@ void loop() {
       digitalWrite(PIN_LED, LOW);
     } else {
       digitalWrite(PIN_LED, HIGH);
-    } // if
+    }  // if
 
   } else if (nextAction == ACTION_FAST) {
     // do a fast blinking
@@ -136,9 +140,9 @@ void loop() {
       digitalWrite(PIN_LED, LOW);
     } else {
       digitalWrite(PIN_LED, HIGH);
-    } // if
-  } // if
-} // loop
+    }  // if
+  }    // if
+}  // loop
 
 
 // this function will be called when the button was pressed 1 time and them some time has passed.
@@ -147,7 +151,7 @@ void myClickFunction() {
     nextAction = ACTION_ON;
   else
     nextAction = ACTION_OFF;
-} // myClickFunction
+}  // myClickFunction
 
 
 // this function will be called when the button was pressed 2 times in a short timeframe.
@@ -160,8 +164,13 @@ void myDoubleClickFunction() {
 
   } else if (nextAction == ACTION_FAST) {
     nextAction = ACTION_ON;
-  } // if
-} // myDoubleClickFunction
+  }  // if
+}  // myDoubleClickFunction
+
+
+// this function will be called when a long press was detected.
+void myLongPressFunction() {
+  nextAction = ACTION_OFF;
+}  // myLongPressFunction
 
 // End
-

@@ -12,6 +12,7 @@ You can find more details on this library at
 
 The change log of this library can be found in [CHANGELOG](CHANGELOG.md).
 
+
 ## Getting Started
 
 Clone this repository into `Arduino/Libraries` or use the built-in Arduino IDE Library manager to install
@@ -24,6 +25,30 @@ a copy of this library. You can find more detail about installing libraries
 ```
 
 Each physical button requires its own `OneButton` instance. You can initialize them like this:
+
+
+### OneButton Tiny version
+
+The OneButton Library was extended over time with functionality that was requested for specific
+use cases. This makes the library growing over time too and therefore was limiting use cases using very small processors like attiny84.
+
+Staring with version 2.5 the OneButton Library starts supporting these processors with limited
+memory and low cpu frequencies by introducing the `OneButtonTiny` class that offers a subset of
+the features of the complete `OneButton` class by exposing the following events as callbacks:
+
+* Click event
+* DoubleClick event
+* LongPressStart event
+* Callbacks without parameters
+
+This saves up to 1k of binary program space that is a huge amount on these processors.
+
+With Version 2.5 the `OneButtonTiny` class is now in a beta state.
+
+* Any Issues or pull requests fixing problems are welcome.
+* Any new feature request for the `OneButtonTiny` class will be rejected to keep size small.
+* New, reasonable functionality will be added to the OneButton class only.
+
 
 ### Initialize a Button to GND
 
@@ -43,6 +68,7 @@ OneButton btn = OneButton(
 );
 ```
 
+
 ### Initialize a Button to VCC
 
 ```CPP
@@ -61,6 +87,7 @@ OneButton btn = OneButton(
   false        // Disable internal pull-up resistor
 );
 ```
+
 
 ### Attach State Events
 
@@ -103,6 +130,7 @@ void loop() {
 }
 ```
 
+
 ### Usage with lambdas that capture context
 
 You __can't pass__ a lambda-__with-context__ to an argument which expects a __function pointer__. To work that around,
@@ -114,6 +142,7 @@ okBtn.attachClick([](void *ctx){Serial.println(*((BtnHandler*)ctx) -> state);}, 
 ```
 
 See also discussion in [Issue #112](https://github.com/mathertel/OneButton/issues/112).
+
 
 ## State Events
 
@@ -127,6 +156,7 @@ Here's a full list of events handled by this library:
 | `attachLongPressStart`  | Fires as soon as the button is held down for 800 milliseconds.|
 | `attachDuringLongPress` | Fires periodically as long as the button is held down.        |
 | `attachLongPressStop`   | Fires when the button is released after a long hold.          |
+
 
 ### Event Timing
 
@@ -151,6 +181,7 @@ The former functions `setDebounceTicks`, `setClickTicks` and `setPressTicks` are
 The term `Ticks` in these functions where confusing. Replace them with the ...Ms function calls.
 There is no functional change on them.
 
+
 ### Additional Functions
 
 `OneButton` also provides a couple additional functions to use for querying button status:
@@ -163,10 +194,12 @@ There is no functional change on them.
 | `int state()`           | Get the OneButton state                                                        |
 | `int debouncedValue()`  | Get the OneButton debounced value                                              |
 
+
 ### `tick()` and `reset()`
 
 You can specify a logic level when calling `tick(bool)`, which will skip reading the pin and use
 that level instead. If you wish to reset the internal state of your buttons, call `reset()`.
+
 
 ## Troubleshooting
 
