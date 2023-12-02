@@ -72,6 +72,17 @@ public:
   void setPressTicks(const unsigned int ms) { setPressMs(ms); }; // deprecated
   void setPressMs(const unsigned int ms);
 
+  /**
+   * set interval in msecs between calls of the DuringLongPress event.
+   * 0 ms is the fastest events calls.
+   */
+  void setLongPressIntervalMs(const unsigned int ms) { _long_press_interval_ms = ms; };
+
+  /**
+   * set # millisec after idle is assumed.
+   */
+  void setIdleMs(const unsigned int ms);
+
   // ----- Attach events functions -----
 
   /**
@@ -111,10 +122,17 @@ public:
 
   /**
    * Attach an event to fire periodically while the button is held down.
+   * The period of calls is set by setLongPressIntervalMs(ms).
    * @param newFunction
    */
   void attachDuringLongPress(callbackFunction newFunction);
   void attachDuringLongPress(parameterizedCallbackFunction newFunction, void *parameter);
+
+  /**
+   * Attach an event when the button is in idle position.
+   * @param newFunction
+   */
+  void attachIdle(callbackFunction newFunction);
 
   // ----- State machine functions -----
 
@@ -130,7 +148,7 @@ public:
    * level is given by the parameter.
    * Run the finite state machine (FSM) using the given level.
    */
-  void tick(bool level);
+  void tick(bool activeLevel);
 
 
   /**
@@ -162,6 +180,7 @@ private:
   unsigned int _debounce_ms = 50; // number of msecs for debounce times.
   unsigned int _click_ms = 400;   // number of msecs before a click is detected.
   unsigned int _press_ms = 800;   // number of msecs before a long button press is detected
+  unsigned int _idle_ms = 1000;   // number of msecs before idle is detected
 
   int _buttonPressed = 0; // this is the level of the input pin when the button is pressed.
                           // LOW if the button connects the input pin to GND when pressed.
@@ -192,6 +211,8 @@ private:
   parameterizedCallbackFunction _paramDuringLongPressFunc = NULL;
   void *_duringLongPressFuncParam = NULL;
 
+  callbackFunction _idleFunc = NULL;
+
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the
   // tick function is called.
@@ -218,20 +239,31 @@ private:
 
   stateMachine_t _state = OCS_INIT;
 
+  bool _idleState = false;
+
   int debouncedPinLevel = -1;
   int _lastDebouncePinLevel = -1;      // used for pin debouncing
   unsigned long _lastDebounceTime = 0; // millis()
   unsigned long now = 0;               // millis()
 
-  unsigned long _startTime = 0; // start of current input change to checking debouncing
+  unsigned long _startTime = 0; // start time of current activeLevel change
   int _nClicks = 0;             // count the number of clicks with this variable
   int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
+
+  unsigned int _long_press_interval_ms = 0; // interval in msecs between calls of the DuringLongPress event
+  unsigned long _lastDuringLongPressTime = 0; // used to produce the DuringLongPress interval
 
 public:
   int pin() const { return _pin; };
   stateMachine_t state() const { return _state; };
   int debounce(const int value);
   int debouncedValue() const { return debouncedPinLevel; };
+
+  /**
+   * @brief Use this function in the DuringLongPress and LongPressStop events to get the time since the button was pressed.
+   * @return milliseconds from the start of the button press.
+   */
+  unsigned long getPressedMs() { return(millis() - _startTime); };
 };
 
 #endif

@@ -58,7 +58,7 @@ typedef enum {
   ACTION_FAST   // blink LED "FAST"
 } MyActions;
 
-#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY)
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO_EVERY) ||defined(ARDUINO_UNOR4_WIFI)
 // Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
 #define PIN_INPUT A1
 #define PIN_LED 13
