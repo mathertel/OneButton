@@ -57,9 +57,6 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
 BreakStringLiterals: false
-# v12 has various problems with this set to 0 (no limit)
-# possible workaround is to set this to 4294967295 aka some large number
-# see https://reviews.llvm.org/D96896
 ColumnLimit: 0
 # "" matches none
 CommentPragmas: ""
@@ -117,7 +114,7 @@ PenaltyReturnTypeOnItsOwnLine: 1
 # Used as a fallback if alignment style can't be detected from code (DerivePointerAlignment: true)
 PointerAlignment: Right
 RawStringFormats: []
-ReflowComments: true
+ReflowComments: false
 SortIncludes: false
 SortUsingDeclarations: false
 SpaceAfterCStyleCast: false
