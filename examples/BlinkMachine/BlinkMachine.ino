@@ -63,6 +63,11 @@ MyActions;
 #define PIN_INPUT A1
 #define PIN_LED 13
 
+#elif defined(ARDUINO_attiny)
+// Example for Arduino UNO with input button on pin 2 and builtin LED on pin 13
+#define PIN_INPUT PB0
+#define PIN_LED PB1
+
 #elif defined(ESP8266)
 // Example for NodeMCU with input button using FLASH button on D3 and using the led on -12 module (D4).
 // This LED is lighting on output level LOW.
