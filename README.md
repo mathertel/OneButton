@@ -25,6 +25,30 @@ a copy of this library. You can find more detail about installing libraries
 
 Each physical button requires its own `OneButton` instance. You can initialize them like this:
 
+
+### OneButton Tiny version
+
+The OneButton Library was extended over time with functionality that was requested for specific
+use cases. This makes the library growing over time too and therefore was limiting use cases using very small processors like attiny84.
+
+Staring with version 2.5 the OneButton Library starts supporting these processors with limited
+memory and low cpu frequencies by introducing the `OneButtonTiny` class that offers a subset of
+the features of the complete `OneButton` class by exposing the following events as callbacks:
+
+* Click event
+* DoubleClick event
+* LongPressStart event
+* Callbacks without parameters
+
+This saves up to 1k of binary program space that is a huge amount on these processors.
+
+With Version 2.5 the `OneButtonTiny` class is now in a beta state.
+
+* Any Issues or pull requests fixing problems are welcome.
+* Any new feature request for the `OneButtonTiny` class will be rejected to keep size small.
+* New, reasonable functionality will be added to the OneButton class only.
+
+
 ### Initialize a Button to GND
 
 ```CPP
