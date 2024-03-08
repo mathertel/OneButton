@@ -42,12 +42,21 @@ public:
   OneButton();
 
   /**
-   * Initialize the OneButton library.
+   * Initialize the OneButton object.
+   * @param pin The pin to be used for input from a momentary button.
+   * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
+   * @param pin_mode The pinMode() function parameter. INPUT, INPUT_PULLUP, INPUT_PULLDOWN etc. Default is INPUT_PULLUP.
+   */
+  explicit OneButton(const int pin, const boolean activeLow = true, const int pin_mode = INPUT_PULLUP);
+
+  /**
+   * Initialize the OneButton library. [deprecated]
    * @param pin The pin to be used for input from a momentary button.
    * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
    * @param pullupActive Activate the internal pullup when available. Default is true.
    */
-  explicit OneButton(const int pin, const boolean activeLow = true, const bool pullupActive = true);
+  [[deprecated("Use OneButton(int pin, boolean activeLow, int pin_mode) instead.")]]
+  /*explicit */OneButton(const int pin, const boolean activeLow/* = true*/, const bool pullupActive/* = true*/); // deprecated
 
   // ----- Set runtime parameters -----
 

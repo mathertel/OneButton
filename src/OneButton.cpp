@@ -29,12 +29,30 @@ OneButton::OneButton()
   // further initialization has moved to OneButton.h
 }
 
+OneButton::OneButton(const int pin, const boolean activeLow, const int pin_mode)
+{
+  _pin = pin;
+
+  if (activeLow) {
+    // the button connects the input pin to GND when pressed.
+    _buttonPressed = LOW;
+
+  } else {
+    // the button connects the input pin to VCC when pressed.
+    _buttonPressed = HIGH;
+  }
+
+  // use the given pin in input mode aka INPUT, INPUT_PULLUP, INPUT_PULLDOWN according to the Arduino board.
+  pinMode(pin, pin_mode);
+} // OneButton
+
 /**
  * Initialize the OneButton library.
  * @param pin The pin to be used for input from a momentary button.
  * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
  * @param pullupActive Activate the internal pullup when available. Default is true.
  */
+/*
 OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupActive)
 {
   _pin = pin;
@@ -56,7 +74,7 @@ OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupAc
     pinMode(pin, INPUT);
   }
 } // OneButton
-
+*/
 
 // explicitly set the number of millisec that have to pass by before a click is assumed stable.
 void OneButton::setDebounceMs(const unsigned int ms)
@@ -261,7 +279,7 @@ void OneButton::_fsm(bool activeLevel)
         _idleState = true;
         _idleFunc();
       }
-      
+
     // waiting for level to become active.
     if (activeLevel) {
       _newState(OneButton::OCS_DOWN);
