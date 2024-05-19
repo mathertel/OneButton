@@ -35,7 +35,7 @@ OneButton::OneButton()
  * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
  * @param pullupActive Activate the internal pullup when available. Default is true.
  */
-OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupActive)
+OneButton::OneButton(const int pin, const bool activeLow, const bool pullupActive)
 {
   _pin = pin;
 
