@@ -59,7 +59,7 @@ OneButton::OneButton(const int pin, const bool activeLow, const bool pullupActiv
 
 
 // explicitly set the number of millisec that have to pass by before a click is assumed stable.
-void OneButton::setDebounceMs(const unsigned int ms)
+void OneButton::setDebounceMs(const int ms)
 {
   _debounce_ms = ms;
 } // setDebounceMs
@@ -206,26 +206,32 @@ int OneButton::getNumberClicks(void)
  */
 int OneButton::debounce(const int value) {
     now = millis(); // current (relative) time in msecs.
-    if (_lastDebouncePinLevel == value) {
-      if (now - _lastDebounceTime >= _debounce_ms)
-        debouncedPinLevel = value;
+    
+    // Don't debounce going into active state, if _debounce_ms is negative
+    if(value && _debounce_ms < 0){
+      debouncedLevel = value;
+    }
+    
+    if (_lastDebounceLevel == value) {
+      if (now - _lastDebounceTime >= abs(_debounce_ms))
+        debouncedLevel = value;
     } else {
       _lastDebounceTime = now;
-      _lastDebouncePinLevel = value;
+      _lastDebounceLevel = value;
     }
-    return debouncedPinLevel;
+    return debouncedLevel;
 };
 
 
 /**
  * @brief Check input of the configured pin,
- * debounce input pin level and then
+ * debounce button state and then
  * advance the finite state machine (FSM).
  */
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    _fsm(debounce(digitalRead(_pin)) == _buttonPressed);
+    _fsm(debounce(digitalRead(_pin) == _buttonPressed));
   }
 } // tick()
 

@@ -56,7 +56,7 @@ public:
    */
   [[deprecated("Use setDebounceMs() instead.")]]
   void setDebounceTicks(const unsigned int ms) { setDebounceMs(ms); }; // deprecated
-  void setDebounceMs(const unsigned int ms);
+  void setDebounceMs(const int ms);
 
   /**
    * set # millisec after single click is assumed.
@@ -177,7 +177,7 @@ public:
 
 private:
   int _pin = -1;                  // hardware pin number.
-  unsigned int _debounce_ms = 50; // number of msecs for debounce times.
+  int _debounce_ms = 50; // number of msecs for debounce times.
   unsigned int _click_ms = 400;   // number of msecs before a click is detected.
   unsigned int _press_ms = 800;   // number of msecs before a long button press is detected
   unsigned int _idle_ms = 1000;   // number of msecs before idle is detected
@@ -241,8 +241,8 @@ private:
 
   bool _idleState = false;
 
-  int debouncedPinLevel = -1;
-  int _lastDebouncePinLevel = -1;      // used for pin debouncing
+  int debouncedLevel = -1;
+  int _lastDebounceLevel = -1;         // used for pin debouncing
   unsigned long _lastDebounceTime = 0; // millis()
   unsigned long now = 0;               // millis()
 
@@ -257,7 +257,7 @@ public:
   int pin() const { return _pin; };
   stateMachine_t state() const { return _state; };
   int debounce(const int value);
-  int debouncedValue() const { return debouncedPinLevel; };
+  int debouncedValue() const { return debouncedLevel; };
 
   /**
    * @brief Use this function in the DuringLongPress and LongPressStop events to get the time since the button was pressed.
