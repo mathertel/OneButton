@@ -85,6 +85,20 @@ void OneButton::setIdleMs(const unsigned int ms)
 } // setIdleMs
 
 // save function for click event
+void OneButton::attachPress(callbackFunction newFunction)
+{
+  _pressFunc = newFunction;
+} // attachPress
+
+
+// save function for parameterized click event
+void OneButton::attachPress(parameterizedCallbackFunction newFunction, void *parameter)
+{
+  _paramPressFunc = newFunction;
+  _pressFuncParam = parameter;
+} // attachPress
+
+// save function for click event
 void OneButton::attachClick(callbackFunction newFunction)
 {
   _clickFunc = newFunction;
@@ -273,6 +287,9 @@ void OneButton::_fsm(bool activeLevel)
       _newState(OneButton::OCS_DOWN);
       _startTime = now; // remember starting time
       _nClicks = 0;
+
+      if (_pressFunc) _pressFunc();
+      if (_paramPressFunc) _paramPressFunc(_pressFuncParam);
     } // if
     break;
 

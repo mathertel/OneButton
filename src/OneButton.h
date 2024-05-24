@@ -86,6 +86,13 @@ public:
   // ----- Attach events functions -----
 
   /**
+   * Attach an event to be called immediately when a depress is detected.
+   * @param newFunction This function will be called when the event has been detected.
+   */
+  void attachPress(callbackFunction newFunction);
+  void attachPress(parameterizedCallbackFunction newFunction, void *parameter);
+
+  /**
    * Attach an event to be called when a single click is detected.
    * @param newFunction This function will be called when the event has been detected.
    */
@@ -187,6 +194,10 @@ private:
                           // HIGH if the button connects the input pin to VCC when pressed.
 
   // These variables will hold functions acting as event source.
+  callbackFunction _pressFunc = NULL;
+  parameterizedCallbackFunction _paramPressFunc = NULL;
+  void *_pressFuncParam = NULL;
+  
   callbackFunction _clickFunc = NULL;
   parameterizedCallbackFunction _paramClickFunc = NULL;
   void *_clickFuncParam = NULL;
