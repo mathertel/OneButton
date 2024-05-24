@@ -222,9 +222,8 @@ bool OneButton::debounce(const bool value) {
     now = millis(); // current (relative) time in msecs.
     
     // Don't debounce going into active state, if _debounce_ms is negative
-    if(value && _debounce_ms < 0){
+    if(value && _debounce_ms < 0)
       debouncedLevel = value;
-    }
     
     if (_lastDebounceLevel == value) {
       if (now - _lastDebounceTime >= abs(_debounce_ms))
