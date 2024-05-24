@@ -204,7 +204,7 @@ int OneButton::getNumberClicks(void)
 /**
  * @brief Debounce input pin level for use in SpesialInput.
  */
-int OneButton::debounce(const int value) {
+bool OneButton::debounce(const bool value) {
     now = millis(); // current (relative) time in msecs.
     
     // Don't debounce going into active state, if _debounce_ms is negative

@@ -241,8 +241,8 @@ private:
 
   bool _idleState = false;
 
-  int debouncedLevel = -1;
-  int _lastDebounceLevel = -1;         // used for pin debouncing
+  bool debouncedLevel = false;
+  bool _lastDebounceLevel = false;         // used for pin debouncing
   unsigned long _lastDebounceTime = 0; // millis()
   unsigned long now = 0;               // millis()
 
@@ -256,7 +256,7 @@ private:
 public:
   int pin() const { return _pin; };
   stateMachine_t state() const { return _state; };
-  int debounce(const int value);
+  bool debounce(const bool value);
   int debouncedValue() const { return debouncedLevel; };
 
   /**
