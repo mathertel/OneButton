@@ -150,7 +150,8 @@ Here's a full list of events handled by this library:
 
 | Attach Function         | Description                                                   |
 | ----------------------- | ------------------------------------------------------------- |
-| `attachClick`           | Fires as soon as a single click is detected.                  |
+| `attachPress`           | Fires as soon as a press is detected.                         |
+| `attachClick`           | Fires as soon as a single click press and release is detected.|
 | `attachDoubleClick`     | Fires as soon as a double click is detected.                  |
 | `attachMultiClick`      | Fires as soon as multiple clicks have been detected.          |
 | `attachLongPressStart`  | Fires as soon as the button is held down for 800 milliseconds.|
@@ -175,11 +176,15 @@ This is because a single click callback must not to be triggered in case of a do
 | `setPressMs(int)`       | `800 msec` | Duration to hold a button to trigger a long press.            |
 
 You may change these default values but be aware that when you specify too short times
-it is hard to click twice or you will create a press instead of a click.
+it is hard to click twice or you will create a long press instead of a click.
 
 The former functions `setDebounceTicks`, `setClickTicks` and `setPressTicks` are marked deprecated.
 The term `Ticks` in these functions where confusing. Replace them with the ...Ms function calls.
 There is no functional change on them.
+
+Set debounce ms to a negative value to only debounce on release. `setDebounceMs(-25);` will immediately
+update to a pressed state, and will debounce for 25ms going into the released state. This will expidite
+the `attachPress` callback function to run instantly.
 
 
 ### Additional Functions
