@@ -27,6 +27,12 @@
 
 #include "Arduino.h"
 
+#define BUTTON_ACTIVE_LOW true
+#define BUTTON_ACTIVE_HIGH false
+#define BUTTON_PULLUP true
+#define BUTTON_NO_PULLUP false
+
+
 // ----- Callback function types -----
 
 extern "C" {
