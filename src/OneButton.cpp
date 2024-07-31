@@ -52,8 +52,7 @@ OneButton::OneButton(const int pin, const boolean activeLow, const int pin_mode)
  * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
  * @param pullupActive Activate the internal pullup when available. Default is true.
  */
-/*
-OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupActive)
+OneButton::OneButton(const int pin, const bool activeLow, const bool pullupActive)
 {
   _pin = pin;
 
@@ -77,7 +76,7 @@ OneButton::OneButton(const int pin, const boolean activeLow, const bool pullupAc
 */
 
 // explicitly set the number of millisec that have to pass by before a click is assumed stable.
-void OneButton::setDebounceMs(const unsigned int ms)
+void OneButton::setDebounceMs(const int ms)
 {
   _debounce_ms = ms;
 } // setDebounceMs
@@ -101,6 +100,20 @@ void OneButton::setIdleMs(const unsigned int ms)
 {
   _idle_ms = ms;
 } // setIdleMs
+
+// save function for click event
+void OneButton::attachPress(callbackFunction newFunction)
+{
+  _pressFunc = newFunction;
+} // attachPress
+
+
+// save function for parameterized click event
+void OneButton::attachPress(parameterizedCallbackFunction newFunction, void *parameter)
+{
+  _paramPressFunc = newFunction;
+  _pressFuncParam = parameter;
+} // attachPress
 
 // save function for click event
 void OneButton::attachClick(callbackFunction newFunction)
@@ -222,28 +235,33 @@ int OneButton::getNumberClicks(void)
 /**
  * @brief Debounce input pin level for use in SpesialInput.
  */
-int OneButton::debounce(const int value) {
+bool OneButton::debounce(const bool value) {
     now = millis(); // current (relative) time in msecs.
-    if (_lastDebouncePinLevel == value) {
-      if (now - _lastDebounceTime >= _debounce_ms)
-        debouncedPinLevel = value;
+    
+    // Don't debounce going into active state, if _debounce_ms is negative
+    if(value && _debounce_ms < 0)
+      debouncedLevel = value;
+    
+    if (_lastDebounceLevel == value) {
+      if (now - _lastDebounceTime >= abs(_debounce_ms))
+        debouncedLevel = value;
     } else {
       _lastDebounceTime = now;
-      _lastDebouncePinLevel = value;
+      _lastDebounceLevel = value;
     }
-    return debouncedPinLevel;
+    return debouncedLevel;
 };
 
 
 /**
  * @brief Check input of the configured pin,
- * debounce input pin level and then
+ * debounce button state and then
  * advance the finite state machine (FSM).
  */
 void OneButton::tick(void)
 {
   if (_pin >= 0) {
-    _fsm(debounce(digitalRead(_pin)) == _buttonPressed);
+    _fsm(debounce(digitalRead(_pin) == _buttonPressed));
   }
 } // tick()
 
@@ -285,6 +303,9 @@ void OneButton::_fsm(bool activeLevel)
       _newState(OneButton::OCS_DOWN);
       _startTime = now; // remember starting time
       _nClicks = 0;
+
+      if (_pressFunc) _pressFunc();
+      if (_paramPressFunc) _paramPressFunc(_pressFuncParam);
     } // if
     break;
 

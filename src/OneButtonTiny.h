@@ -31,7 +31,7 @@ public:
    * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
    * @param pullupActive Activate the internal pullup when available. Default is true.
    */
-  explicit OneButtonTiny(const int pin, const boolean activeLow = true, const bool pullupActive = true);
+  explicit OneButtonTiny(const int pin, const bool activeLow = true, const bool pullupActive = true);
 
   /**
    * set # millisec after safe click is assumed.

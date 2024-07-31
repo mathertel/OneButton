@@ -29,6 +29,12 @@
 #define PIN_INPUT D3
 #define PIN_LED D4
 
+#elif defined(ESP32) && defined(ARDUINO_NANO_ESP32)
+// For Arduino Nano ESP32 use D3 for button
+#define PIN_INPUT D3
+// For Arduino Nano ESP32 use e.g. LED_RED
+#define PIN_LED LED_RED
+
 #elif defined(ESP32)
 // Example pin assignments for a ESP32 board
 // Some boards have a BOOT switch using GPIO 0.
@@ -40,7 +46,7 @@
 
 // Setup a new OneButton on pin PIN_INPUT
 // The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
-OneButton button(PIN_INPUT, true);
+OneButton *button;
 
 // In case the momentary button puts the input to HIGH when pressed:
 // The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
@@ -56,14 +62,15 @@ void setup()
   Serial.begin(115200);
   Serial.println("One Button Example with polling.");
 
-  // enable the standard led on pin 13.
+  // enable the standard led on pin PIN_LED.
   pinMode(PIN_LED, OUTPUT); // sets the digital pin as output
-
-  // enable the standard led on pin 13.
   digitalWrite(PIN_LED, ledState);
 
+  // setup OneButton
+  button = new OneButton(PIN_INPUT, true);
+
   // link the doubleclick function to be called on a doubleclick event.
-  button.attachDoubleClick(doubleClick);
+  button->attachDoubleClick(doubleClick);
 } // setup
 
 
@@ -71,7 +78,7 @@ void setup()
 void loop()
 {
   // keep watching the push button:
-  button.tick();
+  button->tick();
 
   // You can implement other code in here or just wait a while
   delay(10);
