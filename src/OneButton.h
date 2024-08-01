@@ -30,53 +30,75 @@
 // ----- Callback function types -----
 
 extern "C" {
-typedef void (*callbackFunction)(void);
-typedef void (*parameterizedCallbackFunction)(void *);
+  typedef void (*callbackFunction)(void);
+  typedef void (*parameterizedCallbackFunction)(void *);
 }
 
 
-class OneButton
-{
+class OneButton {
 public:
   // ----- Constructor -----
+
+  /*
+   * Create a OneButton instance.
+   * use setup(...) to specify the hardware configuration. 
+   */
   OneButton();
 
   /**
-   * Initialize the OneButton library.
+   * Create a OneButton instance and setup.
    * @param pin The pin to be used for input from a momentary button.
    * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
    * @param pullupActive Activate the internal pullup when available. Default is true.
    */
-  explicit OneButton(const int pin, const bool activeLow = true, const bool pullupActive = true);
+  OneButton(const int pin, const bool activeLow = true, const bool pullupActive = true);
 
   // ----- Set runtime parameters -----
+
+
+  /**
+   * Initialize or re-initialize the input pin. 
+   * @param pin The pin to be used for input from a momentary button.
+   * @param mode Any of the modes also used in pinMode like INPUT or INPUT_PULLUP (default).
+   * @param activeLow Set to true when the input level is LOW when the button is pressed, Default is true.
+   */
+  void setup(const uint8_t pin, const uint8_t mode = INPUT_PULLUP, const bool activeLow = true);
+
 
   /**
    * set # millisec after safe click is assumed.
    */
   [[deprecated("Use setDebounceMs() instead.")]]
-  void setDebounceTicks(const unsigned int ms) { setDebounceMs(ms); }; // deprecated
+  void setDebounceTicks(const unsigned int ms) {
+    setDebounceMs(ms);
+  };  // deprecated
   void setDebounceMs(const int ms);
 
   /**
    * set # millisec after single click is assumed.
    */
   [[deprecated("Use setClickMs() instead.")]]
-  void setClickTicks(const unsigned int ms) { setClickMs(ms); }; // deprecated
+  void setClickTicks(const unsigned int ms) {
+    setClickMs(ms);
+  };  // deprecated
   void setClickMs(const unsigned int ms);
 
   /**
    * set # millisec after press is assumed.
    */
   [[deprecated("Use setPressMs() instead.")]]
-  void setPressTicks(const unsigned int ms) { setPressMs(ms); }; // deprecated
+  void setPressTicks(const unsigned int ms) {
+    setPressMs(ms);
+  };  // deprecated
   void setPressMs(const unsigned int ms);
 
   /**
    * set interval in msecs between calls of the DuringLongPress event.
    * 0 ms is the fastest events calls.
    */
-  void setLongPressIntervalMs(const unsigned int ms) { _long_press_interval_ms = ms; };
+  void setLongPressIntervalMs(const unsigned int ms) {
+    _long_press_interval_ms = ms;
+  };
 
   /**
    * set # millisec after idle is assumed.
@@ -174,30 +196,34 @@ public:
    * @return true if we are currently handling button press flow
    * (This allows power sensitive applications to know when it is safe to power down the main CPU)
    */
-  bool isIdle() const { return _state == OCS_INIT; }
+  bool isIdle() const {
+    return _state == OCS_INIT;
+  }
 
   /**
    * @return true when a long press is detected
    */
-  bool isLongPressed() const { return _state == OCS_PRESS; };
+  bool isLongPressed() const {
+    return _state == OCS_PRESS;
+  };
 
 
 private:
-  int _pin = -1;                  // hardware pin number.
-  int _debounce_ms = 50; // number of msecs for debounce times.
-  unsigned int _click_ms = 400;   // number of msecs before a click is detected.
-  unsigned int _press_ms = 800;   // number of msecs before a long button press is detected
-  unsigned int _idle_ms = 1000;   // number of msecs before idle is detected
+  int _pin = -1;                 // hardware pin number.
+  int _debounce_ms = 50;         // number of msecs for debounce times.
+  unsigned int _click_ms = 400;  // number of msecs before a click is detected.
+  unsigned int _press_ms = 800;  // number of msecs before a long button press is detected
+  unsigned int _idle_ms = 1000;  // number of msecs before idle is detected
 
-  int _buttonPressed = 0; // this is the level of the input pin when the button is pressed.
-                          // LOW if the button connects the input pin to GND when pressed.
-                          // HIGH if the button connects the input pin to VCC when pressed.
+  int _buttonPressed = 0;  // this is the level of the input pin when the button is pressed.
+                           // LOW if the button connects the input pin to GND when pressed.
+                           // HIGH if the button connects the input pin to VCC when pressed.
 
   // These variables will hold functions acting as event source.
   callbackFunction _pressFunc = NULL;
   parameterizedCallbackFunction _paramPressFunc = NULL;
   void *_pressFuncParam = NULL;
-  
+
   callbackFunction _clickFunc = NULL;
   parameterizedCallbackFunction _paramClickFunc = NULL;
   void *_clickFuncParam = NULL;
@@ -231,10 +257,10 @@ private:
   // define FiniteStateMachine
   enum stateMachine_t : int {
     OCS_INIT = 0,
-    OCS_DOWN = 1, // button is down
-    OCS_UP = 2, // button is up
-    OCS_COUNT = 3,
-    OCS_PRESS = 6, // button is hold down
+    OCS_DOWN = 1,   // button is down
+    OCS_UP = 2,     // button is up
+    OCS_COUNT = 3,  // in multi press-mode, counting
+    OCS_PRESS = 6,  // button is hold down
     OCS_PRESSEND = 7,
   };
 
@@ -253,28 +279,36 @@ private:
   bool _idleState = false;
 
   bool debouncedLevel = false;
-  bool _lastDebounceLevel = false;         // used for pin debouncing
-  unsigned long _lastDebounceTime = 0; // millis()
-  unsigned long now = 0;               // millis()
+  bool _lastDebounceLevel = false;      // used for pin debouncing
+  unsigned long _lastDebounceTime = 0;  // millis()
+  unsigned long now = 0;                // millis()
 
-  unsigned long _startTime = 0; // start time of current activeLevel change
-  int _nClicks = 0;             // count the number of clicks with this variable
-  int _maxClicks = 1;           // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
+  unsigned long _startTime = 0;  // start time of current activeLevel change
+  int _nClicks = 0;              // count the number of clicks with this variable
+  int _maxClicks = 1;            // max number (1, 2, multi=3) of clicks of interest by registration of event functions.
 
-  unsigned int _long_press_interval_ms = 0; // interval in msecs between calls of the DuringLongPress event
-  unsigned long _lastDuringLongPressTime = 0; // used to produce the DuringLongPress interval
+  unsigned int _long_press_interval_ms = 0;    // interval in msecs between calls of the DuringLongPress event
+  unsigned long _lastDuringLongPressTime = 0;  // used to produce the DuringLongPress interval
 
 public:
-  int pin() const { return _pin; };
-  stateMachine_t state() const { return _state; };
+  int pin() const {
+    return _pin;
+  };
+  stateMachine_t state() const {
+    return _state;
+  };
   bool debounce(const bool value);
-  int debouncedValue() const { return debouncedLevel; };
+  int debouncedValue() const {
+    return debouncedLevel;
+  };
 
   /**
    * @brief Use this function in the DuringLongPress and LongPressStop events to get the time since the button was pressed.
    * @return milliseconds from the start of the button press.
    */
-  unsigned long getPressedMs() { return(millis() - _startTime); };
+  unsigned long getPressedMs() {
+    return (millis() - _startTime);
+  };
 };
 
 #endif

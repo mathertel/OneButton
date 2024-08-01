@@ -46,7 +46,7 @@
 
 // Setup a new OneButton on pin PIN_INPUT
 // The 2. parameter activeLOW is true, because external wiring sets the button to LOW when pressed.
-OneButton *button;
+OneButton button;
 
 // In case the momentary button puts the input to HIGH when pressed:
 // The 2. parameter activeLOW is false when the external wiring sets the button to HIGH when pressed.
@@ -67,10 +67,10 @@ void setup()
   digitalWrite(PIN_LED, ledState);
 
   // setup OneButton
-  button = new OneButton(PIN_INPUT, true);
+  button.setup(PIN_INPUT, INPUT_PULLUP, true);
 
   // link the doubleclick function to be called on a doubleclick event.
-  button->attachDoubleClick(doubleClick);
+  button.attachDoubleClick(doubleClick);
 } // setup
 
 
@@ -78,7 +78,7 @@ void setup()
 void loop()
 {
   // keep watching the push button:
-  button->tick();
+  button.tick();
 
   // You can implement other code in here or just wait a while
   delay(10);
