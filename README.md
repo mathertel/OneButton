@@ -24,10 +24,53 @@ a copy of this library. You can find more detail about installing libraries
 #include <OneButton.h>
 ```
 
-Each physical button requires its own `OneButton` instance. You can initialize them like this:
+Each physical button requires its own `OneButton` instance.
 
 
-### OneButton Tiny version
+### Initialize on Instance creation (old way)
+
+You can create a global instance and pass the hardware configurtion directly at compile time:
+
+```cpp
+// Declare and initialize
+OneButton btn = OneButton(
+  BUTTON_PIN,  // Input pin for the button
+  true,        // Button is active LOW
+  true         // Enable internal pull-up resistor
+);
+```
+
+This works for most boards.  However, some boards will initialize the hardware AFTER the initialization of global
+defined instances and the Input pin will not work at all.
+
+
+### Explicit setup and deferred initialization (new, more compatible option)
+
+By using an explicit initialization using the `setup(...)` function solves the problem of the initialization order.
+Also this is also a good option in case you do not know the Hardware configuration at compile time.
+
+Declare a global instance, un-initialized:
+
+```cpp
+OneButton btn;
+```
+
+In the main `setup()` function the instance will be initialized by passing the hardware configuration.  Pass the input
+mode as known from pinMode():
+
+```cpp
+btn.setup(
+  BUTTON_PIN,   // Input pin for the button
+  INPUT_PULLUP, // INPUT and enable the internal pull-up resistor
+  true          // Button is active LOW
+);
+```
+
+In the SimpleOneButton example shows how to use this sequence.  In the new `setup(...)` function the pinMode can be
+given in the second parameter to allow all kind of hardware options.
+
+
+## OneButton Tiny version
 
 The OneButton Library was extended over time with functionality that was requested for specific
 use cases. This makes the library growing over time too and therefore was limiting use cases using very small processors like attiny84.
