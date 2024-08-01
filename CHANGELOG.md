@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
+## [2.6.0] - 2024-08-01
+
+* The new `setup(...)` function allows deferred initialisation.
+* The SimpleOneButton.ino includes a configuration for the Arduino Nano ESP32
+* Supporting a new press event.
+* using `bool` instead of `boolean` that is a deprecated type by Arduino.
+* changes in debouncing.
+* standard Arduino style .clang formatting in changed files.
+
 ## [2.5.0] - 2023-12-02
 
 This release is a minor update including som smaller fixes.
