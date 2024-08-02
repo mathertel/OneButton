@@ -30,7 +30,7 @@ OneButton::OneButton() {
 
 // Initialize the OneButton library.
 OneButton::OneButton(const int pin, const bool activeLow, const bool pullupActive) {
-  init(pin, pullupActive ? INPUT_PULLUP : INPUT, activeLow);
+  setup(pin, pullupActive ? INPUT_PULLUP : INPUT, activeLow);
 }  // OneButton
 
 
