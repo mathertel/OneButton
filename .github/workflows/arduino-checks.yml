@@ -20,10 +20,9 @@ jobs:
   lint:
     name: check library format
     runs-on: ubuntu-latest
-    continue-on-error: true
-
+    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Arduino - lint
       - name: Arduino-lint
@@ -37,10 +36,10 @@ jobs:
   compile-uno:
     name: compile uno examples
     runs-on: ubuntu-latest
-    continue-on-error: true
-
+    # continue-on-error: true
+    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Compile Examples for UNO
       - name: Compile examples on uno
@@ -58,10 +57,9 @@ jobs:
   compile-esp8266:
     name: compile esp8266 examples
     runs-on: ubuntu-latest
-    continue-on-error: true
-
+    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: compile sketches
         uses: arduino/compile-sketches@v1
         with:
@@ -82,10 +80,9 @@ jobs:
   compile-esp32:
     name: build examples on ESP32
     runs-on: ubuntu-latest
-    continue-on-error: true
-
+    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: compile sketches
         uses: arduino/compile-sketches@v1
         with:
@@ -97,6 +94,50 @@ jobs:
               # version: 2.0.4 doesn't work with CLI caused by issue https://github.com/espressif/arduino-esp32/pull/7060
               version: 2.0.8
           fqbn: esp32:esp32:esp32
+          sketch-paths: |
+            - 'examples/SimpleOneButton'
+            - 'examples/TwoButtons'
+            - 'examples/BlinkMachine'
+            - 'examples/InterruptOneButton'
+            - 'examples/SpecialInput'
+
+  compile-arduino-nano-esp32:
+    name: build examples on Arduino Nano ESP32
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: compile sketches
+        uses: arduino/compile-sketches@v1
+        with:
+          verbose: true
+          platforms: |
+            # Install ESP32 platform via Boards Manager
+            - name: "esp32:esp32"
+              source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+              # version: 2.0.4 doesn't work with CLI caused by issue https://github.com/espressif/arduino-esp32/pull/7060
+              version: 2.0.8
+          fqbn: esp32:esp32:esp32
+          sketch-paths: |
+            - 'examples/SimpleOneButton'
+            - 'examples/TwoButtons'
+            - 'examples/BlinkMachine'
+            - 'examples/InterruptOneButton'
+            - 'examples/SpecialInput'
+            
+  compile-arduino-nano-eps32:
+    name: compile examples for Arduinop Nano ESP32
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Compile Examples for UNO
+      - name: Compile examples on uno
+        uses: arduino/compile-sketches@v1
+        with:
+          verbose: true
+          fqbn: arduino:esp32:nano_nora
           sketch-paths: |
             - 'examples/SimpleOneButton'
             - 'examples/TwoButtons'
