@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions for Arduino library projects
+
+name: Arduino Library Checks
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the develop branch
+  push:
+    branches: [develop,master]
+  pull_request:
+    branches: [develop,master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  # These jobs are used to compile the examples fot the specific processor/board.
+  # see <https://github.com/marketplace/actions/compile-arduino-sketches>
+  compile-arduino-nano-eps32:
+    name: compile examples for Arduinop Nano ESP32
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout
+
+      # Compile Examples for UNO
+      - name: Compile examples on uno
+        uses: arduino/compile-sketches
+        with:
+          verbose: true
+          fqbn: arduino:esp32:nano_nora
+          sketch-paths: |
+            - 'examples/SimpleOneButton'
+            - 'examples/TwoButtons'
+            - 'examples/BlinkMachine'
+            - 'examples/InterruptOneButton'
+            - 'examples/SpecialInput'
