@@ -22,11 +22,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@latest
+      - uses: actions/checkout@v4
 
       # Compile Examples for UNO
       - name: Compile examples on uno
-        uses: arduino/compile-sketches@latest
+        uses: arduino/compile-sketches@v1
         with:
           verbose: true
           fqbn: arduino:esp32:nano_nora
