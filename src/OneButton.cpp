@@ -1,12 +1,13 @@
 /**
- * @file OneButton.cpp
+ * @file OneButtonbool.cpp
  *
  * @brief Library for detecting button clicks, doubleclicks and long press
- * pattern on a single button.
+ * pattern on a single button. Extended version with boolean mode support.
  *
  * @author Matthias Hertel, https://www.mathertel.de
  * @Copyright Copyright (c) by Matthias Hertel, https://www.mathertel.de.
  *                          Ihor Nehrutsa, Ihor.Nehrutsa@gmail.com
+ *                          Boolean mode extension by [Your Name]
  *
  * This work is licensed under a BSD style license. See
  * http://www.mathertel.de/License.aspx
@@ -21,329 +22,378 @@
 // ----- Initialization and Default Values -----
 
 /**
- * @brief Construct a new OneButton object but not (yet) initialize the IO pin.
+ * @brief Construct a new OneButton object for boolean mode.
+ * Use setupBool() to configure active level.
  */
 OneButton::OneButton() {
-  _pin = -1;
-  // further initialization has moved to OneButton.h
+  // Default constructor for boolean mode
+  // No hardware pin initialization required
 }
 
-// Initialize the OneButton library.
+/**
+ * @brief Construct a new OneButton object with hardware pin configuration.
+ * @param pin The pin to be used for input.
+ * @param activeLow Set to true when input is LOW when pressed.
+ * @param pullupActive Activate internal pullup resistor.
+ */
 OneButton::OneButton(const int pin, const bool activeLow, const bool pullupActive) {
+  // Constructor for hardware mode
   setup(pin, pullupActive ? INPUT_PULLUP : INPUT, activeLow);
-}  // OneButton
-
-
-// initialize or re-initialize the input pin
-void OneButton::setup(const uint8_t pin, const uint8_t mode, const bool activeLow) {
-  _pin = pin;
-
-  if (activeLow) {
-    // the button connects the input pin to GND when pressed.
-    _buttonPressed = LOW;
-
-  } else {
-    // the button connects the input pin to VCC when pressed.
-    _buttonPressed = HIGH;
-  }
-
-  pinMode(pin, mode);
+  _useHardware = true;
 }
 
+/**
+ * @brief Initialize or re-initialize the input pin for hardware mode.
+ * @param pin The pin to be used for input.
+ * @param mode Pin mode (INPUT, INPUT_PULLUP, etc.)
+ * @param activeLow Set to true when input is LOW when pressed.
+ */
+void OneButton::setup(const uint8_t pin, const uint8_t mode, const bool activeLow) {
+  // Configure hardware pin
+  _pin = pin;
+  _buttonPressed = activeLow ? LOW : HIGH;
+  pinMode(pin, mode);
+  _useHardware = true;
+}
 
-// explicitly set the number of millisec that have to pass by before a click is assumed stable.
-void OneButton::setDebounceMs(const int ms) {
+/**
+ * @brief Configure the button for boolean mode.
+ * Use this when button state is provided via tick(bool) method.
+ * @param activeLow Set to true when active level is false/0.
+ */
+void OneButton::setupBool(bool activeLow) {
+  // Configure for boolean mode
+  _buttonPressed = activeLow;
+  _useHardware = false;
+}
+
+/**
+ * @brief Set debounce time in milliseconds.
+ * @param ms Debounce time in milliseconds.
+ */
+void OneButton::setDebounceMs(int ms) {
+  // Set debounce time in milliseconds
   _debounce_ms = ms;
-}  // setDebounceMs
+}
 
-
-// explicitly set the number of millisec that have to pass by before a click is detected.
-void OneButton::setClickMs(const unsigned int ms) {
+/**
+ * @brief Set click detection time in milliseconds.
+ * @param ms Click detection time in milliseconds.
+ */
+void OneButton::setClickMs(unsigned int ms) {
+  // Set click detection time
   _click_ms = ms;
-}  // setClickMs
+}
 
-
-// explicitly set the number of millisec that have to pass by before a long button press is detected.
-void OneButton::setPressMs(const unsigned int ms) {
+/**
+ * @brief Set long press detection time in milliseconds.
+ * @param ms Long press detection time in milliseconds.
+ */
+void OneButton::setPressMs(unsigned int ms) {
+  // Set long press detection time
   _press_ms = ms;
-}  // setPressMs
+}
 
-// explicitly set the number of millisec that have to pass by before button idle is detected.
-void OneButton::setIdleMs(const unsigned int ms) {
+/**
+ * @brief Set idle detection time in milliseconds.
+ * @param ms Idle detection time in milliseconds.
+ */
+void OneButton::setIdleMs(unsigned int ms) {
+  // Set idle detection time
   _idle_ms = ms;
-}  // setIdleMs
+}
 
-// save function for click event
+// ----- Event attachment implementations -----
+
+/**
+ * @brief Attach press event callback.
+ */
 void OneButton::attachPress(callbackFunction newFunction) {
   _pressFunc = newFunction;
-}  // attachPress
+}
 
-
-// save function for parameterized click event
+/**
+ * @brief Attach parameterized press event callback.
+ */
 void OneButton::attachPress(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramPressFunc = newFunction;
   _pressFuncParam = parameter;
-}  // attachPress
+}
 
-// save function for click event
+/**
+ * @brief Attach click event callback.
+ */
 void OneButton::attachClick(callbackFunction newFunction) {
   _clickFunc = newFunction;
-}  // attachClick
+}
 
-
-// save function for parameterized click event
+/**
+ * @brief Attach parameterized click event callback.
+ */
 void OneButton::attachClick(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramClickFunc = newFunction;
   _clickFuncParam = parameter;
-}  // attachClick
+}
 
-
-// save function for doubleClick event
+/**
+ * @brief Attach double click event callback.
+ */
 void OneButton::attachDoubleClick(callbackFunction newFunction) {
   _doubleClickFunc = newFunction;
   _maxClicks = max(_maxClicks, 2);
-}  // attachDoubleClick
+}
 
-
-// save function for parameterized doubleClick event
+/**
+ * @brief Attach parameterized double click event callback.
+ */
 void OneButton::attachDoubleClick(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramDoubleClickFunc = newFunction;
   _doubleClickFuncParam = parameter;
   _maxClicks = max(_maxClicks, 2);
-}  // attachDoubleClick
+}
 
-
-// save function for multiClick event
+/**
+ * @brief Attach multi-click event callback.
+ */
 void OneButton::attachMultiClick(callbackFunction newFunction) {
   _multiClickFunc = newFunction;
   _maxClicks = max(_maxClicks, 100);
-}  // attachMultiClick
+}
 
-
-// save function for parameterized MultiClick event
+/**
+ * @brief Attach parameterized multi-click event callback.
+ */
 void OneButton::attachMultiClick(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramMultiClickFunc = newFunction;
   _multiClickFuncParam = parameter;
   _maxClicks = max(_maxClicks, 100);
-}  // attachMultiClick
+}
 
-
-// save function for longPressStart event
+/**
+ * @brief Attach long press start event callback.
+ */
 void OneButton::attachLongPressStart(callbackFunction newFunction) {
   _longPressStartFunc = newFunction;
-}  // attachLongPressStart
+}
 
-
-// save function for parameterized longPressStart event
+/**
+ * @brief Attach parameterized long press start event callback.
+ */
 void OneButton::attachLongPressStart(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramLongPressStartFunc = newFunction;
   _longPressStartFuncParam = parameter;
-}  // attachLongPressStart
+}
 
-
-// save function for longPressStop event
+/**
+ * @brief Attach long press stop event callback.
+ */
 void OneButton::attachLongPressStop(callbackFunction newFunction) {
   _longPressStopFunc = newFunction;
-}  // attachLongPressStop
+}
 
-
-// save function for parameterized longPressStop event
+/**
+ * @brief Attach parameterized long press stop event callback.
+ */
 void OneButton::attachLongPressStop(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramLongPressStopFunc = newFunction;
   _longPressStopFuncParam = parameter;
-}  // attachLongPressStop
+}
 
-
-// save function for during longPress event
+/**
+ * @brief Attach during long press event callback.
+ */
 void OneButton::attachDuringLongPress(callbackFunction newFunction) {
   _duringLongPressFunc = newFunction;
-}  // attachDuringLongPress
+}
 
-
-// save function for parameterized during longPress event
+/**
+ * @brief Attach parameterized during long press event callback.
+ */
 void OneButton::attachDuringLongPress(parameterizedCallbackFunction newFunction, void *parameter) {
   _paramDuringLongPressFunc = newFunction;
   _duringLongPressFuncParam = parameter;
-}  // attachDuringLongPress
+}
 
-
-// save function for idle button event
+/**
+ * @brief Attach idle event callback.
+ */
 void OneButton::attachIdle(callbackFunction newFunction) {
   _idleFunc = newFunction;
-}  // attachIdle
+}
 
-
-void OneButton::reset(void) {
-  _state = OneButton::OCS_INIT;
+/**
+ * @brief Reset button state machine to initial state.
+ */
+void OneButton::reset() {
+  // Reset state machine to initial state
+  _state = OCS_INIT;
   _nClicks = 0;
   _startTime = millis();
   _idleState = false;
 }
 
-
-// ShaggyDog ---- return number of clicks in any case: single or multiple clicks
-int OneButton::getNumberClicks(void) {
+/**
+ * @brief Get current click count.
+ * @return Number of clicks in current sequence.
+ */
+int OneButton::getNumberClicks() {
+  // Return current click count
   return _nClicks;
 }
 
-
 /**
- * @brief Debounce input pin level for use in SpesialInput.
+ * @brief Debounce input signal.
+ * @param value Raw input value.
+ * @return Debounced value.
  */
-bool OneButton::debounce(const bool value) {
-  now = millis();  // current (relative) time in msecs.
-
-  // Don't debounce going into active state, if _debounce_ms is negative
-  if (value && _debounce_ms < 0)
-    debouncedLevel = value;
+bool OneButton::debounce(bool value) {
+  // Debounce logic for input signal
+  unsigned long now = millis();
+  if (value && _debounce_ms < 0) {
+    _debouncedLevel = value;
+  }
 
   if (_lastDebounceLevel == value) {
-    if (now - _lastDebounceTime >= abs(_debounce_ms))
-      debouncedLevel = value;
+    if (now - _lastDebounceTime >= static_cast<unsigned long>(abs(_debounce_ms))) {
+      _debouncedLevel = value;
+    }
   } else {
     _lastDebounceTime = now;
     _lastDebounceLevel = value;
   }
-  return debouncedLevel;
-};
-
+  return _debouncedLevel;
+}
 
 /**
- * @brief Check input of the configured pin,
- * debounce button state and then
- * advance the finite state machine (FSM).
+ * @brief Check hardware pin state (hardware mode only).
  */
-void OneButton::tick(void) {
-  if (_pin >= 0) {
-    _fsm(debounce(digitalRead(_pin) == _buttonPressed));
+void OneButton::tick() {
+  // Process hardware pin input
+  if (_useHardware && _pin >= 0) {
+    bool activeLevel = (digitalRead(_pin) == _buttonPressed);
+    tick(activeLevel);
   }
-}  // tick()
+}
 
-
+/**
+ * @brief Process boolean input (boolean mode).
+ * @param activeLevel Current button state (true = pressed, false = released).
+ */
 void OneButton::tick(bool activeLevel) {
+  // Process boolean input
   _fsm(debounce(activeLevel));
 }
 
-
 /**
- *  @brief Advance to a new state and save the last one to come back in cas of bouncing detection.
+ * @brief Transition to new state.
+ * @param nextState Next state to transition to.
  */
 void OneButton::_newState(stateMachine_t nextState) {
+  // Transition to new state
   _state = nextState;
-}  // _newState()
-
+}
 
 /**
- * @brief Run the finite state machine (FSM) using the given level.
+ * @brief Finite State Machine implementation.
+ * @param activeLevel Debounced button state.
  */
 void OneButton::_fsm(bool activeLevel) {
-  unsigned long waitTime = (now - _startTime);
+  // Finite State Machine implementation
+  unsigned long now = millis();
+  unsigned long waitTime = now - _startTime;
 
-  // Implementation of the state machine
   switch (_state) {
-    case OneButton::OCS_INIT:
-      // on idle for idle_ms call idle function
-      if (!_idleState and (waitTime > _idle_ms))
+    case OCS_INIT:
+      // Handle idle state
+      if (!_idleState && (waitTime > _idle_ms)) {
         if (_idleFunc) {
           _idleState = true;
           _idleFunc();
         }
+      }
 
-      // waiting for level to become active.
+      // Detect button press
       if (activeLevel) {
-        _newState(OneButton::OCS_DOWN);
-        _startTime = now;  // remember starting time
+        _newState(OCS_DOWN);
+        _startTime = now;
         _nClicks = 0;
 
+        // Trigger press callbacks
         if (_pressFunc) _pressFunc();
         if (_paramPressFunc) _paramPressFunc(_pressFuncParam);
-      }  // if
+      }
       break;
 
-    case OneButton::OCS_DOWN:
-      // waiting for level to become inactive.
-
+    case OCS_DOWN:
+      // Handle button release or long press
       if (!activeLevel) {
-        _newState(OneButton::OCS_UP);
-        _startTime = now;  // remember starting time
-
+        _newState(OCS_UP);
+        _startTime = now;
       } else if (waitTime > _press_ms) {
+        // Long press detected
         if (_longPressStartFunc) _longPressStartFunc();
         if (_paramLongPressStartFunc) _paramLongPressStartFunc(_longPressStartFuncParam);
-        _newState(OneButton::OCS_PRESS);
-      }  // if
+        _newState(OCS_PRESS);
+      }
       break;
 
-    case OneButton::OCS_UP:
-      // level is inactive
-
-      // count as a short button down
+    case OCS_UP:
+      // Button released, count as a click
       _nClicks++;
-      _newState(OneButton::OCS_COUNT);
+      _newState(OCS_COUNT);
       break;
 
-    case OneButton::OCS_COUNT:
-      // dobounce time is over, count clicks
-
+    case OCS_COUNT:
+      // Count clicks and detect multi-click patterns
       if (activeLevel) {
-        // button is down again
-        _newState(OneButton::OCS_DOWN);
-        _startTime = now;  // remember starting time
-
+        // Another press detected
+        _newState(OCS_DOWN);
+        _startTime = now;
       } else if ((waitTime >= _click_ms) || (_nClicks == _maxClicks)) {
-        // now we know how many clicks have been made.
-
+        // Click sequence complete
         if (_nClicks == 1) {
-          // this was 1 click only.
+          // Single click
           if (_clickFunc) _clickFunc();
           if (_paramClickFunc) _paramClickFunc(_clickFuncParam);
-
         } else if (_nClicks == 2) {
-          // this was a 2 click sequence.
+          // Double click
           if (_doubleClickFunc) _doubleClickFunc();
           if (_paramDoubleClickFunc) _paramDoubleClickFunc(_doubleClickFuncParam);
-
         } else {
-          // this was a multi click sequence.
+          // Multi-click
           if (_multiClickFunc) _multiClickFunc();
           if (_paramMultiClickFunc) _paramMultiClickFunc(_multiClickFuncParam);
-        }  // if
-
+        }
         reset();
-      }  // if
+      }
       break;
 
-    case OneButton::OCS_PRESS:
-      // waiting for pin being release after long press.
-
+    case OCS_PRESS:
+      // Handle long press
       if (!activeLevel) {
-        _newState(OneButton::OCS_PRESSEND);
-
+        _newState(OCS_PRESSEND);
       } else {
-        // still the button is pressed
+        // Trigger during-long-press callbacks
         if ((now - _lastDuringLongPressTime) >= _long_press_interval_ms) {
           if (_duringLongPressFunc) _duringLongPressFunc();
           if (_paramDuringLongPressFunc) _paramDuringLongPressFunc(_duringLongPressFuncParam);
           _lastDuringLongPressTime = now;
         }
-      }  // if
+      }
       break;
 
-    case OneButton::OCS_PRESSEND:
-      // button was released.
-
+    case OCS_PRESSEND:
+      // Long press ended
       if (_longPressStopFunc) _longPressStopFunc();
       if (_paramLongPressStopFunc) _paramLongPressStopFunc(_longPressStopFuncParam);
       reset();
       break;
 
     default:
-      // unknown state detected -> reset state machine
-      _newState(OneButton::OCS_INIT);
+      // Reset on unknown state
+      _newState(OCS_INIT);
       break;
-  }  // if
-
-}  // OneButton.tick()
-
+  }
+}
 
 // end.
