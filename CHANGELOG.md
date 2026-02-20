@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file starting 2021.
 
+## Version 2.6.2 - 2026-02-20
+
+* Fixed debouncing logic to properly handle `_debounce_ms` of 0 (no debouncing) Thanks to #163 by (**@jp-bennett**)
+* Added ESP-IDF component support via CMakeLists.txt for use as an ESP-IDF component. Thanks to #164 (**@daha24**)
+* GitHub Actions workflow updates for improved CI/CD pipeline.
+* GitHub CoPilot instruction file added.
+
 ## Version 2.6.1 - 2024-08-02
 
 fixing compiler error Issue #147
