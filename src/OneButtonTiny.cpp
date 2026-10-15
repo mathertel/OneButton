@@ -157,8 +157,8 @@ void OneButtonTiny::_fsm(bool activeLevel) {
         _startTime = now;  // remember starting time
 
       } else if ((activeLevel) && (waitTime > _press_ms)) {
-        if (_longPressStartFunc) _longPressStartFunc();
         _newState(OneButtonTiny::OCS_PRESS);
+        if (_longPressStartFunc) _longPressStartFunc();
       }  // if
       break;
 

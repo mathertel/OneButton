@@ -269,9 +269,9 @@ void OneButton::_fsm(bool activeLevel) {
         _startTime = now;  // remember starting time
 
       } else if (waitTime > _press_ms) {
+        _newState(OneButton::OCS_PRESS);
         if (_longPressStartFunc) _longPressStartFunc();
         if (_paramLongPressStartFunc) _paramLongPressStartFunc(_longPressStartFuncParam);
-        _newState(OneButton::OCS_PRESS);
       }  // if
       break;
 
